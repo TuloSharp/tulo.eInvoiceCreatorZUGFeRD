@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>tulo.XMLeInvoiceToPdf</RootNamespace>
+		<AssemblyName>tulo.XMLeInvoiceToPdf</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>tulo.XMLeInvoiceToPdf</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Tulo's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<Description>
+			create a pdf from xml cii file.
+		</Description>
+		<RepositoryType>GitHub</RepositoryType>
+		<RepositoryUrl></RepositoryUrl>
+		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Copyright>Copyright (c) 2025 Tulo's Company. All rights reserved.</Copyright>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Fonts\ARIAL.TTF" />
+	  <None Remove="Fonts\CASCADIACODE.TTF" />
+	  <None Remove="Fonts\ROBOTO.TTF" />
+	  <None Remove="Fonts\VERDANA.TTF" />
+	  <None Remove="Languages\de.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Fonts\ARIAL.TTF" />
+	  <EmbeddedResource Include="Fonts\CASCADIACODE.TTF" />
+	  <EmbeddedResource Include="Fonts\ROBOTO.TTF" />
+	  <EmbeddedResource Include="Fonts\VERDANA.TTF" />
+	  <EmbeddedResource Include="Languages\en.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Languages\de.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="PDFsharp" />
+		<PackageReference Include="QRCoder" />
+		<PackageReference Include="Svg" />
+		<PackageReference Include="System.Xml.XmlDocument" />
+		<PackageReference Include="System.Text.RegularExpressions" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="icons\EmailAddress.svg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="icons\Phone.svg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="icons\TuloTeam.svg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>

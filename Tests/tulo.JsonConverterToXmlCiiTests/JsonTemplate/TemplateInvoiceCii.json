@@ -1,0 +1,115 @@
+{
+  "InvoiceNumber": "",
+  "InvoiceDate": "2026-01-23",
+  "Currency": "EUR",
+
+  "DocumentName": "",
+  "DocumentTypeCode": "380",
+
+  "Seller": {
+    "ID": "",
+    "Name": "",
+    "Street": "",
+    "Zip": "",
+    "City": "",
+    "CountryCode": "DE",
+    "VatId": "",
+    "LeitwegId": "",
+    "FiscalId": null,
+    "GeneralEmail": null,
+    "ContactPersonName": null,
+    "ContactPhone": null,
+    "ContactEmail": null
+  },
+
+  "Buyer": {
+    "ID": "",
+    "Name": "",
+    "Street": "",
+    "Zip": "",
+    "City": "",
+    "CountryCode": "DE",
+    "VatId": "",
+    "LeitwegId": "",
+    "FiscalId": null,
+    "GeneralEmail": null,
+    "ContactPersonName": null,
+    "ContactPhone": null,
+    "ContactEmail": null
+  },
+
+  "Payment": {
+    "Iban": "",
+    "Bic": "",
+    "AccountName": "",
+
+    "PaymentTermsText": "",
+    "DueDate": null,
+
+    "DirectDebitMandateID": "",
+
+    "PaymentMeansTypeCode": "",
+    "PaymentMeansInformation": "",
+    "PaymentReference": "",
+
+    "Terms": [
+      {
+        "Description": null,
+        "DueDate": null,
+        "DiscountTerms": {
+          "BasisDate": null,
+          "BasisPeriodDays": 0,
+          "BasisAmount": 0,
+          "CalculationPercent": 0,
+          "ActualDiscountAmount": 0
+        }
+      }
+    ]
+  },
+
+  "Notes": [
+    {
+      "Content": "",
+      "SubjectCode": "",
+      "ContentCode": ""
+    }
+  ],
+
+  "Lines": [
+    {
+      "Description": "",
+      "ProductDescription": "",
+
+      "GlobalId": "",
+      "GlobalIdSchemeId": "",
+      "SellerAssignedId": "",
+
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+
+      "Quantity": 0,
+      "UnitCode": "C62",
+      "UnitPrice": 0,
+
+      "TaxPercent": 0,
+      "TaxCategory": "S",
+
+      "BillingPeriodEndDate": null,
+
+      "OriginCountryCode": "",
+
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": ""
+    }
+  ],
+
+  "HeaderChargeTotalAmount": 0,
+  "HeaderAllowanceTotalAmount": 0,
+  "HeaderTotalPrepaidAmount": 0,
+  "HeaderDuePayableAmount": 0
+}

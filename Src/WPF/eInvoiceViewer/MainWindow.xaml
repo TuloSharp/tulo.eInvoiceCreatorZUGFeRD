@@ -1,0 +1,231 @@
+﻿<Window x:Class="tulo.eInvoiceViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:tulo.eInvoiceViewer"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:custombehaviors="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+        xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:livelogscontrol="clr-namespace:tulo.ResourcesWpfLib.Controls.LiveLogs;assembly=tulo.ResourcesWpfLib"
+        xmlns:views="clr-namespace:tulo.eInvoice.eInvoiceViewer.Views"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip"
+        Background="{StaticResource PanelBackgroundBrushColor}"
+        BorderBrush="{StaticResource PanelBorderBrushColor}"
+        BorderThickness="2"
+        Left="{Binding Left, Mode=TwoWay}"
+        Top="{Binding Top, Mode=TwoWay}"
+        Height="{Binding Height, Mode=TwoWay}"
+        Width="{Binding Width, Mode=TwoWay}"
+        WindowState="{Binding WindowState, Mode=TwoWay}"
+        ToolTipService.InitialShowDelay="500"
+        Title="eInvoice Viewer"
+        Icon="Assets/TuloTeam.ico"
+        SnapsToDevicePixels="True"
+        MinWidth="1000"
+        MinHeight="900">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="1"
+                      CornerRadius="4"
+                      ResizeBorderThickness="4"
+                      GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo Description="eInvoice Viewer" />
+    </Window.TaskbarItemInfo>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:MultiCommandParameterConverter x:Key="MultiCommandParameterConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:LogLevelToBrushConverter x:Key="LogLevelToBrushConverter" />
+            <system:Boolean x:Key="TrueFlag">True</system:Boolean>
+            <system:Boolean x:Key="FalseFlag">False</system:Boolean>
+            <system:Double x:Key="AppFontSize">12</system:Double>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="P">
+            <KeyBinding.Command>
+                <Binding Path="MakeScreenshotCommand" />
+            </KeyBinding.Command>
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                    <Binding Source="{StaticResource FalseFlag}" />
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+
+        <KeyBinding Modifiers="Ctrl+Shift" Key="H">
+            <KeyBinding.Command>
+                <Binding Path="MakeScreenshotCommand" />
+            </KeyBinding.Command>
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                    <Binding Source="{StaticResource TrueFlag}" />
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+
+        <KeyBinding Modifiers="Alt"
+                    Key="F4"
+                    Command="{Binding ExecuteAltF4Command}">
+            <KeyBinding.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                    <Binding Path="IsMainWindow" />
+                    <Binding Path="CloseMainWindowCommand" />
+                </MultiBinding>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+
+    </Window.InputBindings>
+
+    <!--<behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="PreviewKeyUp">
+            <behaviors:InvokeCommandAction Command="{Binding ÎsAltKeyPressedCommand, Mode=OneWay}" PassEventArgsToCommand="True" />
+        </behaviors:EventTrigger>
+        <behaviors:EventTrigger EventName="KeyUp">
+            <behaviors:InvokeCommandAction Command="{Binding IsShortcutKeyReleased, Mode=OneWay}" PassEventArgsToCommand="True" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>-->
+
+    <Grid ToolTipService.ShowOnDisabled="True" Style="{StaticResource MainWindowPanelStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <!--<Border CornerRadius="2"
+                BorderBrush="{StaticResource MainBrushColor}"
+                BorderThickness="0,2,0,0"
+                ClipToBounds="True">-->
+            <Grid Grid.Row="0"
+                  Background="{StaticResource MainBrushColor}"
+                  Focusable="False"
+                  x:Name="TitleBarGrid">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                        <behaviors:InvokeCommandAction Command="{Binding DragMoveMainWindowCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                    </behaviors:EventTrigger>
+                    <behaviors:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                        <behaviors:InvokeCommandAction Command="{Binding MouseLeftDoubleClickResizeWindowCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="2" />
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="0"
+                       Source="Assets/TuloTeam.ico"
+                       Width="24"
+                       Height="24" />
+
+                <TextBlock Grid.Column="1"
+                           MaxWidth="3000"
+                           Padding="2,3,0,0"
+                           Foreground="White"
+                           Text="{Binding MainWindowTitle}" />
+
+                <Button x:Name="btnMinimize"
+                        ToolTip="Minimieren"
+                        Width="22"
+                        Grid.Column="2"
+                        KeyboardNavigation.AcceptsReturn="False"
+                        Style="{StaticResource MinMaxWinButton}"
+                        Background="{StaticResource MainBrushColor}"
+                        Command="{Binding MinimizedMainWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Path Data="{StaticResource MinimizeIconSVG}" Style="{StaticResource WinMinMaxButtonPath}" />
+                </Button>
+
+                <Button x:Name="btnMaximize"
+                        ToolTip="Maximieren"
+                        Width="22"
+                        Grid.Column="4"
+                        Visibility="{Binding IsWindowCustomResized, Converter={StaticResource BoolToVisibilityConverter}}"
+                        KeyboardNavigation.AcceptsReturn="False"
+                        Style="{StaticResource MinMaxWinButton}"
+                        Background="{StaticResource MainBrushColor}"
+                        Command="{Binding ResizeMainWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Path Data="{StaticResource MaximizeIconSVG}" Style="{StaticResource WinMinMaxButtonPath}" />
+                </Button>
+
+                <Button x:Name="btnMinimizeCustom"
+                        ToolTip="Minimieren"
+                        Width="22"
+                        Grid.Column="6"
+                        Visibility="{Binding IsWindowMaximized, Converter={StaticResource BoolToVisibilityConverter}}"
+                        KeyboardNavigation.AcceptsReturn="False"
+                        Style="{StaticResource MinMaxWinButton}"
+                        Background="{StaticResource MainBrushColor}"
+                        Command="{Binding ResizeMainWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Path Data="{StaticResource MinimizeCustomSizeIconSVG}" Style="{StaticResource WinMinMaxButtonPath}" />
+                </Button>
+
+                <Button x:Name="btnCloseMainApp"
+                        ToolTip="Schließen"
+                        AutomationProperties.AutomationId="btnCloseMainApp"
+                        Width="22"
+                        Grid.Column="8"
+                        KeyboardNavigation.AcceptsReturn="False"
+                        Style="{StaticResource CloseWinButton}"
+                        Background="{StaticResource MainBrushColor}"
+                        Command="{Binding CloseMainWindowCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                            <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                            <Binding Path="IsMainWindow" />
+                            <Binding Path="IsModalOpen" />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                    <Path Data="{StaticResource CloseIconSVG}" Style="{StaticResource WinCloseButtonPath}" />
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:KeyTrigger Key="Esc">
+                            <behaviors:InvokeCommandAction Command="{Binding CloseMainWindowCommand}">
+                                <behaviors:InvokeCommandAction.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                                        <Binding Path="IsMainWindow" />
+                                        <Binding Path="IsModalOpen" />
+                                    </MultiBinding>
+                                </behaviors:InvokeCommandAction.CommandParameter>
+                            </behaviors:InvokeCommandAction>
+                        </behaviors:KeyTrigger>
+                    </behaviors:Interaction.Triggers>
+                </Button>
+            </Grid>
+        <!--</Border>-->
+
+        <Grid Grid.Row="1">
+
+            <views:ContentXmlToPdfViewerView DataContext="{Binding ContentXmlToPdfViewerViewModel}" />
+
+        </Grid>
+
+    </Grid>
+</Window>

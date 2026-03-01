@@ -1,0 +1,419 @@
+// Annotated JSON (JSONC) for your Invoice model
+// This file is NOT strict JSON because of comments (//).
+// DE: Kommentare erklären jedes Feld. EN: Comments explain each field.
+
+{
+  // DE: Rechnungsnummer / eindeutige Dokument-ID.
+  // EN: Invoice number / unique document ID.
+  "InvoiceNumber": "6063636771001",
+  // DE: Rechnungsdatum (Ausstellungsdatum).
+  // EN: Invoice date (issue date).
+  "InvoiceDate": "2026-08-27",
+  // DE: Währungscode nach ISO 4217, z.B. EUR.
+  // EN: Currency code (ISO 4217), e.g. EUR.
+  "Currency": "EUR",
+  // DE: Dokumentbezeichnung (frei), z.B. RECHNUNG.
+  // EN: Human-readable document name, e.g. INVOICE.
+  "DocumentName": "RECHNUNG",
+  // DE: Dokumentart-Code (UN/CEFACT 1001), z.B. 380=Rechnung, 381=Gutschrift.
+  // EN: Document type code (UN/CEFACT 1001), e.g. 380=Invoice, 381=Credit note.
+  "DocumentTypeCode": "380",
+  // DE: Verkäufer / Rechnungsaussteller.
+  // EN: Seller / invoice issuer.
+  "Seller": {
+    // DE: Interne/ERP-Kundennummer des Verkäufers (optional).
+    // EN: Seller internal/ERP identifier (optional).
+    "ID": "10737",
+    // DE: Firmenname des Verkäufers.
+    // EN: Seller legal/trade name.
+    "Name": "Lieferant GmbH & Co. KG",
+    // DE: Straße + Hausnummer.
+    // EN: Street and house number.
+    "Street": "Lieferanten-Strasse 12-17",
+    // DE: Postleitzahl.
+    // EN: Postal code.
+    "Zip": "98765",
+    // DE: Ort/Stadt.
+    // EN: City.
+    "City": "Lieferantenstadt",
+    // DE: Ländercode nach ISO 3166-1 alpha-2, z.B. DE.
+    // EN: Country code (ISO 3166-1 alpha-2), e.g. DE.
+    "CountryCode": "DE",
+    // DE: USt-IdNr. des Verkäufers.
+    // EN: Seller VAT ID (VAT registration number).
+    "VatId": "DE946280061",
+    // DE: Leitweg-ID (XRechnung) – i.d.R. beim Verkäufer leer.
+    // EN: Leitweg-ID (German e-invoicing routing ID) – usually empty for seller.
+    "LeitwegId": "",
+    // DE: Steuernummer/Tax Number (optional).
+    // EN: Fiscal ID / tax number (optional).
+    "FiscalId": "88888/00072",
+    // DE: Allgemeine E-Mail-Adresse (optional).
+    // EN: General email address (optional).
+    "GeneralEmail": "info@lieferant.com",
+    // DE: Ansprechpartner (optional).
+    // EN: Contact person (optional).
+    "ContactPersonName": "Tim Kleine",
+    // DE: Telefon Ansprechpartner (optional).
+    // EN: Contact phone (optional).
+    "ContactPhone": "0170...",
+    // DE: E-Mail Ansprechpartner (optional).
+    // EN: Contact email (optional).
+    "ContactEmail": "tim.kleine@lieferant.com"
+  },
+  // DE: Käufer / Rechnungsempfänger.
+  // EN: Buyer / invoice recipient.
+  "Buyer": {
+    // DE: Interne/ERP-Kundennummer des Käufers.
+    // EN: Buyer internal/ERP identifier.
+    "ID": "9900880077",
+    // DE: Firmenname des Käufers.
+    // EN: Buyer legal/trade name.
+    "Name": "Musterkunde GmbH & Co Name 2 Musterkunde",
+    // DE: Straße + Hausnummer.
+    // EN: Street and house number.
+    "Street": "Musterstrasse 44",
+    // DE: Postleitzahl.
+    // EN: Postal code.
+    "Zip": "40789",
+    // DE: Ort/Stadt.
+    // EN: City.
+    "City": "Musterstadt",
+    // DE: Ländercode ISO 3166-1 alpha-2.
+    // EN: Country code ISO 3166-1 alpha-2.
+    "CountryCode": "DE",
+    // DE: USt-IdNr. des Käufers (optional je nach Fall).
+    // EN: Buyer VAT ID (optional depending on scenario).
+    "VatId": "DE2012129398",
+    // DE: Leitweg-ID für Behörden/öffentliche Auftraggeber (XRechnung Routing).
+    // EN: Leitweg-ID used for German public sector routing (XRechnung).
+    "LeitwegId": "04011000-1234512345-35",
+    // DE: Steuernummer des Käufers (optional).
+    // EN: Buyer fiscal ID / tax number (optional).
+    "FiscalId": null,
+    // DE: Allgemeine E-Mail (optional).
+    // EN: General email (optional).
+    "GeneralEmail": null,
+    // DE: Ansprechpartner Käufer (optional).
+    // EN: Buyer contact person (optional).
+    "ContactPersonName": "Herr Test Monteur",
+    // DE: Telefon Käufer (optional).
+    // EN: Buyer contact phone (optional).
+    "ContactPhone": "02173 9364",
+    // DE: E-Mail Käufer (optional).
+    // EN: Buyer contact email (optional).
+    "ContactEmail": "mike.maier@lieferant.com"
+  },
+  // DE: Zahlungsinformationen.
+  // EN: Payment information.
+  "Payment": {
+    // DE: IBAN des Zahlungsempfängers (Überweisung).
+    // EN: Payee IBAN (credit transfer).
+    "Iban": "DE33600501010001234567",
+    // DE: BIC/SWIFT des Zahlungsempfängers (optional, je nach Land/Bank).
+    // EN: Payee BIC/SWIFT (optional depending on bank/country).
+    "Bic": "SOLADEST600",
+    // DE: Kontoinhabername (optional).
+    // EN: Account holder name (optional).
+    "AccountName": "Lieferant GmbH & Co. KG",
+    // DE: Zahlungsbedingungen als Text (frei).
+    // EN: Payment terms as free text.
+    "PaymentTermsText": "Zahlbar innerhalb von 14 Tagen ohne Abzug.",
+    // DE: Fälligkeitsdatum der Zahlung (optional).
+    // EN: Payment due date (optional).
+    "DueDate": "2026-09-16",
+    // DE: Mandatsreferenz für SEPA-Lastschrift (nur falls genutzt).
+    // EN: Mandate reference for SEPA direct debit (only if used).
+    "DirectDebitMandateID": "",
+    // DE: Zahlungsart-Code, z.B. 58=SEPA Credit Transfer.
+    // EN: Payment means type code, e.g. 58=SEPA credit transfer.
+    "PaymentMeansTypeCode": "58",
+    // DE: Zusätzliche Infos zur Zahlungsart (frei).
+    // EN: Additional information about payment means (free text).
+    "PaymentMeansInformation": "Bezahlung per SEPA Überweisung",
+    // DE: Zahlungsreferenz/Verwendungszweck.
+    // EN: Payment reference/remittance information.
+    "PaymentReference": "Kundennummer:. 9900880077 Rechnungsnummer:. 6063636771001",
+    // DE: Erweiterte Zahlungsbedingungen/Skonto-Stufen (optional).
+    // EN: Extended payment terms/discount tiers (optional).
+    "Terms": [
+      {
+          // DE: Beschreibung der Skonto-/Zahlungsstufe.
+          // EN: Description of the discount/payment tier.
+          "Description": "Bis zum 06.09.2026 erhalten Sie 2,000 % Skonto",
+          // DE: Fälligkeit dieser Stufe (optional).
+          // EN: Due date for this tier (optional).
+          "DueDate": null,
+          // DE: Skonto-Details (optional).
+          // EN: Cash discount terms (optional).
+          "DiscountTerms": {
+            // DE: Bezugsdatum für Skonto-Berechnung (z.B. Rechnungsdatum).
+            // EN: Basis date for discount calculation (e.g., invoice date).
+            "BasisDate": "2026-08-27",
+            // DE: Tage bis Skonto-Frist.
+            // EN: Number of days for discount period.
+            "BasisPeriodDays": 10,
+            // DE: Bemessungsgrundlage (Betrag), auf den Prozent angewendet wird.
+            // EN: Base amount to which the percent is applied.
+            "BasisAmount": 655.38,
+            // DE: Skonto-Prozentsatz.
+            // EN: Discount percentage.
+            "CalculationPercent": 2.0,
+            // DE: Konkreter Skonto-Betrag (falls vorab berechnet).
+            // EN: Actual discount amount (if pre-calculated).
+            "ActualDiscountAmount": 13.11
+          }
+      },
+      {
+          // DE: Beschreibung der Skonto-/Zahlungsstufe.
+          // EN: Description of the discount/payment tier.
+          "Description": "Bis zum 16.09.2026 ohne Abzug",
+          // DE: Fälligkeit dieser Stufe (optional).
+          // EN: Due date for this tier (optional).
+          "DueDate": "2026-09-16",
+          // DE: Skonto-Details (optional).
+          // EN: Cash discount terms (optional).
+          "DiscountTerms": null
+      }
+    ]
+  },
+  // DE: Kopf-/Dokument-Notizen (mehrere möglich).
+  // EN: Header/document notes (multiple allowed).
+  "Notes": [
+    {
+        // DE: Notiztext.
+        // EN: Note text.
+        "Content": "Bank: LBBW Stuttgart BLZ: 999 888 77 Kto.Nr.: 1234567, IBAN: DE33 9998 8877 0001 2345 67 BIC: SOLADEST600",
+        // DE: Notiz-Typ/Code (z.B. REG, AAI, PMT).
+        // EN: Note subject/type code (e.g., REG, AAI, PMT).
+        "SubjectCode": "REG",
+        // DE: Optionaler Inhalts-Code (oft leer).
+        // EN: Optional content code (often empty).
+        "ContentCode": ""
+    },
+    {
+        // DE: Notiztext.
+        // EN: Note text.
+        "Content": "Wenn nicht anders angegeben entspricht das Leistungsdatum dem Rechnungsdatum.",
+        // DE: Notiz-Typ/Code (z.B. REG, AAI, PMT).
+        // EN: Note subject/type code (e.g., REG, AAI, PMT).
+        "SubjectCode": "AAI",
+        // DE: Optionaler Inhalts-Code (oft leer).
+        // EN: Optional content code (often empty).
+        "ContentCode": ""
+    },
+    {
+        // DE: Notiztext.
+        // EN: Note text.
+        "Content": "ZUGFeRD 2.4 Extended Sammelrechnung (Template JSON)",
+        // DE: Notiz-Typ/Code (z.B. REG, AAI, PMT).
+        // EN: Note subject/type code (e.g., REG, AAI, PMT).
+        "SubjectCode": "ACB",
+        // DE: Optionaler Inhalts-Code (oft leer).
+        // EN: Optional content code (often empty).
+        "ContentCode": ""
+    }
+  ],
+  // DE: Rechnungspositionen.
+  // EN: Invoice line items.
+  "Lines": [
+    {
+        // DE: Positionsbezeichnung / Artikelname.
+        // EN: Line description / item name.
+        "Description": "GWDSTG-DIN976-A-4.8-(A2K)-M10X1000",
+        // DE: Kategorie/zusätzliche Beschreibung (optional).
+        // EN: Additional product description/category (optional).
+        "ProductDescription": "Gewindestange",
+        // DE: Globale Artikel-ID (z.B. GTIN) – optional.
+        // EN: Global item identifier (e.g., GTIN) – optional.
+        "GlobalId": "7711231873598",
+        // DE: Schema der GlobalId (z.B. 0160 für GTIN).
+        // EN: Scheme for GlobalId (e.g., 0160 for GTIN).
+        "GlobalIdSchemeId": "0160",
+        // DE: Artikelnummer des Verkäufers (optional).
+        // EN: Seller assigned item ID/SKU (optional).
+        "SellerAssignedId": "0595810 25",
+        // DE: Bestellreferenz des Käufers (optional).
+        // EN: Buyer order reference (optional).
+        "BuyerOrderReferencedId": "Abholung 1",
+        // DE: Bestelldatum (optional).
+        // EN: Buyer order date (optional).
+        "BuyerOrderDate": "2026-08-27",
+        // DE: Lieferscheinnummer (optional).
+        // EN: Delivery note number (optional).
+        "DeliveryNoteNumber": "8408230045",
+        // DE: Lieferschein-Positionsnummer (optional).
+        // EN: Delivery note line ID (optional).
+        "DeliveryNoteLineId": "000010",
+        // DE: Lieferscheindatum (optional).
+        // EN: Delivery note date (optional).
+        "DeliveryNoteDate": "2026-08-27",
+        // DE: Menge der Position.
+        // EN: Quantity.
+        "Quantity": 25.0,
+        // DE: Mengeneinheit (UN/ECE Rec 20), z.B. H87=Stück, C62=Einheit.
+        // EN: Unit code (UN/ECE Rec 20), e.g. H87=piece, C62=unit.
+        "UnitCode": "H87",
+        // DE: Preis pro Einheit (i.d.R. Netto) gemäß deinem Mapper.
+        // EN: Unit price (typically net) as used by your mapper.
+        "UnitPrice": 2.06,
+        // DE: Steuersatz in Prozent.
+        // EN: Tax rate percentage.
+        "TaxPercent": 19.0,
+        // DE: Steuerkategorie, z.B. S=Standard, Z=Zero-rated.
+        // EN: Tax category code, e.g. S=Standard, Z=Zero-rated.
+        "TaxCategory": "S",
+        // DE: Leistungs-/Abrechnungszeitraum Ende (optional).
+        // EN: Billing/service period end date (optional).
+        "BillingPeriodEndDate": "2026-08-27",
+        // DE: Ursprungsland des Artikels (optional).
+        // EN: Country of origin (optional).
+        "OriginCountryCode": "DE",
+        // DE: Zusätzliche Referenz-Dokumentnummer (optional).
+        // EN: Additional referenced document ID (optional).
+        "AdditionalReferencedDocumentId": "2156307416",
+        // DE: Dokumenttyp-Code der Zusatzreferenz (optional).
+        // EN: Type code of additional referenced document (optional).
+        "AdditionalReferencedDocumentTypeCode": "130",
+        // DE: Referenztyp (optional, z.B. VN).
+        // EN: Reference type code (optional, e.g., VN).
+        "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+        // DE: Positionsbezeichnung / Artikelname.
+        // EN: Line description / item name.
+        "Description": "KAFFEE-ESPRESSO-GANZE-BOHNEN-1KG",
+        // DE: Kategorie/zusätzliche Beschreibung (optional).
+        // EN: Additional product description/category (optional).
+        "ProductDescription": "Lebensmittel",
+        // DE: Globale Artikel-ID (z.B. GTIN) – optional.
+        // EN: Global item identifier (e.g., GTIN) – optional.
+        "GlobalId": "",
+        // DE: Schema der GlobalId (z.B. 0160 für GTIN).
+        // EN: Scheme for GlobalId (e.g., 0160 for GTIN).
+        "GlobalIdSchemeId": "",
+        // DE: Artikelnummer des Verkäufers (optional).
+        // EN: Seller assigned item ID/SKU (optional).
+        "SellerAssignedId": "",
+        // DE: Bestellreferenz des Käufers (optional).
+        // EN: Buyer order reference (optional).
+        "BuyerOrderReferencedId": "Abholung 2",
+        // DE: Bestelldatum (optional).
+        // EN: Buyer order date (optional).
+        "BuyerOrderDate": "2026-08-27",
+        // DE: Lieferscheinnummer (optional).
+        // EN: Delivery note number (optional).
+        "DeliveryNoteNumber": "",
+        // DE: Lieferschein-Positionsnummer (optional).
+        // EN: Delivery note line ID (optional).
+        "DeliveryNoteLineId": "",
+        // DE: Lieferscheindatum (optional).
+        // EN: Delivery note date (optional).
+        "DeliveryNoteDate": null,
+        // DE: Menge der Position.
+        // EN: Quantity.
+        "Quantity": 2.0,
+        // DE: Mengeneinheit (UN/ECE Rec 20), z.B. H87=Stück, C62=Einheit.
+        // EN: Unit code (UN/ECE Rec 20), e.g. H87=piece, C62=unit.
+        "UnitCode": "H87",
+        // DE: Preis pro Einheit (i.d.R. Netto) gemäß deinem Mapper.
+        // EN: Unit price (typically net) as used by your mapper.
+        "UnitPrice": 18.9,
+        // DE: Steuersatz in Prozent.
+        // EN: Tax rate percentage.
+        "TaxPercent": 7.0,
+        // DE: Steuerkategorie, z.B. S=Standard, Z=Zero-rated.
+        // EN: Tax category code, e.g. S=Standard, Z=Zero-rated.
+        "TaxCategory": "S",
+        // DE: Leistungs-/Abrechnungszeitraum Ende (optional).
+        // EN: Billing/service period end date (optional).
+        "BillingPeriodEndDate": null,
+        // DE: Ursprungsland des Artikels (optional).
+        // EN: Country of origin (optional).
+        "OriginCountryCode": "DE",
+        // DE: Zusätzliche Referenz-Dokumentnummer (optional).
+        // EN: Additional referenced document ID (optional).
+        "AdditionalReferencedDocumentId": "",
+        // DE: Dokumenttyp-Code der Zusatzreferenz (optional).
+        // EN: Type code of additional referenced document (optional).
+        "AdditionalReferencedDocumentTypeCode": "",
+        // DE: Referenztyp (optional, z.B. VN).
+        // EN: Reference type code (optional, e.g., VN).
+        "AdditionalReferencedDocumentReferenceTypeCode": ""
+    },
+    {
+        // DE: Positionsbezeichnung / Artikelname.
+        // EN: Line description / item name.
+        "Description": "VERSAND / TRANSPORTKOSTEN",
+        // DE: Kategorie/zusätzliche Beschreibung (optional).
+        // EN: Additional product description/category (optional).
+        "ProductDescription": "Versandkosten",
+        // DE: Globale Artikel-ID (z.B. GTIN) – optional.
+        // EN: Global item identifier (e.g., GTIN) – optional.
+        "GlobalId": "",
+        // DE: Schema der GlobalId (z.B. 0160 für GTIN).
+        // EN: Scheme for GlobalId (e.g., 0160 for GTIN).
+        "GlobalIdSchemeId": "",
+        // DE: Artikelnummer des Verkäufers (optional).
+        // EN: Seller assigned item ID/SKU (optional).
+        "SellerAssignedId": "SHIP-001",
+        // DE: Bestellreferenz des Käufers (optional).
+        // EN: Buyer order reference (optional).
+        "BuyerOrderReferencedId": "Abholung 3",
+        // DE: Bestelldatum (optional).
+        // EN: Buyer order date (optional).
+        "BuyerOrderDate": "2026-08-27",
+        // DE: Lieferscheinnummer (optional).
+        // EN: Delivery note number (optional).
+        "DeliveryNoteNumber": "",
+        // DE: Lieferschein-Positionsnummer (optional).
+        // EN: Delivery note line ID (optional).
+        "DeliveryNoteLineId": "",
+        // DE: Lieferscheindatum (optional).
+        // EN: Delivery note date (optional).
+        "DeliveryNoteDate": null,
+        // DE: Menge der Position.
+        // EN: Quantity.
+        "Quantity": 1.0,
+        // DE: Mengeneinheit (UN/ECE Rec 20), z.B. H87=Stück, C62=Einheit.
+        // EN: Unit code (UN/ECE Rec 20), e.g. H87=piece, C62=unit.
+        "UnitCode": "C62",
+        // DE: Preis pro Einheit (i.d.R. Netto) gemäß deinem Mapper.
+        // EN: Unit price (typically net) as used by your mapper.
+        "UnitPrice": 8.5,
+        // DE: Steuersatz in Prozent.
+        // EN: Tax rate percentage.
+        "TaxPercent": 19.0,
+        // DE: Steuerkategorie, z.B. S=Standard, Z=Zero-rated.
+        // EN: Tax category code, e.g. S=Standard, Z=Zero-rated.
+        "TaxCategory": "S",
+        // DE: Leistungs-/Abrechnungszeitraum Ende (optional).
+        // EN: Billing/service period end date (optional).
+        "BillingPeriodEndDate": null,
+        // DE: Ursprungsland des Artikels (optional).
+        // EN: Country of origin (optional).
+        "OriginCountryCode": "DE",
+        // DE: Zusätzliche Referenz-Dokumentnummer (optional).
+        // EN: Additional referenced document ID (optional).
+        "AdditionalReferencedDocumentId": "",
+        // DE: Dokumenttyp-Code der Zusatzreferenz (optional).
+        // EN: Type code of additional referenced document (optional).
+        "AdditionalReferencedDocumentTypeCode": "",
+        // DE: Referenztyp (optional, z.B. VN).
+        // EN: Reference type code (optional, e.g., VN).
+        "AdditionalReferencedDocumentReferenceTypeCode": ""
+    }
+  ],
+  // DE: Summe Zuschläge auf Kopfebene (optional).
+  // EN: Total header charges (optional).
+  "HeaderChargeTotalAmount": 0.0,
+  // DE: Summe Abschläge/Rabatte auf Kopfebene (optional).
+  // EN: Total header allowances/discounts (optional).
+  "HeaderAllowanceTotalAmount": 0.0,
+  // DE: Summe bereits gezahlter Beträge (optional).
+  // EN: Total prepaid amount (optional).
+  "HeaderTotalPrepaidAmount": 0.0,
+  // DE: Zahlbarer Gesamtbetrag (fällig).
+  // EN: Amount due/payable total.
+  "HeaderDuePayableAmount": 655.38
+}

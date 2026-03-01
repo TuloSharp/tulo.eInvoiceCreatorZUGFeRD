@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<RootNamespace>tulo.CommonMVVM</RootNamespace>
+		<AssemblyName>tulo.CommonMVVM</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>tulo.CommonMVVM.WPF</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Tulo's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Description>
+			Common Classes for development WFP with MVVM Pattern
+		</Description>
+	</PropertyGroup>
+
+</Project>

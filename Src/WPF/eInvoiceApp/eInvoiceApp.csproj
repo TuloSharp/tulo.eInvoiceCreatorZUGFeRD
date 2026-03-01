@@ -1,0 +1,80 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<RootNamespace>tulo.eInvoice.eInvoiceApp</RootNamespace>
+		<AssemblyName>tulo.eInvoice.eInvoiceApp</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>tulo.eInvoice.eInvoiceApp</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Andrade's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<Description>
+			This App is for private use within our organisation only.
+			Generate an framework project
+		</Description>
+		<RepositoryType>GitHub</RepositoryType>
+		<RepositoryUrl></RepositoryUrl>
+		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Copyright>Copyright (c) 2025 Andrade Company. All rights reserved.</Copyright>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Markdig.Wpf" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.DropdownMenuControl\tulo.DropdownMenuControl.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.FontSizePicker\tulo.FontSizePicker.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.LeaderLabeledTextBlock\tulo.LeaderLabeledTextBlock.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.ModalViewControl\tulo.ModalViewControl.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.PlaceholderTextBoxControl\tulo.PlaceholderTextBoxControl.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.RevealPasswordBox\tulo.RevealPasswordBox.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.SerilogLib\tulo.SerilogLib.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.SlideToComfirmControl\tulo.SlideToComfirmControl.csproj" />
+		<ProjectReference Include="..\..\Common\tulo.UiUtilitiesLib\tulo.UiUtilitiesLib.csproj" />
+		<ProjectReference Include="..\..\tulo.CreateZugferdPdfA3\tulo.CreateZugferdPdfA3.csproj" />
+		<ProjectReference Include="..\..\tulo.eInvocieXmlGeneratorCii\tulo.eInvoiceXmlGeneratorCii.csproj" />
+		<ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Assets\TuloTeam.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Languages\ui_en.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Languages\ui_de.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
+</Project>

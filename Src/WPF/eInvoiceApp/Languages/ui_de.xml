@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+  <!--#region unit code -->
+<entry key="UnitPiece">Stk</entry>
+<entry key="UnitHour">Std</entry>
+<entry key="UnitKilogram">kg</entry>
+<entry key="UnitLitre">Liter</entry>
+<entry key="UnitMetre">m</entry>
+<entry key="UnitLinearMetre">lfm</entry>
+<entry key="UnitSquareMetre">m²</entry>
+<entry key="UnitCubicMetre">m³</entry>
+<entry key="UnitDay">Tag</entry>
+<entry key="UnitMinute">Minute</entry>
+<entry key="UnitSecond">Sekunde</entry>
+<entry key="UnitHectare">Hektar</entry>
+<entry key="UnitKilometre">km</entry>
+<entry key="UnitFlatRate">pauschal</entry>
+<entry key="UnitCount">Anzahl</entry>
+<entry key="UnitPair">Anzahl Paare</entry>
+<entry key="UnitSet">Set</entry>
+<entry key="UnitTonne">Tonne</entry>
+<entry key="UnitWeek">Woche</entry>
+<entry key="UnitPercent">%</entry>
+  <!--#endregion -->
+
+  <!-- Payment means typecode -->
+
+    <!--#endregion -->
+
+
+  <!--Umsatzsteuerkategorie-->
+
+
+ 
+  <!--#endregion -->
+</properties>

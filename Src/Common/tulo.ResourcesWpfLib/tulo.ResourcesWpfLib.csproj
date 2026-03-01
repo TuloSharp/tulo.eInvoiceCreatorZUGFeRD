@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+	  <UseWPF>true</UseWPF>
+	  <Nullable>disable</Nullable>
+
+	  <RootNamespace>tulo.ResourcesWpfLib</RootNamespace>
+	  <AssemblyName>tulo.ResourcesWpfLib</AssemblyName>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>tulo.ResourcesWpfLib</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Tulo's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<Description>
+			This package is for private use within our organisation only.
+			Generate an framework project
+		</Description>
+		<RepositoryType>GitHub</RepositoryType>
+		<RepositoryUrl></RepositoryUrl>
+		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Copyright>Copyright (c) 2025 Tulo's Company. All rights reserved.</Copyright>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Web.WebView2" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="Markdig.Wpf" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
+	  <ProjectReference Include="..\tulo.LoadingSpinnerControl\tulo.LoadingSpinnerControl.csproj" />
+	</ItemGroup>
+	
+	
+	<ItemGroup>
+	  <None Update="Icons\MainIcon.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Icons\MainIcon.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	
+</Project>

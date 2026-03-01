@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>tulo.eInvoiceXmlGeneratorCii</RootNamespace>
+		<AssemblyName>tulo.eInvoiceXmlGeneratorCii</AssemblyName>
+	</PropertyGroup>
+
+
+	<PropertyGroup>
+		<PackageId>tulo.eInvoiceXmlGeneratorCii</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Tulo's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<Description>
+			create a xml cii file for
+		</Description>
+		<RepositoryType>GitHub</RepositoryType>
+		<RepositoryUrl></RepositoryUrl>
+		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Copyright>Copyright (c) 2025 Tulo's Company. All rights reserved.</Copyright>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<Deterministic>true</Deterministic>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Codes\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Text.RegularExpressions" />
+	</ItemGroup>
+	
+</Project>

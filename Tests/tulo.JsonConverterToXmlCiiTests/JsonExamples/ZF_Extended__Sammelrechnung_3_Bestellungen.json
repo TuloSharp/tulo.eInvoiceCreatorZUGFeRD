@@ -1,0 +1,251 @@
+{
+  "InvoiceNumber": "6063636771001",
+  "InvoiceDate": "2026-08-27",
+  "Currency": "EUR",
+  "DocumentName": "RECHNUNG",
+  "DocumentTypeCode": "380",
+
+  "Seller": {
+    "ID": "10737",
+    "Name": "Lieferant GmbH & Co. KG",
+    "Street": "Lieferanten-Strasse 12-17",
+    "Zip": "98765",
+    "City": "Lieferantenstadt",
+    "CountryCode": "DE",
+    "VatId": "DE946280061",
+    "LeitwegId": "",
+    "FiscalId": "88888/00072",
+    "GeneralEmail": "info@lieferant.com",
+    "ContactPersonName": "Tim Kleine",
+    "ContactPhone": "0170...",
+    "ContactEmail": "tim.kleine@lieferant.com"
+  },
+
+  "Buyer": {
+    "ID": "9900880077",
+    "Name": "Musterkunde GmbH & Co Name 2 Musterkunde",
+    "Street": "Musterstrasse 44",
+    "Zip": "40789",
+    "City": "Musterstadt",
+    "CountryCode": "DE",
+    "VatId": "DE2012129398",
+    "LeitwegId": "04011000-1234512345-35",
+    "FiscalId": null,
+    "GeneralEmail": null,
+    "ContactPersonName": "Herr Test Monteur",
+    "ContactPhone": "02173 9364",
+    "ContactEmail": "mike.maier@lieferant.com"
+  },
+
+  "Payment": {
+    "Iban": "DE33600501010001234567",
+    "Bic": "SOLADEST600",
+    "AccountName": "Lieferant GmbH & Co. KG",
+
+    "PaymentTermsText": "Zahlbar innerhalb von 14 Tagen ohne Abzug.",
+    "DueDate": "2026-09-16",
+
+    "DirectDebitMandateID": "",
+    "PaymentMeansTypeCode": "58",
+    "PaymentMeansInformation": "Bezahlung per SEPA Überweisung",
+    "PaymentReference": "Kundennummer:. 9900880077 Rechnungsnummer:. 6063636771001",
+
+    "Terms": [
+      {
+        "Description": "Bis zum 06.09.2026 erhalten Sie 2,000 % Skonto",
+        "DueDate": null,
+        "DiscountTerms": {
+          "BasisDate": "2026-08-27",
+          "BasisPeriodDays": 10,
+          "BasisAmount": 655.38,
+          "CalculationPercent": 2.0,
+          "ActualDiscountAmount": 13.11
+        }
+      },
+      {
+        "Description": "Bis zum 16.09.2026 ohne Abzug",
+        "DueDate": "2026-09-16",
+        "DiscountTerms": null
+      }
+    ]
+  },
+
+  "Notes": [
+    {
+      "Content": "Bank: LBBW Stuttgart BLZ: 999 888 77 Kto.Nr.: 1234567, IBAN: DE33 9998 8877 0001 2345 67 BIC: SOLADEST600",
+      "SubjectCode": "REG",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Wenn nicht anders angegeben entspricht das Leistungsdatum dem Rechnungsdatum.",
+      "SubjectCode": "AAI",
+      "ContentCode": ""
+    },
+    {
+      "Content": "ZUGFeRD 2.4 Extended Sammelrechnung (Template JSON)",
+      "SubjectCode": "ACB",
+      "ContentCode": ""
+    }
+  ],
+
+  "Lines": [
+    {
+      "Description": "GWDSTG-DIN976-A-4.8-(A2K)-M10X1000",
+      "ProductDescription": "Gewindestange",
+      "GlobalId": "7711231873598",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "0595810 25",
+      "BuyerOrderReferencedId": "Abholung 1",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230045",
+      "DeliveryNoteLineId": "000010",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 25.0,
+      "UnitCode": "H87",
+      "UnitPrice": 2.06,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307416",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+      "Description": "MUELLSACK-EXTRASTARK-BLAU-700X1100X0,07",
+      "ProductDescription": "Müllsack, -beutel",
+      "GlobalId": "7748539263943",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "05899800555 150",
+      "BuyerOrderReferencedId": "Abholung 1",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230045",
+      "DeliveryNoteLineId": "000020",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 150.0,
+      "UnitCode": "H87",
+      "UnitPrice": 49.29,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307416",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+      "Description": "SHR-AW30-(A2K)-7,5X152",
+      "ProductDescription": "Abstandsmontageschraube Rahmen",
+      "GlobalId": "7738898142591",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "05234830152 200",
+      "BuyerOrderReferencedId": "Abholung 2",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230046",
+      "DeliveryNoteLineId": "000010",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 400.0,
+      "UnitCode": "H87",
+      "UnitPrice": 32.76,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307417",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+      "Description": "MU-6KT-DIN934-I8I-SW17-(A2K)-M10",
+      "ProductDescription": "Sechskantmutter",
+      "GlobalId": "7711231333337",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "0531710 100",
+      "BuyerOrderReferencedId": "Abholung 2",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230046",
+      "DeliveryNoteLineId": "000020",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 500.0,
+      "UnitCode": "H87",
+      "UnitPrice": 9.16,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307417",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+      "Description": "MU-6KT-DIN934-I8I-SW19-(A2K)-M12",
+      "ProductDescription": "Sechskantmutter",
+      "GlobalId": "7711231333498",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "0531712 100",
+      "BuyerOrderReferencedId": "Abholung 2",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230046",
+      "DeliveryNoteLineId": "000030",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 500.0,
+      "UnitCode": "H87",
+      "UnitPrice": 13.32,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307417",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+      "Description": "MUELLSACK-EXTRASTARK-BLAU-700X1100X0,07",
+      "ProductDescription": "Müllsack, -beutel",
+      "GlobalId": "7748539263943",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "05899800555 150",
+      "BuyerOrderReferencedId": "Abholung 3",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230047",
+      "DeliveryNoteLineId": "000010",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 300.0,
+      "UnitCode": "H87",
+      "UnitPrice": 49.29,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307418",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    },
+    {
+      "Description": "KAFFEE-ESPRESSO-GANZE-BOHNEN-1KG",
+      "ProductDescription": "Kaffee",
+      "GlobalId": "7765233128651",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "05988013679 10",
+      "BuyerOrderReferencedId": "Abholung 3",
+      "BuyerOrderDate": "2026-08-27",
+      "DeliveryNoteNumber": "8408230047",
+      "DeliveryNoteLineId": "000020",
+      "DeliveryNoteDate": "2026-08-27",
+      "Quantity": 2.0,
+      "UnitCode": "H87",
+      "UnitPrice": 18.9,
+      "TaxPercent": 7.0,
+      "TaxCategory": "S",
+      "BillingPeriodEndDate": "2026-08-27",
+      "OriginCountryCode": "DE",
+      "AdditionalReferencedDocumentId": "2156307418",
+      "AdditionalReferencedDocumentTypeCode": "130",
+      "AdditionalReferencedDocumentReferenceTypeCode": "VN"
+    }
+  ],
+  "HeaderChargeTotalAmount": 0.0,
+  "HeaderAllowanceTotalAmount": 0.0,
+  "HeaderTotalPrepaidAmount": 0.0,
+  "HeaderDuePayableAmount": 655.38
+}

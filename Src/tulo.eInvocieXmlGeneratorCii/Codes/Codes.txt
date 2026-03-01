@@ -1,0 +1,35 @@
+Payment codes
+Code	Beschreibung
+1		Bargeldzahlung (Cash Payment)
+2		Wechsel
+3		Überweisung (Credit Transfer)
+4		Barzahlung mit Wechsel
+10		Banküberweisung mit Kassenerhebung
+20		Überweisung (inkl. SEPA-Überweisungen)
+30		Lastschrift (Direct Debit)
+31		SEPA-Lastschrift (SEPA Direct Debit)
+42		Kreditkartenzahlung (Credit Card Payment)
+48		Mobile Zahlung (Mobile Payment)
+49		Banküberweisung über Online-Banking
+57		Zahlungsanweisung oder Scheck (Payment Order/Cheque)
+58		Einzahlungsschein (Deposit Slip)
+59		Internationale Überweisung (International Transfer)
+97		Elektronisches Geld (E-Money)
+98		Sonstiges (Other Means)
+ZZZ		Nicht spezifiziert (Unspecified Payment Means)
+
+InvoiceTypeCode
+CII (UN/CEFACT Cross Industry Invoice)
+Die Codes stammen aus der UNTDID 1001-Liste. Dies ist die vollständige Liste der relevanten Codes für Rechnungsarten in CII:
+Code    Bedeutung
+380 Handelsrechnung (Commercial Invoice)
+381 Gutschrift (Credit Note)
+383 Lastschrift (Debit Note)
+384 Rechnungskorrektur (Corrected Invoice)
+385 Selbstfakturierte Lastschrift
+386 Vorläufige Rechnung (Preliminary Invoice)
+388 Selbstfakturierte Gutschrift
+389 Konsolidierte Rechnung (Consolidated Invoice)
+391 Angepasste Rechnung (Adjusted Invoice)
+875 Proformarechnung (Proforma Invoice)
+572 Vorauszahlungsrechnung (Prepayment Invoice)

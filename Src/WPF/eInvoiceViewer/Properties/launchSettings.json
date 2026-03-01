@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Extended Invoice": {
+      "commandName": "Project",
+      "commandLineArgs": "--pathFile \"D:\\temp mio\\tulo.eInvoiceApp\\Src\\WPF\\eInvoiceViewer\\Examples\\ZF_Extended__Sammelrechnung_3_Bestellungen.xml\""
+    },
+    "Extended Invoice Home": {
+      "commandName": "Project",
+      "commandLineArgs": "--pathFile \"D:\\VisualStudio\\tulo.eInvoiceApp\\Src\\WPF\\eInvoiceViewer\\Examples\\ZF_Extended__Sammelrechnung_3_Bestellungen.xml\""
+    },
+    "Without Invoice": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

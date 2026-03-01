@@ -1,0 +1,214 @@
+{
+  "InvoiceNumber": "KR87654321012",
+  "InvoiceDate": "2025-12-01",
+  "DocumentName": "KOSTENRECHNUNG",
+  "DocumentTypeCode": "380",
+  "Seller": {
+    "ID": "549910",
+    "Name": "MUSTERLIEFERANT GMBH",
+    "Street": "BAHNHOFSTRASSE 99",
+    "Zip": "99199",
+    "City": "MUSTERHAUSEN",
+    "CountryCode": "DE",
+    "VatId": "",
+    "LeitwegId": "",
+    "FiscalId": "201/113/40209",
+    "GeneralEmail": null,
+    "ContactPersonName": null,
+    "ContactPhone": "+49 932 431 500",
+    "ContactEmail": "max.mustermann@musterlieferant.de"
+  },
+  "Buyer": {
+    "ID": "339420",
+    "Name": "MUSTER-KUNDE GMBH",
+    "Street": "KUNDENWEG 88",
+    "Zip": "40235",
+    "City": "DUESSELDORF",
+    "CountryCode": "DE",
+    "VatId": "",
+    "LeitwegId": "",
+    "FiscalId": null,
+    "GeneralEmail": null,
+    "ContactPersonName": null,
+    "ContactPhone": null,
+    "ContactEmail": null
+  },
+  "Currency": "EUR",
+  "Lines": [
+    {
+      "Description": "Wirkarbeit HT",
+      "Quantity": 1000.0,
+      "UnitCode": "KWH",
+      "UnitPrice": 0.052,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ProductDescription": "",
+      "GlobalId": "4123456000014",
+      "GlobalIdSchemeId": "0088",
+      "SellerAssignedId": "WA997",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    },
+    {
+      "Description": "Ökosteuer Lieferant",
+      "Quantity": 1000.0,
+      "UnitCode": "KWH",
+      "UnitPrice": 0.0205,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ProductDescription": "",
+      "GlobalId": "4123456000021",
+      "GlobalIdSchemeId": "0088",
+      "SellerAssignedId": "ÖST250",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    },
+    {
+      "Description": "Kommissionierer 1250032 D. Muster",
+      "Quantity": 27.5,
+      "UnitCode": "HUR",
+      "UnitPrice": 10.5,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ProductDescription": "Besteller: Hr. Mayer, Personalnr. 4488",
+      "GlobalId": "4260331811362",
+      "GlobalIdSchemeId": "0088",
+      "SellerAssignedId": "",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    },
+    {
+      "Description": "FALTENBEUTEL 16x6x28 CM",
+      "Quantity": 3500.0,
+      "UnitCode": "H87",
+      "UnitPrice": 0.0105,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ProductDescription": "",
+      "GlobalId": "2001015001325",
+      "GlobalIdSchemeId": "0088",
+      "SellerAssignedId": "FB05",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    },
+    {
+      "Description": "Kopierpapier A4",
+      "Quantity": 1210.0,
+      "UnitCode": "H87",
+      "UnitPrice": 0.01,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ProductDescription": "Zählerstand von-bis: 543210 - 544420",
+      "GlobalId": "4123456000038",
+      "GlobalIdSchemeId": "0088",
+      "SellerAssignedId": "KOP05",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    }
+  ],
+  "Payment": {
+    "Iban": "",
+    "Bic": "",
+    "AccountName": "",
+    "PaymentTermsText": "",
+    "DueDate": null,
+    "DirectDebitMandateId": "",
+    "PaymentMeansTypeCode": "",
+    "PaymentMeansInformation": "",
+    "PaymentReference": "",
+    "Terms": [
+      {
+        "Description": "Skontovereinbarung: 2% bei Zahlung innerhalb 10 Tagen nach Rechnungsdatum",
+        "DueDate": null,
+        "DiscountTerms": {
+          "BasisDate": "2025-12-01",
+          "BasisPeriodDays": 10,
+          "BasisAmount": 480.22,
+          "CalculationPercent": 2.0,
+          "ActualDiscountAmount": 9.6
+        }
+      }
+    ]
+  },
+  "Notes": [
+    {
+      "Content": "Es bestehen Rabatt- oder Bonusvereinbarungen.",
+      "SubjectCode": "AAK",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Der Verkäufer bleibt Eigentümer der Waren bis zur vollständigen Erfüllung der Kaufpreisforderung.",
+      "SubjectCode": "AAJ",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Geschäftsführer: Max Mustermann",
+      "SubjectCode": "REG",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Handelsregister: HRB Nr. 372876",
+      "SubjectCode": "REG",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Amtsgericht Musterstadt",
+      "SubjectCode": "REG",
+      "ContentCode": ""
+    },
+    {
+      "Content": "ZUGFeRD vers 2.4.0 (Extended)",
+      "SubjectCode": "ACB",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Dies ist ein Beispiel für eine Kostenrechnung",
+      "SubjectCode": "ACB",
+      "ContentCode": ""
+    }
+  ],
+  "HeaderChargeTotalAmount": 15.0,
+  "HeaderAllowanceTotalAmount": 21.55,
+  "HeaderTotalPrepaidAmount": 0.0,
+  "HeaderDuePayableAmount": 480.22
+}

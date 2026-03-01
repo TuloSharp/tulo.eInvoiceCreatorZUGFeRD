@@ -1,0 +1,361 @@
+﻿<UserControl x:Class="tulo.eInvoice.eInvoiceApp.Views.Invoices.InvoicePositionCardItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Invoices"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
+             xmlns:dropdown="clr-namespace:tulo.DropdownMenuControl;assembly=tulo.DropdownMenuControl"
+             xmlns:customedtextblock="clr-namespace:tulo.LeaderLabeledTextBlock;assembly=tulo.LeaderLabeledTextBlock"
+             mc:Ignorable="d"
+             d:DesignHeight="120"
+             d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:IntToStringConverter x:Key="IntToStringConverter" />
+            <converters:DecimalToStringConverter x:Key="DecimalToStringConverter" />
+            <Style x:Key="InvoicePosStyle" TargetType="{x:Type customedtextblock:LeaderLabeledTextBlock}">
+                <Setter Property="TextFontSize" Value="13" />
+                <Setter Property="LabelFontSize" Value="10" />
+                <Setter Property="Stroke" Value="{StaticResource MainBrushColor}" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="LabelAlignToCorner" Value="True" />
+                <Setter Property="CornerHeight" Value="4" />
+              
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Background="{StaticResource PanelBackgroundBrushColor}"
+            BorderBrush="{StaticResource PanelBorderBrushColor}"
+            BorderThickness="2"
+            CornerRadius="5"
+            Margin="1"
+            Padding="4"
+            SnapsToDevicePixels="True"
+            Width="560"
+            Height="auto">
+
+        <Border.Effect>
+            <DropShadowEffect Color="DarkGray"
+                              BlurRadius="10"
+                              ShadowDepth="2"
+                              Opacity="0.5" />
+        </Border.Effect>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+
+                <ScrollViewer MaxWidth="1000" VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="0,4,0,4" VerticalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="0" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!--  row 1: #, Description  -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="0"
+                                                                      Text="{Binding InvoicePositionNr, Converter={StaticResource IntToStringConverter}}"
+                                                                      Label="#"
+                                                                      Width="14"
+                                                                      CornerWidth="12"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="2"
+                                                                      Text="{Binding InvoicePositionDescription}"
+                                                                      Label="Description"
+                                                                      Width="160"
+                                                                      CornerWidth="160"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+                            
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="4"
+                                                                      Text="{Binding InvoicePositionProductDescription}"
+                                                                      Label="Product Description"
+                                                                      Width="328"
+                                                                      CornerWidth="300"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+                        </Grid>
+
+                        <!--  row 2: Quantity, Unit, Price, VAT %, Net Amount, Gross Amount  -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="1"
+                                                                      Text="{Binding InvoicePositionItemNr, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="70"
+                                                                      Label="Item-Nr."
+                                                                      CornerWidth="70"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="3"
+                                                                      Text="{Binding InvoicePositionEan, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="70"
+                                                                      Label="EAN"
+                                                                      CornerWidth="70"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+                            
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="5"
+                                                                      Text="{Binding InvoicePositionQuantity, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="40"
+                                                                      Label="Quantity"
+                                                                      CornerWidth="40"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="7"
+                                                                      Text="{Binding InvoicePositionUnit, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="50"
+                                                                      Label="Unit"
+                                                                      CornerWidth="50"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="9"
+                                                                      Text="{Binding InvoicePositionUnitPrice, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="56"
+                                                                      Label="Price[€]"
+                                                                      CornerWidth="56"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="11"
+                                                                      Text="{Binding InvoicePositionVatRate, Converter={StaticResource IntToStringConverter}}"
+                                                                      Width="32"
+                                                                      Label="VAT[%]"
+                                                                      CornerWidth="32"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="13"
+                                                                      Text="{Binding InvoicePositionNetAmount, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="70"
+                                                                      Label="Total Net[€]"
+                                                                      CornerWidth="70"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="15"
+                                                                      Text="{Binding InvoicePositionGrossAmount, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Width="70"
+                                                                      Label="Total Gross[€]"
+                                                                      CornerWidth="70"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+
+
+                <Expander x:Name="discountInfosExpander" IsExpanded="False">
+                    <Expander.Template>
+                        <ControlTemplate TargetType="Expander">
+                            <Grid>
+                                <ContentPresenter x:Name="ContentSite"
+                                                  ContentSource="Content"
+                                                  Visibility="Collapsed" />
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="True">
+                                    <Setter TargetName="ContentSite" Property="Visibility" Value="Visible" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Expander.Template>
+
+                    <Expander.Header>
+                        <Grid Height="0" />
+                    </Expander.Header>
+
+                    <Border Background="#10FFFFFF"
+                            BorderBrush="#22000000"
+                            BorderThickness="1"
+                            Height="32"
+                            CornerRadius="4">
+
+                        <Grid Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="2" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="2" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                            </Grid.ColumnDefinitions>
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="1"
+                                                                      Text="{Binding InvoicePositionDiscountReason, UpdateSourceTrigger=PropertyChanged}"
+                                                                      Label="Discount reason"
+                                                                      Width="300"
+                                                                      CornerWidth="260"
+                                                                      CornerHeight="4"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="3"
+                                                                      Text="{Binding InvoicePositionDiscountNetAmount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Label="Dis. Net[€]"
+                                                                      Width="80"
+                                                                      CornerWidth="60"
+                                                                      CornerHeight="4"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+
+                            <customedtextblock:LeaderLabeledTextBlock Grid.Column="5"
+                                                                      Text="{Binding InvoicePositionNetAmountAfterDiscount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Label="Total Net (Dis.)[€]"
+                                                                      Width="85"
+                                                                      CornerWidth="70"
+                                                                      CornerHeight="4"
+                                                                      Style="{StaticResource InvoicePosStyle}" />
+                        </Grid>
+
+                    </Border>
+                </Expander>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Margin="4,0,0,0">
+
+                <dropdown:DropdownMenu x:Name="dropdownmenu"
+                                       Width="24"
+                                       Height="24"
+                                       VerticalAlignment="Top">
+                    <Border Background="White"
+                            BorderBrush="Gray"
+                            SnapsToDevicePixels="True"
+                            CornerRadius="5"
+                            BorderThickness="1">
+                        <StackPanel MinWidth="125">
+                            <StackPanel.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#4CAF50" />
+                                    <Setter Property="Foreground" Value="#0F52BA" />
+                                    <Setter Property="Padding" Value="5,5" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                    <EventSetter Event="Click" Handler="Button_Click" />
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Margin="{TemplateBinding Margin}"
+                                                        Padding="{TemplateBinding Padding}"
+                                                        Background="{TemplateBinding Background}">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                                        To="#81C784"
+                                                                        Duration="0:0:0.1" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                            <Trigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                                        To="#4CAF50"
+                                                                        Duration="0:0:0.1" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.ExitActions>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <Button Command="{Binding OpenEditInvoicePositionViewCommand}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="4" />
+                                        <ColumnDefinition Width="auto" />
+
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0"
+                                          Style="{StaticResource ContentButtonPathStyle}"
+                                          Data="{StaticResource EditIconSVG}"
+                                          Width="22"
+                                          Height="22">
+                                        <Path.Fill>
+                                            <SolidColorBrush Color="{StaticResource ButtonIconPrimaryColor}" />
+                                        </Path.Fill>
+                                    </Path>
+                                    <TextBlock Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               Text="Edit" />
+                                </Grid>
+                            </Button>
+                            <Button Command="{Binding OpenDeleteInvoicePositionViewCommand}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="4" />
+                                        <ColumnDefinition Width="auto" />
+
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0"
+                                          Style="{StaticResource ContentButtonPathStyle}"
+                                          Data="{StaticResource DeleteIconSVG}"
+                                          Width="22"
+                                          Height="22">
+                                        <Path.Fill>
+                                            <SolidColorBrush Color="{StaticResource ButtonIconPrimaryColor}" />
+                                        </Path.Fill>
+                                    </Path>
+                                    <TextBlock Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               Text="Delete" />
+                                </Grid>
+
+                            </Button>
+                        </StackPanel>
+
+                    </Border>
+                </dropdown:DropdownMenu>
+
+                <ToggleButton Style="{StaticResource ExpanderIconToggleButtonStyle}"
+                              ToolTip="{Binding ToolTipDiscountInfosExpander}"
+                              Margin="0,20,0,0"
+                              IsChecked="{Binding ElementName=discountInfosExpander, Path=IsExpanded, Mode=TwoWay}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

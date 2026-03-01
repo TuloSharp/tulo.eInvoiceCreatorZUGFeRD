@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+	  <RootNamespace>tulo.eInvoice.eInvoiceViewer</RootNamespace>
+	  <AssemblyName>tulo.eInvoice.eInvoiceViewer</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	  <PackageId>tulo.eInvoice.eInvoiceViewer</PackageId>
+	  <Version>0.0.1</Version>
+	  <Authors>Andrade's Team</Authors>
+	  <Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+	  <Description>
+		  This App is for private use within our organisation only.
+		  Generate an framework project
+	  </Description>
+	  <RepositoryType>GitHub</RepositoryType>
+	  <RepositoryUrl></RepositoryUrl>
+	  <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+	  <Copyright>Copyright (c) 2025 Andrade Company. All rights reserved.</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\TuloTeam.ico" />
+    <None Remove="Fonts\ARIAL.TTF" />
+    <None Remove="Fonts\CASCADIACODE.TTF" />
+    <None Remove="Fonts\ROBOTO.TTF" />
+    <None Remove="Fonts\VERDANA.TTF" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Fonts\ARIAL.TTF" />
+    <EmbeddedResource Include="Fonts\CASCADIACODE.TTF" />
+    <EmbeddedResource Include="Fonts\ROBOTO.TTF" />
+    <EmbeddedResource Include="Fonts\VERDANA.TTF" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
+    <ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
+    <ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
+    <ProjectReference Include="..\..\Common\tulo.RevealPasswordBox\tulo.RevealPasswordBox.csproj" />
+    <ProjectReference Include="..\..\Common\tulo.SerilogLib\tulo.SerilogLib.csproj" />
+    <ProjectReference Include="..\..\Common\tulo.UiUtilitiesLib\tulo.UiUtilitiesLib.csproj" />
+    <ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\TuloTeam.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\ZF_Extended__Sammelrechnung_3_Bestellungen.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>disable</Nullable>
+		<UseWPF>true</UseWPF>
+
+		<RootNamespace>tulo.DropdownMenuControl</RootNamespace>
+		<AssemblyName>tulo.DropdownMenuControl</AssemblyName>
+	</PropertyGroup>
+
+<PropertyGroup>
+		<PackageId>tulo.DropdownMenuControl</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Tulo's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Description>
+			Common Classes for development WFP with drop down menu
+		</Description>
+	</PropertyGroup>
+</Project>

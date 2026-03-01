@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="tulo.eInvoice.eInvoiceViewer.Controls.PdfContentViewerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:tulo.eInvoice.eInvoiceViewer.Controls"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:custombehaviors="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <wv2:WebView2 Name="webView" Grid.Column="1">
+            <behaviors:Interaction.Behaviors>
+                <custombehaviors:WebView2ViewerBehavior HtmlContent="{Binding DocumentSource}" />
+            </behaviors:Interaction.Behaviors>
+        </wv2:WebView2>
+
+    </Grid>
+</UserControl>

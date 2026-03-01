@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>tulo.CreateZugferdPdfA3</RootNamespace>
+    <AssemblyName>tulo.CreateZugferdPdfA3</AssemblyName>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <PackageId>tulo.CreateZugferdPdfA3</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Tulo's Team</Authors>
+    <Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+    <Description>
+      create a xml cii file for
+    </Description>
+    <RepositoryType>GitHub</RepositoryType>
+    <RepositoryUrl></RepositoryUrl>
+    <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright (c) 2026 Tulo's Company. All rights reserved.</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZUGFeRD-csharp" />
+    <PackageReference Include="ZUGFeRD.PDF-csharp" />
+  </ItemGroup>
+
+
+</Project>

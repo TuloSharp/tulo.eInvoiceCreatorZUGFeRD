@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="tulo.ResourcesWpfLib.Controls.Common.SpinnerMessageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:tulo.ResourcesWpfLib.Controls.Common"
+             xmlns:spinner="clr-namespace:tulo.LoadingSpinnerControl;assembly=tulo.LoadingSpinnerControl"
+             xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters"
+             mc:Ignorable="d"
+             Background="{StaticResource PanelBrushColor}"
+             Opacity="50"
+             d:DesignHeight="120"
+             Width="140"
+             d:DesignWidth="140">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:DebuggerConverter x:Key="DebuggerConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="11" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="4" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="0" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="1"
+                   Margin="0,2,0,0"
+                   Foreground="{StaticResource SpinnerTextBrushColor}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="16"
+                   Text="Please Wait" />
+
+        <spinner:LoadingSpinner Grid.Row="3"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Color="{StaticResource SpinnerTextBrushColor}"
+                                Diameter="40"
+                                IsLoading="{Binding IsLoading}"
+                                Thickness="5" 
+                                FullText="●●●●●●●●●"/>
+        <TextBlock Grid.Row="4"
+                   Grid.Column="1"
+                   Margin="0,2,0,0"
+                   Foreground="{StaticResource SpinnerTextBrushColor}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="20"
+                   Text="{Binding DisplayedText}" />
+
+    </Grid>
+</UserControl>

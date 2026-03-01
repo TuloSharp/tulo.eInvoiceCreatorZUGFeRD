@@ -1,0 +1,111 @@
+{
+  "InvoiceNumber": "471102",
+  "InvoiceDate": "2018-03-05",
+  "DocumentName": "Gutschrift",
+  "DocumentTypeCode": "389",
+  "Seller": {
+    "ID": "549910",
+    "Name": "Lieferant GmbH",
+    "Street": "Lieferantenstraße 20",
+    "Zip": "80333",
+    "City": "München",
+    "CountryCode": "DE",
+    "VatId": "DE123456789",
+    "LeitwegId": "",
+    "FiscalId": "201/113/40209",
+    "GeneralEmail": null,
+    "ContactPersonName": null,
+    "ContactPhone": null,
+    "ContactEmail": null
+  },
+  "Buyer": {
+    "ID": "GE2020211",
+    "Name": "Kunden AG Mitte",
+    "Street": "Kundenstraße 15",
+    "Zip": "69876",
+    "City": "Frankfurt",
+    "CountryCode": "DE",
+    "VatId": "DE136695976",
+    "LeitwegId": "",
+    "FiscalId": null,
+    "GeneralEmail": null,
+    "ContactPersonName": null,
+    "ContactPhone": null,
+    "ContactEmail": null
+  },
+  "Currency": "EUR",
+  "Lines": [
+    {
+      "Description": "Trennblätter A4",
+      "Quantity": 20.0,
+      "UnitCode": "H87",
+      "UnitPrice": 9.9,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ProductDescription": "",
+      "GlobalId": "4012345001235",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "TB100A4",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    },
+    {
+      "Description": "Joghurt Banane",
+      "Quantity": 50.0,
+      "UnitCode": "H87",
+      "UnitPrice": 5.5,
+      "TaxPercent": 7.0,
+      "TaxCategory": "S",
+      "ProductDescription": "",
+      "GlobalId": "4000050986428",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "ARNR2",
+      "BuyerOrderReferencedId": "",
+      "BuyerOrderDate": null,
+      "DeliveryNoteNumber": "",
+      "DeliveryNoteLineId": "",
+      "DeliveryNoteDate": null,
+      "BillingPeriodEndDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "OriginCountryCode": ""
+    }
+  ],
+  "Payment": {
+    "Iban": "",
+    "Bic": "",
+    "AccountName": "",
+    "PaymentTermsText": "Der Betrag wird ihrem Kundenkonto gutgeschrieben und mit der nächsten Rechnung verrechnet.",
+    "DueDate": null,
+    "DirectDebitMandateId": "",
+    "PaymentMeansTypeCode": "",
+    "PaymentMeansInformation": "",
+    "PaymentReference": "",
+    "Terms": []
+  },
+  "Notes": [
+    {
+      "Content": "Rechnung gemäß Bestellung vom 01.03.2018.",
+      "SubjectCode": "",
+      "ContentCode": ""
+    },
+    {
+      "Content": "Lieferant GmbH\t\t\t\t\nLieferantenstraße 20\t\t\t\t\n80333 München\t\t\t\t\nDeutschland\t\t\t\t\nGeschäftsführer: Hans Muster\nHandelsregisternummer: H A 123",
+      "SubjectCode": "REG",
+      "ContentCode": ""
+    }
+  ],
+  "HeaderChargeTotalAmount": 0.0,
+  "HeaderAllowanceTotalAmount": 0.0,
+  "HeaderTotalPrepaidAmount": 0.0,
+  "HeaderDuePayableAmount": 529.87
+}

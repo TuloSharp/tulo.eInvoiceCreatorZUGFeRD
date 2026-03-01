@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<RootNamespace>tulo.CoreLib</RootNamespace>
+		<AssemblyName>tulo.CoreLib</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>tulo.CoreLib</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Tulo's Team</Authors>
+		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<Description>
+			This package is for private use within our organisation only.
+			Generate an framework project
+		</Description>
+		<RepositoryType>GitHub</RepositoryType>
+		<RepositoryUrl></RepositoryUrl>
+		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Copyright>Copyright (c) 2025 Tulo's Company. All rights reserved.</Copyright>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+		<PackageReference Include="PDFsharp" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
+	</ItemGroup>
+
+</Project>
