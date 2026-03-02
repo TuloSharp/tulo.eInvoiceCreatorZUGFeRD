@@ -65,7 +65,6 @@
                 <!--  Content="Invoice View"  -->
                 <Label Content="{Binding LabelContentInvoiceView}"
                        Grid.Row="1"
-                       FontSize="26"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
@@ -138,15 +137,12 @@
                     <RowDefinition Height="4" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="16" />
+                    <RowDefinition Height="8" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="16" />
+                    <RowDefinition Height="8" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="16" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="16" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="16" />
+                    <RowDefinition Height="12" />
+
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />
@@ -171,7 +167,7 @@
                         <!--  Content="Buyer Information"  -->
                         <Label Content="{Binding LabelContenBuyerInformation}"
                                Grid.Row="0"
-                               FontSize="16"
+                               FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center" />
                         <controls:BuyerPartyControl Grid.Row="1" HorizontalAlignment="Left" />
@@ -185,7 +181,7 @@
                         <!--  Content="Header"  -->
                         <Label Content="{Binding LabelContentHeader}"
                                Grid.Row="0"
-                               FontSize="16"
+                               FontWeight="Bold"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center" />
                         <invoicecontrols:HeaderInvoiceControl Grid.Row="1" HorizontalAlignment="Left" />
@@ -202,7 +198,7 @@
                     </Grid.RowDefinitions>
                     <!--  Content="Payment Information"  -->
                     <Label Content="{Binding LabelContentPaymentInformation}"
-                           FontSize="16"
+                           FontWeight="Bold"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center" />
                     <controls:PaymentInfosControl Grid.Row="1" />
@@ -221,7 +217,7 @@
                     <!--  Content="Positions List"  -->
                     <Label Content="{Binding LabelContentPositionsList}"
                            Grid.Row="0"
-                           FontSize="16"
+                           FontWeight="Bold"
                            HorizontalAlignment="Left" />
                     <invoicecontrols:HeaderInvoicePositionControl Grid.Row="1"
                                                                   HorizontalAlignment="Stretch"
@@ -286,7 +282,7 @@
 
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
-                                   
+
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                     <Setter Property="VerticalContentAlignment" Value="Top" />
                                     <Setter Property="Margin" Value="4" />
@@ -326,9 +322,9 @@
                                                   VerticalAlignment="Center"
                                                   Visibility="{Binding IsLoading, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />-->
 
-                <commoncontrols:StatusMessageControl Grid.Row="7"
+                <!--<commoncontrols:StatusMessageControl Grid.Row="7"
                                                      Grid.Column="1"
-                                                     DataContext="{Binding StatusMessageViewModel}" />
+                                                     DataContext="{Binding StatusMessageViewModel}" />-->
             </Grid>
         </Grid>
 

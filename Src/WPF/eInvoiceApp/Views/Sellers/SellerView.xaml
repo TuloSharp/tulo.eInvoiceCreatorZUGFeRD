@@ -38,7 +38,7 @@
         <Label Content="Seller Information"
                Grid.Row="1"
                Grid.Column="1"
-               FontSize="16"
+               FontWeight="Bold"
                HorizontalAlignment="Left"
                VerticalAlignment="Center" />
 
@@ -50,7 +50,7 @@
         <Label Content="Bank account details"
                Grid.Row="3"
                Grid.Column="1"
-               FontSize="16"
+               FontWeight="Bold"
                HorizontalAlignment="Left"
                VerticalAlignment="Center" />
         <controls:BankConnectionSellerControl Grid.Row="4" Grid.Column="1" />
@@ -58,7 +58,7 @@
         <Label Content="Invoice Notes"
                Grid.Row="5"
                Grid.Column="1"
-               FontSize="16"
+               FontWeight="Bold"
                HorizontalAlignment="Left"
                VerticalAlignment="Center" />
 
