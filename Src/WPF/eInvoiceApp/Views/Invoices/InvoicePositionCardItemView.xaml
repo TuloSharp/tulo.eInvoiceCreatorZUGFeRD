@@ -54,7 +54,7 @@
 
             <StackPanel Grid.Column="0">
 
-                <ScrollViewer MaxWidth="1000" VerticalScrollBarVisibility="Auto">
+                <Grid MaxWidth="1000" VerticalAlignment="Center">
                     <Grid Margin="0,4,0,4" VerticalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -172,7 +172,7 @@
                                                                       Style="{StaticResource InvoicePosStyle}" />
                         </Grid>
                     </Grid>
-                </ScrollViewer>
+                </Grid>
 
 
                 <Expander x:Name="discountInfosExpander" IsExpanded="False">

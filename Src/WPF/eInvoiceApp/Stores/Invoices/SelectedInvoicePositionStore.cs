@@ -39,31 +39,25 @@ public class SelectedInvoicePositionStore : ISelectedInvoicePositionStore
         _invoicePositionService.InvoicePositionDeleted += OnPositionDeleted;
     }
 
-    private void OnPositionCreated(Guid id, InvoicePositionDetailsDTO invoicePosition)
+    private void OnPositionCreated(InvoicePositionDetailsDTO invoicePosition)
     {
-        _selectedInvoicePositionId = id;
+        SelectedInvoicePositionId = invoicePosition.Id;
         SelectedInvoicePosition = invoicePosition;
     }
 
-    private void OnPositionUpdated(Guid id, InvoicePositionDetailsDTO invoicePosition)
+    private void OnPositionUpdated(InvoicePositionDetailsDTO invoicePosition)
     {
-        if (_selectedInvoicePositionId == id)
-            SelectedInvoicePosition = invoicePosition;
+        SelectedInvoicePositionId = invoicePosition.Id;
+        SelectedInvoicePosition = invoicePosition;
     }
 
     private void OnPositionDeleted(Guid id)
     {
-        if (_selectedInvoicePositionId == id)
+        if (SelectedInvoicePositionId == id)
         {
-            _selectedInvoicePositionId = null;
+            SelectedInvoicePositionId = null;
             SelectedInvoicePosition = null!;
         }
-    }
-
-    public void SetSelected(Guid id, InvoicePositionDetailsDTO invoicePosition)
-    {
-        _selectedInvoicePositionId = id;
-        SelectedInvoicePosition = invoicePosition;
     }
 
     public event Action? SelectedInvoicePositionChanged;

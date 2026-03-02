@@ -2,7 +2,6 @@
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.ViewModels;
-using tulo.eInvoice.eInvoiceApp.Commands.Common;
 using tulo.eInvoice.eInvoiceApp.DTOs;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices

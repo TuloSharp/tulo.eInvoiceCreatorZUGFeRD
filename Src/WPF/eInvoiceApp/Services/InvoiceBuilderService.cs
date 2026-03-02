@@ -92,13 +92,13 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
     // Loads invoice positions from store and fills invoice.Lines.
     private async Task FillLinesFromStoreAsync(Invoice invoice)
     {
-        var result = await _invoicePositionStore.GetAllWithIdAsync();
+        var result = await _invoicePositionStore.GetAllAsync();
         if (!result.Success || result.Data == null)
             return;
 
         invoice.Lines.Clear();
 
-        foreach (var (_, dto) in result.Data)
+        foreach (var dto in result.Data)
         {
             var line = new InvoiceLine
             {

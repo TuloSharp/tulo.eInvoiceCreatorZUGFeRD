@@ -162,7 +162,7 @@
                             BorderBrush="Transparent"
                             Foreground="Transparent"
                             Command="{Binding EditInvoicePositionDetailsCommand}"
-                            IsEnabled="{Binding IsSyntaxCheckValid}">
+                            IsEnabled="{Binding IsEnableToSaveData}">
                         <Grid>
                             <Viewbox Style="{StaticResource ViewBox4Icon}">
                                 <Path Style="{StaticResource ContentButtonPathStyle}"

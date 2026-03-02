@@ -18,7 +18,11 @@ public sealed class InvoicePositionStore : IInvoicePositionStore
     public Task<OperationResult<Guid>> AddAsync(InvoicePositionDetailsDTO dto, int? desiredPositionNo = null)
     {
         var id = Guid.NewGuid();
-        if (!_items.TryAdd(id, Clone(dto)))
+
+        var cloned = Clone(dto);
+        cloned.Id = id;
+
+        if (!_items.TryAdd(id, cloned))
             return Task.FromResult(OperationResult<Guid>.Fail("Failed to add invoice position."));
 
         lock (_lock)
@@ -42,7 +46,9 @@ public sealed class InvoicePositionStore : IInvoicePositionStore
         if (!_items.ContainsKey(id))
             return Task.FromResult(OperationResult<Guid>.Fail("Invoice position not found."));
 
-        _items[id] = Clone(dto);
+        var cloned = Clone(dto);
+        cloned.Id = id;
+        _items[id] = cloned;
         return Task.FromResult(OperationResult<Guid>.Ok(id));
     }
 
@@ -60,25 +66,20 @@ public sealed class InvoicePositionStore : IInvoicePositionStore
         return Task.FromResult(OperationResult<Guid>.Ok(id));
     }
 
-    public Task<OperationResult<List<(Guid Id, InvoicePositionDetailsDTO InvoicePosition)>>> GetAllWithIdAsync()
+    public Task<OperationResult<List<InvoicePositionDetailsDTO>>> GetAllAsync()
     {
         List<Guid> ids;
-        lock (_lock)
-        {
-            ids = _order.ToList();
-        }
+        lock (_lock) ids = _order.ToList();
 
-        var list = new List<(Guid, InvoicePositionDetailsDTO)>(ids.Count);
+        var list = new List<InvoicePositionDetailsDTO>(ids.Count);
         foreach (var id in ids)
-        {
             if (_items.TryGetValue(id, out var dto))
-                list.Add((id, Clone(dto)));
-        }
+                list.Add(Clone(dto));
 
-        return Task.FromResult(OperationResult<List<(Guid, InvoicePositionDetailsDTO)>>.Ok(list));
+        return Task.FromResult(OperationResult<List<InvoicePositionDetailsDTO>>.Ok(list));
     }
 
-    public Task<OperationResult<List<(Guid Id, InvoicePositionDetailsDTO InvoicePosition)>>> SetPositionNoAsync(Guid id, int newPositionNo)
+    public Task<OperationResult<List<InvoicePositionDetailsDTO>>> SetPositionNoAsync(Guid id, int newPositionNo)
     {
         if (newPositionNo < 1)
             newPositionNo = 1;
@@ -98,9 +99,9 @@ public sealed class InvoicePositionStore : IInvoicePositionStore
         }
 
         if (!ok)
-            return Task.FromResult(OperationResult<List<(Guid, InvoicePositionDetailsDTO)>>.Fail("Invoice position not found."));
+            return Task.FromResult(OperationResult<List<InvoicePositionDetailsDTO>>.Fail("Invoice position not found."));
 
-        return GetAllWithIdAsync();
+        return GetAllAsync();
     }
 
     private static InvoicePositionDetailsDTO Clone(InvoicePositionDetailsDTO invPos) => new()

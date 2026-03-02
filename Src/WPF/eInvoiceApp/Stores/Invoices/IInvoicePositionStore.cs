@@ -10,6 +10,6 @@ public interface IInvoicePositionStore
     Task<OperationResult<Guid>> UpdateAsync(Guid id, InvoicePositionDetailsDTO dto);
     Task<OperationResult<Guid>> DeleteAsync(Guid id);
 
-    Task<OperationResult<List<(Guid Id, InvoicePositionDetailsDTO InvoicePosition)>>> GetAllWithIdAsync();
-    Task<OperationResult<List<(Guid Id, InvoicePositionDetailsDTO InvoicePosition)>>> SetPositionNoAsync(Guid id, int newPositionNo);
+    Task<OperationResult<List<InvoicePositionDetailsDTO>>> GetAllAsync();
+    Task<OperationResult<List<InvoicePositionDetailsDTO>>> SetPositionNoAsync(Guid id, int newPositionNo);
 }

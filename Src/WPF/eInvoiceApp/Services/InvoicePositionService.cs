@@ -17,8 +17,8 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
     public int TotalCount { get; private set; }
 
     public event Action<List<InvoicePositionDetailsDTO>>? InvoicePositionsLoaded;
-    public event Action<Guid, InvoicePositionDetailsDTO>? InvoicePositionCreated;
-    public event Action<Guid, InvoicePositionDetailsDTO>? InvoicePositionUpdated;
+    public event Action<InvoicePositionDetailsDTO>? InvoicePositionCreated;
+    public event Action<InvoicePositionDetailsDTO>? InvoicePositionUpdated;
     public event Action<Guid>? InvoicePositionDeleted;
 
     public int SuggestNextPositionNo() => _invoicePositionStore.SuggestNextPositionNo();
@@ -27,41 +27,20 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
     {
         ResetLoadFlags();
 
-        var res = await _invoicePositionStore.GetAllWithIdAsync();
-        if (!res.Success)
+        var result = await _invoicePositionStore.GetAllAsync();
+        if (!result.Success)
         {
-            StatusMessage = res.Message;
+            StatusMessage = result.Message;
             return OperationResult<List<InvoicePositionDetailsDTO>>.Fail(StatusMessage);
         }
 
-        var list = BuildNumberedCalculatedList(res.Data ?? []);
+        var list = BuildNumberedCalculatedList(result.Data ?? []);
         TotalCount = list.Count;
         IsLoaded = true;
         StatusMessage = $"Loaded {TotalCount} invoice positions.";
 
         InvoicePositionsLoaded?.Invoke(list);
         return OperationResult<List<InvoicePositionDetailsDTO>>.Ok(list, StatusMessage);
-    }
-
-    public async Task<OperationResult<List<(Guid Id, InvoicePositionDetailsDTO invoicePositions)>>> GetAllInvoicePositionsWithIdAsync()
-    {
-        ResetLoadFlags();
-
-        var res = await _invoicePositionStore.GetAllWithIdAsync();
-        if (!res.Success)
-        {
-            StatusMessage = res.Message;
-            return OperationResult<List<(Guid, InvoicePositionDetailsDTO)>>.Fail(StatusMessage);
-        }
-
-        var numbered = BuildNumberedCalculatedWithIdList(res.Data ?? []);
-        TotalCount = numbered.Count;
-        IsLoaded = true;
-        StatusMessage = $"Loaded {TotalCount} invoice positions.";
-
-        InvoicePositionsLoaded?.Invoke(numbered.Select(x => x.invoicePositions).ToList());
-
-        return OperationResult<List<(Guid, InvoicePositionDetailsDTO)>>.Ok(numbered, StatusMessage);
     }
 
     public async Task<OperationResult<Guid>> AddInvoicePositionAsync(InvoicePositionDetailsDTO invPos, int? desiredPositionNo = null)
@@ -71,26 +50,24 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
         var isValid = Validate(invPos);
         AreRequiredFieldsFilled = isValid;
         if (!isValid)
-        {
-            StatusMessage = string.Empty;
-            return OperationResult<Guid>.Fail(StatusMessage);
-        }
+            return OperationResult<Guid>.Fail(string.Empty);
 
         Recalculate(invPos);
 
-        var res = await _invoicePositionStore.AddAsync(invPos, desiredPositionNo);
-        if (!res.Success)
+        var result = await _invoicePositionStore.AddAsync(invPos, desiredPositionNo);
+        if (!result.Success)
         {
-            StatusMessage = res.Message;
+            StatusMessage = result.Message;
             return OperationResult<Guid>.Fail(StatusMessage);
         }
 
         IsCreated = true;
         StatusMessage = "Invoice position created successfully.";
 
-        InvoicePositionCreated?.Invoke(res.Data, invPos);
+        invPos.Id = result.Data;
+        InvoicePositionCreated?.Invoke(invPos);  
 
-        return OperationResult<Guid>.Ok(res.Data, StatusMessage);
+        return OperationResult<Guid>.Ok(result.Data, StatusMessage);
     }
 
     public async Task<OperationResult<Guid>> UpdateInvoicePositionAsync(Guid id, InvoicePositionDetailsDTO invPos)
@@ -100,24 +77,22 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
         var isValid = Validate(invPos);
         AreRequiredFieldsFilled = isValid;
         if (!isValid)
-        {
-            StatusMessage = string.Empty;
-            return OperationResult<Guid>.Fail(StatusMessage);
-        }
+            return OperationResult<Guid>.Fail(string.Empty);
 
         Recalculate(invPos);
 
-        var res = await _invoicePositionStore.UpdateAsync(id, invPos);
-        if (!res.Success)
+        var result = await _invoicePositionStore.UpdateAsync(id, invPos);
+        if (!result.Success)
         {
-            StatusMessage = res.Message;
+            StatusMessage = result.Message;
             return OperationResult<Guid>.Fail(StatusMessage);
         }
 
         IsUpdated = true;
         StatusMessage = "Invoice position updated successfully.";
 
-        InvoicePositionUpdated?.Invoke(id, invPos);
+        invPos.Id = id;
+        InvoicePositionUpdated?.Invoke(invPos); 
 
         return OperationResult<Guid>.Ok(id, StatusMessage);
     }
@@ -126,10 +101,10 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
     {
         ResetMutationFlags();
 
-        var res = await _invoicePositionStore.DeleteAsync(id);
-        if (!res.Success)
+        var result = await _invoicePositionStore.DeleteAsync(id);
+        if (!result.Success)
         {
-            StatusMessage = res.Message;
+            StatusMessage = result.Message;
             return OperationResult<Guid>.Fail(StatusMessage);
         }
 
@@ -144,22 +119,32 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
     {
         ResetMutationFlags();
 
-        var res = await _invoicePositionStore.SetPositionNoAsync(id, newPositionNo);
-        if (!res.Success)
+        var result = await _invoicePositionStore.SetPositionNoAsync(id, newPositionNo);
+        if (!result.Success)
         {
-            StatusMessage = res.Message;
-            return OperationResult<List<InvoicePositionDetailsDTO>>.Fail(StatusMessage);
+            StatusMessage = result.Message;
+            return OperationResult<List<InvoicePositionDetailsDTO>>.Fail(result.Message);
         }
 
         IsUpdated = true;
         StatusMessage = "Position order updated.";
 
-        var list = BuildNumberedCalculatedList(res.Data ?? []);
+        var list = BuildNumberedCalculatedList(result.Data ?? []);
         TotalCount = list.Count;
         IsLoaded = true;
 
         InvoicePositionsLoaded?.Invoke(list);
         return OperationResult<List<InvoicePositionDetailsDTO>>.Ok(list, StatusMessage);
+    }
+
+    private static List<InvoicePositionDetailsDTO> BuildNumberedCalculatedList(List<InvoicePositionDetailsDTO> raw)
+    {
+        for (int i = 0; i < raw.Count; i++)
+        {
+            raw[i].InvoicePositionNr = i + 1;
+            Recalculate(raw[i]);
+        }
+        return raw;
     }
 
     private void ResetMutationFlags()
@@ -174,34 +159,6 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
     {
         IsLoaded = false;
         StatusMessage = string.Empty;
-    }
-
-    private static List<InvoicePositionDetailsDTO> BuildNumberedCalculatedList(
-        List<(Guid Id, InvoicePositionDetailsDTO InvoicePosition)> raw)
-    {
-        var list = new List<InvoicePositionDetailsDTO>(raw.Count);
-        for (int i = 0; i < raw.Count; i++)
-        {
-            var dto = raw[i].InvoicePosition;
-            dto.InvoicePositionNr = i + 1;
-            Recalculate(dto);
-            list.Add(dto);
-        }
-        return list;
-    }
-
-    private static List<(Guid Id, InvoicePositionDetailsDTO invoicePositions)> BuildNumberedCalculatedWithIdList(
-        List<(Guid Id, InvoicePositionDetailsDTO InvoicePosition)> raw)
-    {
-        var list = new List<(Guid, InvoicePositionDetailsDTO)>(raw.Count);
-        for (int i = 0; i < raw.Count; i++)
-        {
-            var dto = raw[i].InvoicePosition;
-            dto.InvoicePositionNr = i + 1;
-            Recalculate(dto);
-            list.Add((raw[i].Id, dto));
-        }
-        return list;
     }
 
     private static bool Validate(InvoicePositionDetailsDTO invPos)

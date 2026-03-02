@@ -248,7 +248,7 @@
                                   behaviorsutilities:DynamicUniformGridColumns.MaxItemHeight="180"
                                   behaviorsutilities:ListGridViewSortByHeader.AutoSort="True"
                                   ItemsSource="{Binding InvoicePositionCardListItemCollectionView}"
-                                  SelectedItem="{Binding SelectedInvoicePositionCardListItemViewModel}"
+                                  SelectedItem="{Binding SelectedInvoicePositionCardListItemViewModel, Mode=TwoWay}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.CanContentScroll="False"
@@ -286,6 +286,7 @@
 
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
+                                   
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                     <Setter Property="VerticalContentAlignment" Value="Top" />
                                     <Setter Property="Margin" Value="4" />

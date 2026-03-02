@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
@@ -30,22 +31,31 @@ public class InvoiceViewModel : BaseViewModel
     private readonly IAppOptions _appOptions;
     #endregion
 
-    private readonly ObservableCollection<InvoicePositionCardItemViewModel> _invoicePositionCardListItemViewModel;
     public Invoice Invoice { get; private set; } = new Invoice();
 
     public double? NormalWidthBeforePreview { get; set; } = 740;
 
     #region InvoicePositions
+    private readonly ObservableCollection<InvoicePositionCardItemViewModel> _invoicePositionCardListItemViewModel;
     public ICollectionView InvoicePositionCardListItemCollectionView { get; set; }
 
     public InvoicePositionCardItemViewModel SelectedInvoicePositionCardListItemViewModel
     {
-        get => _invoicePositionCardListItemViewModel.FirstOrDefault(invPos => invPos.InvoicePositionId == _selectedInvoicePositionStore.SelectedInvoicePositionId)!;
+        get
+        {
+            var selected = _invoicePositionCardListItemViewModel;
+            if (selected == null || !_selectedInvoicePositionStore.SelectedInvoicePositionId.HasValue) return null!;
+
+            return _invoicePositionCardListItemViewModel.FirstOrDefault(invPos => invPos.InvoicePositionId == _selectedInvoicePositionStore.SelectedInvoicePositionId)!;
+        }
         set
         {
             _selectedInvoicePositionStore.SelectedInvoicePositionId = value?.InvoicePositionId;
             _selectedInvoicePositionStore.SelectedInvoicePosition = value?.InvoicePositionDetails!;
             HasSelectedInvoicePosition = _selectedInvoicePositionStore.SelectedInvoicePosition != null;
+
+            OnPropertyChanged(nameof(SelectedInvoicePositionCardListItemViewModel));
+            OnPropertyChanged(nameof(HasSelectedInvoicePosition));
         }
     }
     #endregion
@@ -385,6 +395,7 @@ public class InvoiceViewModel : BaseViewModel
         CreateElectronicInvoiceComponentsCommand = new CreateElectronicInvoiceComponentsCommand(this, _collectorCollection);
 
         _selectedInvoicePositionStore!.SelectedInvoicePositionChanged += OnSelectedInvoicePositionChanged;
+        _invoicePositionCardListItemViewModel.CollectionChanged += OnInvoicePositionCollectionChanged;
 
         _invoicePositionService.InvoicePositionCreated += OnInvoicePositionCreated;
         _invoicePositionService.InvoicePositionUpdated += OnInvoicePositionUpdated;
@@ -401,12 +412,16 @@ public class InvoiceViewModel : BaseViewModel
         SeedTestInvoicePositions();
     }
 
+    private void OnInvoicePositionCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(SelectedInvoicePositionCardListItemViewModel));
+    }
+
     private void OnSelectedInvoicePositionChanged()
     {
         HasSelectedInvoicePosition = _selectedInvoicePositionStore.SelectedInvoicePosition != null;
         OnPropertyChanged(nameof(SelectedInvoicePositionCardListItemViewModel));
     }
-
 
     private void AddInvoicePostion(InvoicePositionDetailsDTO invPosDetailsDTO, ICollectorCollection collectorCollection)
     {
@@ -414,7 +429,7 @@ public class InvoiceViewModel : BaseViewModel
         _invoicePositionCardListItemViewModel.Add(invoicePositionCardItemViewModel);
     }
 
-    private void OnInvoicePositionsLoaded(List<InvoicePositionDetailsDTO> invoicePositions) 
+    private void OnInvoicePositionsLoaded(List<InvoicePositionDetailsDTO> invoicePositions)
     {
         _invoicePositionCardListItemViewModel.Clear();
 
@@ -426,21 +441,48 @@ public class InvoiceViewModel : BaseViewModel
         InvoicePositionCardListItemCollectionView.Refresh();
     }
 
-    private void OnInvoicePositionCreated(Guid id, InvoicePositionDetailsDTO invoicePositionDetailsDTO) => OnPropertyChanged(nameof(SelectedInvoicePositionCardListItemViewModel));
-
-    private void OnInvoicePositionUpdated(Guid id, InvoicePositionDetailsDTO invoicePositionDetailsDTO)
+    private void OnInvoicePositionCreated(InvoicePositionDetailsDTO invoicePositionDetailsDTO)
     {
-        var existingItemViewModel = _invoicePositionCardListItemViewModel
-            .FirstOrDefault(invPos => invPos.InvoicePositionId == id);
+        var invPosViewModel = new InvoicePositionCardItemViewModel(invoicePositionDetailsDTO, _collectorCollection);
 
-        if (existingItemViewModel != null)
-        {
-            existingItemViewModel.Update(invoicePositionDetailsDTO);
-            InvoicePositionCardListItemCollectionView.Refresh();
-        }
+        // 2) Add to the UI list (so that it can be displayed at all)
+        _invoicePositionCardListItemViewModel.Add(invPosViewModel);
+
+        // 3) Select (uses YOUR setter -> writes to SelectedStore)
+        SelectedInvoicePositionCardListItemViewModel = invPosViewModel;
+
+        OnSelectedInvoicePositionChanged();
     }
 
-    private void OnInvoicePositionDeleted(Guid id) => OnPropertyChanged(nameof(SelectedInvoicePositionCardListItemViewModel));
+    private void OnInvoicePositionUpdated(InvoicePositionDetailsDTO invoicePositionDetailsDTO)
+    {
+        var existingItemViewModel = _invoicePositionCardListItemViewModel
+            .FirstOrDefault(invPos => invPos.InvoicePositionId == invoicePositionDetailsDTO.Id);
+
+        if (existingItemViewModel == null) return;
+
+        existingItemViewModel.Update(invoicePositionDetailsDTO);
+        InvoicePositionCardListItemCollectionView.Refresh();
+
+    }
+
+    private void OnInvoicePositionDeleted(Guid id)
+    {
+        var existingItemViewModel = _invoicePositionCardListItemViewModel
+            .FirstOrDefault(x => x.InvoicePositionId == id);
+
+        if (existingItemViewModel != null)
+            _invoicePositionCardListItemViewModel.Remove(existingItemViewModel);
+
+        // if deleted item was selected -> clear selection
+        if (_selectedInvoicePositionStore.SelectedInvoicePositionId == id)
+        {
+            SelectedInvoicePositionCardListItemViewModel = null!;
+            OnSelectedInvoicePositionChanged();
+        }
+
+        InvoicePositionCardListItemCollectionView.Refresh();
+    }
 
     public static InvoiceViewModel LoadInvoiceViewModel(ICollectorCollection collectorCollection)
     {

@@ -19,6 +19,8 @@ public class LoadInvoicePositionsCommand(InvoiceViewModel invoiceViewModel, ICol
         try
         {
             await _invoiceService.LoadAllInvoicePositionsAsync();
+            if (!string.IsNullOrEmpty(_invoiceService.StatusMessage))
+                _invoiceViewModel.StatusMessage = _invoiceService.StatusMessage;
         }
         catch (Exception ex)
         {

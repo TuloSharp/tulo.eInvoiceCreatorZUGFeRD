@@ -362,3 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 *.claudiaideconfig
+
+# --- allow committing local NuGet feed (repo/Packages) ---
+!Packages/
+!Packages/*.nupkg
+!Packages/*.snupkg
