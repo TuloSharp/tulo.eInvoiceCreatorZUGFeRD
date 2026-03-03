@@ -152,6 +152,7 @@ public class EditInvoicePositionViewModel : BaseViewModel
 
         InvoicePositionDetailsFormViewModel = new InvoicePositionDetailsFormViewModel(collectorCollection, EditInvoicePositionDetailsCommand, CloseEditInvoicePositionDetailsCommand)
         {
+            Id = invPos.Id,
             InvoicePositionNr = invPos.InvoicePositionNr,
             InvoicePositionDescription = invPos.InvoicePositionDescription,
             InvoicePositionProductDescription = invPos.InvoicePositionProductDescription,
@@ -159,7 +160,7 @@ public class EditInvoicePositionViewModel : BaseViewModel
             InvoicePositionEan = invPos.InvoicePositionEan,
 
             InvoicePositionQuantity = invPos.InvoicePositionQuantity,
-            InvoicePostionUnit = invPos.InvoicePostionUnit,
+            InvoicePostionUnit = invPos.InvoicePostionUnit ?? string.Empty,
 
             InvoicePositionUnitPrice = invPos.InvoicePositionUnitPrice,
             InvoicePositionVatRate = invPos.InvoicePositionVatRate,
@@ -182,7 +183,7 @@ public class EditInvoicePositionViewModel : BaseViewModel
             InvoicePositionRefDocType = invPos.InvoicePositionRefDocType,
             InvoicePositionRefDocRefType = invPos.InvoicePositionRefDocRefType,
 
-            //InvoicePositionSelectedVatCategory = invPos.InvoicePositionSelectedVatCategory,
+           InvoicePositionVatCategoryCode = invPos.InvoicePositionVatCategoryCode ?? "S",
 
             //IsEnableAdditionalButton = false,
             IsEnable4ShowButtons = true,
@@ -191,6 +192,8 @@ public class EditInvoicePositionViewModel : BaseViewModel
             IsSaveRequestMessageVisible = IsSaveRequestMessageVisible,
             HasUnsavedChanges = HasUnsavedChanges,
         };
+
+
 
         _globalPropsUiManage.IsEnableToSaveDataChanged += GlobalPropsUiManageOnIsEnableToSaveDataChanged;
         _globalPropsUiManage.IsRequiredFieldChanged += GlobalPropsUiManageOnIsRequiredFieldChanged;
@@ -209,14 +212,14 @@ public class EditInvoicePositionViewModel : BaseViewModel
         IsAltShortcutKeyPressedCommand = new IsAltShortcutKeyPressedCommand(collectorCollection);
         #endregion
 
-        FillAllAddInvoicePositionLabels();
-        FillAllAddInvoicePositionToolTips();
+        FillAllEditInvoicePositionLabels();
+        FillAllEditInvoicePositionToolTips();
     }
 
     #region Labels
     public string LabelEditInvoicePosition { get; set; } = string.Empty;
 
-    private void FillAllAddInvoicePositionLabels()
+    private void FillAllEditInvoicePositionLabels()
     {
         LabelEditInvoicePosition = "Edit invoice position";
     }
@@ -226,10 +229,10 @@ public class EditInvoicePositionViewModel : BaseViewModel
     public string ToolTipReturn { get; set; } = string.Empty;
     public string ToolTipSave { get; set; } = string.Empty;
 
-    private void FillAllAddInvoicePositionToolTips()
+    private void FillAllEditInvoicePositionToolTips()
     {
         ToolTipReturn = "Return";
-        ToolTipSave = "Save";
+        ToolTipSave = "Confirm";
     }
     #endregion
 

@@ -194,7 +194,7 @@ public class AddInvoicePositionViewModel : BaseViewModel
     private void FillAllAddInvoicePositionToolTips()
     {
         ToolTipReturn = "Return";
-        ToolTipSave = "Save";
+        ToolTipSave = "Confirm";
     }
     #endregion
 

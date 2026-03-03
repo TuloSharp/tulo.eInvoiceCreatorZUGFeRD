@@ -95,6 +95,8 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
     #endregion
 
     #region Invoice Position Details Properties
+    public Guid Id { get; set; }
+
     private int _invoicePositionNr;
     public int InvoicePositionNr
     {
@@ -145,16 +147,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         }
     }
 
-    private string _invoicePostionUnit = string.Empty;
-    public string InvoicePostionUnit
-    {
-        get => _invoicePostionUnit;
-        set
-        {
-            if (SetField(ref _invoicePostionUnit, value))
-                UpdateToEnableSaveControl();
-        }
-    }
+
 
     private decimal _invoicePositionUnitPrice;
     public decimal InvoicePositionUnitPrice
@@ -375,14 +368,14 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
 
     public ICommand HideCommand { get; }
     #endregion
-    public ICommand CalculateTotalsAtInvoicePositionCommand { get; }
 
     #region Common Commands
     public ICommand CloseCommand { get; }
     public ICommand SubmitCommand { get; }
+    public ICommand CalculateTotalsAtInvoicePositionCommand { get; }
     #endregion
 
-    #region Vat % and Code Lists
+    #region Vat % and Code List
     public sealed class VatCategoryItem
     {
         public string Code { get; }
@@ -404,8 +397,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         new VatCategoryItem("G",  "ToolTipVatCategory_G"),
     };
 
-    public string SelectedVatCategoryTooltip =>
-    InvoicePositionSelectedVatCategory?.Code switch
+    public string SelectedVatCategoryTooltip => InvoicePositionSelectedVatCategory?.Code switch
     {
         "S" => ToolTipVatCategory_S,
         "Z" => ToolTipVatCategory_Z,
@@ -433,9 +425,22 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
     public string InvoicePositionVatCategoryCode
     {
         get => _invoicePositionVatCategoryCode;
-        set => SetField(ref _invoicePositionVatCategoryCode, value);
-    }
+        set
+        {
+            if (SetField(ref _invoicePositionVatCategoryCode, value))
+            {
+                // Code -> SelectedVatCategory sync
+                var item = string.IsNullOrWhiteSpace(value) ? null : VatCategoriesObservableCollection.FirstOrDefault(v => v.Code == value);
 
+                if (!ReferenceEquals(_invoicePositionSelectedVatCategory, item))
+                {
+                    _invoicePositionSelectedVatCategory = item;
+                    OnPropertyChanged(nameof(InvoicePositionSelectedVatCategory));
+                    OnPropertyChanged(nameof(SelectedVatCategoryTooltip));
+                }
+            }
+        }
+    }
 
     public List<int> VatList { get; }
     public ICollectionView VatListItemCollectionView { get; }
@@ -450,9 +455,32 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
             InvoicePositionVatRate = InvoicePositionSelectedVat;
         }
     }
+
     #endregion
 
-    #region Unit codes
+    #region Unit codes & List  
+    private string _invoicePostionUnit = string.Empty;
+    public string InvoicePostionUnit
+    {
+        get => _invoicePostionUnit;
+        set
+        {
+            if (SetField(ref _invoicePostionUnit, value))
+            {
+                // Code -> SelectedUnit sync
+                var unit = string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : UnitsObservableCollection.FirstOrDefault(u => u.Code == value);
+
+                if (!ReferenceEquals(_invoicePositionSelectedUnit, unit))
+                {
+                    _invoicePositionSelectedUnit = unit;
+                    OnPropertyChanged(nameof(InvoicePositionSelectedUnit));
+                }
+                UpdateToEnableSaveControl();
+            }
+        }
+    }
     public sealed class UnitItem
     {
         public string Code { get; }
@@ -466,12 +494,13 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
             DisplayText = displayText;
         }
     }
-    
+
     public ObservableCollection<UnitItem> UnitsObservableCollection { get; } = new();
 
     private void LoadUintsList()
     {
         UnitsObservableCollection.Clear();
+        UnitsObservableCollection.Add(new UnitItem("H87", "UnitPiece", _translatorUiProvider.Translate("UnitPiece")));
         UnitsObservableCollection.Add(new UnitItem("C62", "UnitPiece", _translatorUiProvider.Translate("UnitPiece")));
         UnitsObservableCollection.Add(new UnitItem("HUR", "UnitHour", _translatorUiProvider.Translate("UnitHour")));
         UnitsObservableCollection.Add(new UnitItem("KGM", "UnitKilogram", _translatorUiProvider.Translate("UnitKilogram")));
@@ -503,12 +532,22 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         {
             if (!SetField(ref _invoicePositionSelectedUnit, value))
                 return;
-
-            InvoicePostionUnit = value?.Code ?? string.Empty;
+            if (!string.Equals(InvoicePostionUnit, value?.Code ?? string.Empty, StringComparison.Ordinal))
+                InvoicePostionUnit = value?.Code ?? string.Empty;
         }
     }
-    #endregion                      
 
+    //private void SyncSelectedUnitFromCode(string? code)
+    //{
+    //    var unit = string.IsNullOrWhiteSpace(code) ? null : UnitsObservableCollection.FirstOrDefault(unit => unit.Code == code);
+
+    //    if (!ReferenceEquals(_invoicePositionSelectedUnit, unit))
+    //    {
+    //        _invoicePositionSelectedUnit = unit;
+    //        OnPropertyChanged(nameof(InvoicePositionSelectedUnit));
+    //    }
+    //}
+    #endregion                      
 
     public InvoicePositionDetailsFormViewModel(ICollectorCollection collectorCollection, ICommand submitInvPosDetailsCommand, ICommand closeInvPosDetailsCommand)
     {
@@ -655,7 +694,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         ToolTipInvoicePositionEan = "GTIN/EAN (ram:SpecifiedTradeProduct/ram:GlobalID)";
         ToolTipInvoicePositionQuantity = "Billed quantity (ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)";
         ToolTipInvoicePostionUnit = "Unit code (ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)";
-        ToolTipInvoicePositionUnitPrice = "Net unit price (ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)";
+        ToolTipInvoicePositionUnitPrice = "Net unit price (excl. VAT) (ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)";
 
         ToolTipInvoicePositionSelectedVat = "Tax type (ram:ApplicableTradeTax/ram:TypeCode)";
         ToolTipInvoicePositionVatRate = "VAT rate % (ram:ApplicableTradeTax/ram:RateApplicablePercent)";

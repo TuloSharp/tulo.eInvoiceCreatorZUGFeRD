@@ -714,8 +714,7 @@ public class InvoiceViewModel : BaseViewModel
             InvoicePositionDeliveryNoteLineId = "000010",
             InvoicePositionRefDocId = "2156307416",
             InvoicePositionRefDocType = "130",
-            InvoicePositionRefDocRefType = "VN",
-            InvoicePositionSelectedVatCategory = null
+            InvoicePositionRefDocRefType = "VN"
         }).GetAwaiter().GetResult();
 
         _invoicePositionService.AddInvoicePositionAsync(new InvoicePositionDetailsDTO
@@ -742,8 +741,7 @@ public class InvoiceViewModel : BaseViewModel
             InvoicePositionDeliveryNoteLineId = "000020",
             InvoicePositionRefDocId = "2156307416",
             InvoicePositionRefDocType = "130",
-            InvoicePositionRefDocRefType = "VN",
-            InvoicePositionSelectedVatCategory = null
+            InvoicePositionRefDocRefType = "VN"
         }).GetAwaiter().GetResult();
 
         _invoicePositionService.AddInvoicePositionAsync(new InvoicePositionDetailsDTO
@@ -770,8 +768,7 @@ public class InvoiceViewModel : BaseViewModel
             InvoicePositionDeliveryNoteLineId = "000010",
             InvoicePositionRefDocId = "2156307417",
             InvoicePositionRefDocType = "130",
-            InvoicePositionRefDocRefType = "VN",
-            InvoicePositionSelectedVatCategory = null
+            InvoicePositionRefDocRefType = "VN"
         }).GetAwaiter().GetResult();
     }
     #endregion

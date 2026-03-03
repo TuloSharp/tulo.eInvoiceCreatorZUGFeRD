@@ -12,11 +12,11 @@
              BorderBrush="{StaticResource PanelBorderBrushColor}"
              Style="{StaticResource RoundedUserControlStyle}"
              BorderThickness="2"
-             mc:Ignorable="d"
-             Width="610"
-             Height="Auto"
-             d:DesignHeight="230"
-             d:DesignWidth="610">
+ mc:Ignorable="d"
+ Width="670"
+ Height="Auto"
+ d:DesignHeight="330"
+ d:DesignWidth="670">
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -83,7 +83,7 @@
                                MaxWidth="2000"
                                Padding="2,3,0,0"
                                Foreground="White"
-                               Text="Rechnungsposition löschen" />
+                               Text="{Binding LabelDeleteInvoicePosition}" />
 
                     <Button x:Name="btnClose"
                             Grid.Column="2"
@@ -134,8 +134,8 @@
                             KeyboardNavigation.AcceptsReturn="False"
                             BorderBrush="Transparent"
                             Foreground="Transparent"
-                            ToolTip="Zurück"
-                            Command="{Binding CheckCloseInvoicePositionDetailsCommand}">
+                           ToolTip="{Binding ToolTipReturn}"
+                            Command="{Binding CloseDeleteInvoicePositionDetailsCommand}">
                         <Grid>
                             <Path Style="{StaticResource ContentButtonPathStyle}"
                                   Data="{StaticResource ArrowBackIconSVG}"
@@ -159,7 +159,7 @@
                             Grid.Column="3"
                             KeyboardNavigation.AcceptsReturn="False"
                             BorderBrush="Transparent"
-                            ToolTip="Löschen"
+                             ToolTip="{Binding ToolTipSave}"
                             Foreground="Transparent"
                             Command="{Binding DeleteInvoicePositionDetailsCommand}"
                             IsEnabled="{Binding IsSyntaxCheckValid}">
@@ -202,7 +202,7 @@
                     <RowDefinition Height="6" />
                 </Grid.RowDefinitions>
 
-                <local:InvoicePositionDetailsFormView DataContext="{Binding InvoicePositionDetailsFormViewModel}" Grid.Row="1" />
+                <local:InvoicePositionDetailsFormView DataContext="{Binding InvoicePositionDetailsFormViewModel}" Grid.Row="1"  IsEnabled="False"  />
 
                 <commoncontrols:StatusMessageControl Grid.Row="2"
                                                      Margin="0,8,0,0"
