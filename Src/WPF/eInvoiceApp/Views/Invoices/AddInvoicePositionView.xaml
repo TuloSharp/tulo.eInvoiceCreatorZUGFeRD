@@ -16,6 +16,7 @@
              Background="{StaticResource PanelBackgroundBrushColor}"
              BorderBrush="{StaticResource PanelBorderBrushColor}"
              Style="{StaticResource RoundedUserControlStyle}"
+             ToolTipService.InitialShowDelay="500"
              BorderThickness="2"
              mc:Ignorable="d"
              Width="670"
@@ -58,7 +59,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid ToolTipService.ShowOnDisabled="True" Grid.Row="0">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
                 <RowDefinition Height="41" />

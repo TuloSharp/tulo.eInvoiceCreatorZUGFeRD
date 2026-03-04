@@ -181,7 +181,6 @@
             </Grid>
 
             <Button x:Name="btnMinimize"
-                    ToolTip="Minimieren"
                     Width="22"
                     Grid.Column="2"
                     KeyboardNavigation.AcceptsReturn="False"
@@ -193,7 +192,6 @@
             </Button>
 
             <Button x:Name="btnMaximize"
-                    ToolTip="Maximieren"
                     Width="22"
                     Grid.Column="4"
                     Visibility="{Binding IsWindowCustomResized, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -206,7 +204,6 @@
             </Button>
 
             <Button x:Name="btnMinimizeCustom"
-                    ToolTip="Minimieren"
                     Width="22"
                     Grid.Column="6"
                     Visibility="{Binding IsWindowMaximized, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -219,7 +216,6 @@
             </Button>
 
             <Button x:Name="btnCloseMainApp"
-                    ToolTip="Schließen"
                     AutomationProperties.AutomationId="btnCloseMainApp"
                     Width="22"
                     Grid.Column="8"

@@ -11,12 +11,13 @@
              Background="{StaticResource PanelBackgroundBrushColor}"
              BorderBrush="{StaticResource PanelBorderBrushColor}"
              Style="{StaticResource RoundedUserControlStyle}"
+             ToolTipService.InitialShowDelay="500"
              BorderThickness="2"
- mc:Ignorable="d"
- Width="670"
- Height="Auto"
- d:DesignHeight="330"
- d:DesignWidth="670">
+             mc:Ignorable="d"
+             Width="670"
+             Height="Auto"
+             d:DesignHeight="330"
+             d:DesignWidth="670">
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -41,13 +42,13 @@
         <KeyBinding Key="Esc" Command="{Binding CloseDeleteInvoicePositionDetailsCommand}" />
     </UserControl.InputBindings>
 
-    <Grid>
+    <Grid ToolTipService.ShowOnDisabled="True">
         <!--  this definition replace the SizeToContent property, because in user control doesn't exist this property  -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid ToolTipService.ShowOnDisabled="True" Grid.Row="0">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
                 <RowDefinition Height="41" />
@@ -134,7 +135,7 @@
                             KeyboardNavigation.AcceptsReturn="False"
                             BorderBrush="Transparent"
                             Foreground="Transparent"
-                           ToolTip="{Binding ToolTipReturn}"
+                            ToolTip="{Binding ToolTipReturn}"
                             Command="{Binding CloseDeleteInvoicePositionDetailsCommand}">
                         <Grid>
                             <Path Style="{StaticResource ContentButtonPathStyle}"
@@ -159,7 +160,7 @@
                             Grid.Column="3"
                             KeyboardNavigation.AcceptsReturn="False"
                             BorderBrush="Transparent"
-                             ToolTip="{Binding ToolTipSave}"
+                            ToolTip="{Binding ToolTipSave}"
                             Foreground="Transparent"
                             Command="{Binding DeleteInvoicePositionDetailsCommand}"
                             IsEnabled="{Binding IsSyntaxCheckValid}">
@@ -202,7 +203,9 @@
                     <RowDefinition Height="6" />
                 </Grid.RowDefinitions>
 
-                <local:InvoicePositionDetailsFormView DataContext="{Binding InvoicePositionDetailsFormViewModel}" Grid.Row="1"  IsEnabled="False"  />
+                <local:InvoicePositionDetailsFormView DataContext="{Binding InvoicePositionDetailsFormViewModel}"
+                                                      Grid.Row="1"
+                                                      IsEnabled="False" />
 
                 <commoncontrols:StatusMessageControl Grid.Row="2"
                                                      Margin="0,8,0,0"
