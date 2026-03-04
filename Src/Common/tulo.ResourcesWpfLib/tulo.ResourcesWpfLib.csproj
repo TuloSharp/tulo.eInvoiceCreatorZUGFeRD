@@ -32,16 +32,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
-	  <ProjectReference Include="..\tulo.LoadingSpinnerControl\tulo.LoadingSpinnerControl.csproj" />
-	</ItemGroup>
-	
-	
-	<ItemGroup>
 	  <None Update="Icons\MainIcon.ico">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Icons\MainIcon.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

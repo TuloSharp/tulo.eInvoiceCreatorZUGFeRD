@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using tulo.CommonMVVM.Commands;
 
 namespace tulo.ResourcesWpfLib.Commands;
 public class OpenHyperlinkCommand : BaseCommand

@@ -1,9 +1,9 @@
 ﻿namespace tulo.CoreLib.SystemConfig;
 
 /// <summary>
-/// Provides configuration settings for the system, including environment variables, 
-/// help file paths, transaction timeouts, process management, registry identifiers, 
-/// and executable paths. Inherits RabbitMQ configuration.
+/// Provides configuration settings for the system, including environment variables,
+/// help file paths, transaction timeouts, process management, registry identifiers,
+/// /// and executable paths. Inherits RabbitMQ configuration.
 /// </summary>
 public interface ISystemConfiguration
 {

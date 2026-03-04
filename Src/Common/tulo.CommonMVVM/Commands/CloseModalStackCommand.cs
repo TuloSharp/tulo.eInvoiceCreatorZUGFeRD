@@ -2,7 +2,6 @@
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.Stores;
 using tulo.CommonMVVM.ViewModels;
-using tulo.ResourcesWpfLib.StatusMessages;
 
 namespace tulo.CommonMVVM.Commands;
 
@@ -13,6 +12,23 @@ public class CloseModalStackCommand(ICollectorCollection collectorCollection, Ty
 
     private readonly Type _defaultViewModelTypeToClose = viewModelTypeToClose;
     private readonly bool _defaultConfirmUnsavedChangesOnClose = confirmUnsavedChangesOnClose;
+
+    public override bool CanExecute(object parameter)
+    {
+        // Determine typeToClose in the same way as in Execute (or simpler, if you standardize it)
+        Type typeToClose = _defaultViewModelTypeToClose;
+        if (parameter is Type t) typeToClose = t;
+        else if (parameter is object[] arr && arr.Length > 0 && arr[0] != null)
+            typeToClose = arr[0] is Type tt ? tt : arr[0].GetType();
+
+        if (typeToClose is null) return false;
+
+        var modals = _modalStackNavigationStore.Modals;
+        var top = modals.LastOrDefault(m => m != null);
+
+        // Only if the top modal is of the desired type may the command close.
+        return top is not null && top.GetType() == typeToClose;
+    }
 
     public override void Execute(object parameter)
     {

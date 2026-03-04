@@ -12,6 +12,7 @@ using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 using tulo.eInvoice.eInvoiceApp.DTOs;
 using tulo.eInvoice.eInvoiceApp.Options;
+using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
@@ -23,6 +24,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
     private readonly ISnapShotService _snapShot;
     private readonly IGlobalPropsUiManage _globalPropsUiManage;
     private readonly ITranslatorUiProvider _translatorUiProvider;
+    private readonly IInvoicePositionLookupService _lookup;
     #endregion
 
     private readonly ISelectedInvoicePositionStore? _selectedInvoicePositionStore;
@@ -146,8 +148,6 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
                 UpdateToEnableSaveControl();
         }
     }
-
-
 
     private decimal _invoicePositionUnitPrice;
     public decimal InvoicePositionUnitPrice
@@ -287,7 +287,6 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         get => _invoicePositionRefDocRefType;
         set => SetField(ref _invoicePositionRefDocRefType, value);
     }
-
     #endregion
 
     #region MessageViewModels
@@ -397,16 +396,8 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         new VatCategoryItem("G",  "ToolTipVatCategory_G"),
     };
 
-    public string SelectedVatCategoryTooltip => InvoicePositionSelectedVatCategory?.Code switch
-    {
-        "S" => ToolTipVatCategory_S,
-        "Z" => ToolTipVatCategory_Z,
-        "E" => ToolTipVatCategory_E,
-        "AE" => ToolTipVatCategory_AE,
-        "K" => ToolTipVatCategory_K,
-        "G" => ToolTipVatCategory_G,
-        _ => ""
-    };
+    public string SelectedVatCategoryTooltip => _lookup.GetVatCategoryTooltip(InvoicePositionSelectedVatCategory?.Code);
+    public string SelectedVatCategoryText => _lookup.GetVatCategoryText(InvoicePositionSelectedVatCategory?.Code);
 
     private VatCategoryItem? _invoicePositionSelectedVatCategory;
     public VatCategoryItem? InvoicePositionSelectedVatCategory
@@ -417,6 +408,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
             if (!SetField(ref _invoicePositionSelectedVatCategory, value))
                 return;
             OnPropertyChanged(nameof(SelectedVatCategoryTooltip));
+            OnPropertyChanged(nameof(SelectedVatCategoryText));
             InvoicePositionVatCategoryCode = value?.Code ?? string.Empty;
         }
     }
@@ -468,9 +460,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
             if (SetField(ref _invoicePostionUnit, value))
             {
                 // Code -> SelectedUnit sync
-                var unit = string.IsNullOrWhiteSpace(value)
-                    ? null
-                    : UnitsObservableCollection.FirstOrDefault(u => u.Code == value);
+                var unit = string.IsNullOrWhiteSpace(value) ? null : UnitsObservableCollection.FirstOrDefault(u => u.Code == value);
 
                 if (!ReferenceEquals(_invoicePositionSelectedUnit, unit))
                 {
@@ -500,27 +490,29 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
     private void LoadUintsList()
     {
         UnitsObservableCollection.Clear();
-        UnitsObservableCollection.Add(new UnitItem("H87", "UnitPiece", _translatorUiProvider.Translate("UnitPiece")));
-        UnitsObservableCollection.Add(new UnitItem("C62", "UnitPiece", _translatorUiProvider.Translate("UnitPiece")));
-        UnitsObservableCollection.Add(new UnitItem("HUR", "UnitHour", _translatorUiProvider.Translate("UnitHour")));
-        UnitsObservableCollection.Add(new UnitItem("KGM", "UnitKilogram", _translatorUiProvider.Translate("UnitKilogram")));
-        UnitsObservableCollection.Add(new UnitItem("LTR", "UnitLitre", _translatorUiProvider.Translate("UnitLitre")));
-        UnitsObservableCollection.Add(new UnitItem("MTR", "UnitMetre", _translatorUiProvider.Translate("UnitMetre")));
-        UnitsObservableCollection.Add(new UnitItem("LM", "UnitLinearMetre", _translatorUiProvider.Translate("UnitLinearMetre")));
-        UnitsObservableCollection.Add(new UnitItem("M2", "UnitSquareMetre", _translatorUiProvider.Translate("UnitSquareMetre")));
-        UnitsObservableCollection.Add(new UnitItem("M3", "UnitCubicMetre", _translatorUiProvider.Translate("UnitCubicMetre")));
-        UnitsObservableCollection.Add(new UnitItem("DAY", "UnitDay", _translatorUiProvider.Translate("UnitDay")));
-        UnitsObservableCollection.Add(new UnitItem("MIN", "UnitMinute", _translatorUiProvider.Translate("UnitMinute")));
-        UnitsObservableCollection.Add(new UnitItem("SEC", "UnitSecond", _translatorUiProvider.Translate("UnitSecond")));
-        UnitsObservableCollection.Add(new UnitItem("HAR", "UnitHectare", _translatorUiProvider.Translate("UnitHectare")));
-        UnitsObservableCollection.Add(new UnitItem("KMT", "UnitKilometre", _translatorUiProvider.Translate("UnitKilometre")));
-        UnitsObservableCollection.Add(new UnitItem("LS", "UnitFlatRate", _translatorUiProvider.Translate("UnitFlatRate")));
-        UnitsObservableCollection.Add(new UnitItem("NAR", "UnitCount", _translatorUiProvider.Translate("UnitCount")));
-        UnitsObservableCollection.Add(new UnitItem("NPR", "UnitPair", _translatorUiProvider.Translate("UnitPair")));
-        UnitsObservableCollection.Add(new UnitItem("SET", "UnitSet", _translatorUiProvider.Translate("UnitSet")));
-        UnitsObservableCollection.Add(new UnitItem("TNE", "UnitTonne", _translatorUiProvider.Translate("UnitTonne")));
-        UnitsObservableCollection.Add(new UnitItem("WEE", "UnitWeek", _translatorUiProvider.Translate("UnitWeek")));
-        UnitsObservableCollection.Add(new UnitItem("P1", "UnitPercent", _translatorUiProvider.Translate("UnitPercent")));
+        void Add(string code, string key) => UnitsObservableCollection.Add(new UnitItem(code, key, _lookup.GetUnitText(code)));
+
+        Add("H87", "UnitPiece");
+        Add("C62", "UnitPiece");
+        Add("HUR", "UnitHour");
+        Add("KGM", "UnitKilogram");
+        Add("LTR", "UnitLitre");
+        Add("MTR", "UnitMetre");
+        Add("LM", "UnitLinearMetre");
+        Add("M2", "UnitSquareMetre");
+        Add("M3", "UnitCubicMetre");
+        Add("DAY", "UnitDay");
+        Add("MIN", "UnitMinute");
+        Add("SEC", "UnitSecond");
+        Add("HAR", "UnitHectare");
+        Add("KMT", "UnitKilometre");
+        Add("LS", "UnitFlatRate");
+        Add("NAR", "UnitCount");
+        Add("NPR", "UnitPair");
+        Add("SET", "UnitSet");
+        Add("TNE", "UnitTonne");
+        Add("WEE", "UnitWeek");
+        Add("P1", "UnitPercent");
         //disbled units,duplicates (H87, MTK, MTQ, KTM and XPP) are not allowed in combobox
     }
 
@@ -536,17 +528,6 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
                 InvoicePostionUnit = value?.Code ?? string.Empty;
         }
     }
-
-    //private void SyncSelectedUnitFromCode(string? code)
-    //{
-    //    var unit = string.IsNullOrWhiteSpace(code) ? null : UnitsObservableCollection.FirstOrDefault(unit => unit.Code == code);
-
-    //    if (!ReferenceEquals(_invoicePositionSelectedUnit, unit))
-    //    {
-    //        _invoicePositionSelectedUnit = unit;
-    //        OnPropertyChanged(nameof(InvoicePositionSelectedUnit));
-    //    }
-    //}
     #endregion                      
 
     public InvoicePositionDetailsFormViewModel(ICollectorCollection collectorCollection, ICommand submitInvPosDetailsCommand, ICommand closeInvPosDetailsCommand)
@@ -558,6 +539,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         _globalPropsUiManage = collectorCollection.GetService<IGlobalPropsUiManage>();
         _selectedInvoicePositionStore = collectorCollection.GetService<ISelectedInvoicePositionStore>();
         _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
+        _lookup = collectorCollection.GetService<IInvoicePositionLookupService>();
         #endregion
 
         #region Selected Invoice Position

@@ -137,7 +137,7 @@
                                                                       Style="{StaticResource InvoicePosStyle}" />
 
                             <customedtextblock:LeaderLabeledTextBlock Grid.Column="7"
-                                                                      Text="{Binding InvoicePositionUnit, Converter={StaticResource DecimalToStringConverter}}"
+                                                                      Text="{Binding InvoicePositionUnitText}"
                                                                       Width="50"
                                                                       Label="Unit"
                                                                       CornerWidth="50"

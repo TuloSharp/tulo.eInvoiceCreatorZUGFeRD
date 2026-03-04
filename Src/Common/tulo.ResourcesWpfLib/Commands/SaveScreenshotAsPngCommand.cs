@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using tulo.CommonMVVM.Commands;
 
 namespace tulo.ResourcesWpfLib.Commands
 {

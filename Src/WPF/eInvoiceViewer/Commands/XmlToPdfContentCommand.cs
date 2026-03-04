@@ -2,9 +2,9 @@
 using System.Text;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
+using tulo.CoreLib.PDFs;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 using tulo.eInvoice.eInvoiceViewer.ViewModels;
-using tulo.UiUtilitiesLib.PDFs;
 
 namespace tulo.eInvoice.eInvoiceViewer.Commands;
 public class XmlToPdfContentCommand(ContentXmlToPdfViewerViewModel contentXmlToPdfViewerViewModel, ICollectorCollection collectorCollection) : BaseCommand

@@ -101,8 +101,8 @@ public class SnapShotService : ISnapShotService
 
             foreach (var p in props)
             {
-                if (includeNames != null && !includeNames.Contains(p.Name)) continue;
-                if (excludeNames != null && excludeNames.Contains(p.Name)) continue;
+                if (includeNames?.Contains(p.Name) == false) continue;
+                if (excludeNames?.Contains(p.Name) == true) continue;
 
                 var value = p.GetValue(src);
                 p.SetValue(target, value);

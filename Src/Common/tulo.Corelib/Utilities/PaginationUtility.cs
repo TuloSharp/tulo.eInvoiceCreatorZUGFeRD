@@ -17,6 +17,6 @@ namespace tulo.CoreLib.Utilities
                 }
             }
         }
-        public event Action StoredCurrentPageChanged = delegate { }; 
+        public event Action StoredCurrentPageChanged = delegate { };
     }
 }

@@ -1,6 +1,4 @@
-﻿using tulo.CommonMVVM.ViewModels;
-
-namespace tulo.ResourcesWpfLib.StatusMessages;
+﻿namespace tulo.CommonMVVM.ViewModels;
 /// <summary>
 /// Marks a ViewModel as having a UI status/message area (e.g., a banner, toast, or inline message).
 /// Commands or services can use this interface to read or clear the message in a generic way,

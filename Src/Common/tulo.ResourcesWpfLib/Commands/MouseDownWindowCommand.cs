@@ -1,8 +1,7 @@
-﻿using tulo.ResourcesWpfLib.Viewmodels;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using tulo.CommonMVVM.Commands;
+using tulo.ResourcesWpfLib.Viewmodels;
 
 namespace tulo.ResourcesWpfLib.Commands;
 

@@ -1,23 +1,17 @@
-﻿<UserControl x:Class="tulo.ResourcesWpfLib.Controls.Common.SpinnerMessageControl"
+﻿<UserControl x:Class="tulo.eInvoice.eInvoiceApp.Views.Common.SpinnerMessageControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:tulo.ResourcesWpfLib.Controls.Common"
+             xmlns:local="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Common"
              xmlns:spinner="clr-namespace:tulo.LoadingSpinnerControl;assembly=tulo.LoadingSpinnerControl"
-             xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters"
              mc:Ignorable="d"
-             Background="{StaticResource PanelBrushColor}"
+             Background="#F4F6F8"
              Opacity="50"
              d:DesignHeight="120"
              Width="140"
              d:DesignWidth="140">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <converters:DebuggerConverter x:Key="DebuggerConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
+       <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="11" />
             <RowDefinition Height="auto" />
@@ -39,7 +33,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    FontSize="16"
-                   Text="Please Wait" />
+                   Text="{Binding TesxMessage}" />
 
         <spinner:LoadingSpinner Grid.Row="3"
                                 Grid.Column="1"

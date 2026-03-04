@@ -3,7 +3,7 @@ using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.GlobalProperties;
 
-namespace tulo.ResourcesWpfLib.Commands;
+namespace tulo.CommonMVVM.UiCommands;
 
 public class IsAltShortcutKeyPressedCommand(ICollectorCollection collectorCollection) : BaseCommand
 {
@@ -17,7 +17,7 @@ public class IsAltShortcutKeyPressedCommand(ICollectorCollection collectorCollec
 
         // Use e.SystemKey when e.Key == Key.System (Alt/Windows key combos).
         // SystemKey cannot be created programmatically in some scenarios, so normalize it here.
-        var key = (e.Key == Key.System) ? e.SystemKey : e.Key;
+        var key = e.Key == Key.System ? e.SystemKey : e.Key;
 
         // Only react to LeftAlt, and only once per physical key press (debounce).
         // We don't use e.IsRepeat because it introduces a delay before the same key

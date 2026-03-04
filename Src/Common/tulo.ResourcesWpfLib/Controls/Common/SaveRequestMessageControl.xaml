@@ -117,7 +117,8 @@
                                 BorderBrush="Transparent"
                                 Foreground="Transparent"
                                 ToolTip="{Binding ToolTipReturnButtonSaveRequestMessage}"
-                                Command="{Binding HideCommand}">
+                                Command="{Binding HideCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
                             <Grid>
                                 <Path Style="{StaticResource ContentButtonPathStyle}"
                                       Data="{StaticResource ArrowBackIconSVG}"

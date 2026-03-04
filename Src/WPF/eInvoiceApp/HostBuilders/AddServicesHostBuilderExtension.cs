@@ -7,6 +7,7 @@ using Serilog;
 using System.IO;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CoreLib.Interfaces.SnapShots;
+using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Services;
 using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Options;
@@ -15,7 +16,6 @@ using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoice.eInvoiceApp.Utilities;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
-using tulo.UiUtilitiesLib.PDFs;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
 
@@ -88,10 +88,6 @@ public static class AddServicesHostBuilderExtension
         services.AddSingleton<ISelectedInvoicePositionStore, SelectedInvoicePositionStore>();
         #endregion
 
-        #region Invoice
-        services.AddSingleton<IInvoicePositionService, InvoicePositionService>();
-        #endregion
-
         #region Options
         services.AddOptions<AppOptions>()
             .Bind(configuration, o => o.BindNonPublicProperties = true)
@@ -147,6 +143,10 @@ public static class AddServicesHostBuilderExtension
         });
         #endregion
 
+        #region Invoice
+        services.AddSingleton<IInvoicePositionService, InvoicePositionService>();
+        services.AddSingleton<IInvoicePositionLookupService, InvoicePositionLookupService>();
+        #endregion
     }
     internal class WebServicesHostBuilderExtension { }
 }

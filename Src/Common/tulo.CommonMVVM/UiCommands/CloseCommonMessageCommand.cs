@@ -1,7 +1,7 @@
 ﻿using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.Stores;
 
-namespace tulo.ResourcesWpfLib.Commands;
+namespace tulo.CommonMVVM.UiCommands;
 
 public class CloseCommonMessageCommand(IModalNavigationStore modalNavigationStore) : BaseCommand
 {

@@ -1,16 +1,10 @@
 ﻿using System;
-using tulo.CommonMVVM.Commands;
 
 namespace tulo.ResourcesWpfLib.Commands
 {
-    public class SearchFilterControlCommand : BaseCommand
+    public class SearchFilterControlCommand(Action<string> action) : BaseCommand
     {
-        Action<string> _action;
-
-        public SearchFilterControlCommand(Action<string> action)
-        {
-            _action = action;
-        }
+        private readonly Action<string> _action = action;
 
         public override void Execute(object parameter)
         {

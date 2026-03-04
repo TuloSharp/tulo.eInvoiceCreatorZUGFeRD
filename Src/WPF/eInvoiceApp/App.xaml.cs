@@ -12,6 +12,7 @@ using System.Windows;
 using tulo.CommonMVVM.Collector;
 using tulo.CoreLib.Exceptions;
 using tulo.CoreLib.Interfaces.SnapShots;
+using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp;
 using tulo.eInvoice.eInvoiceApp.Options;
@@ -23,7 +24,6 @@ using tulo.eInvoiceApp;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.SerilogLib.Common;
-using tulo.UiUtilitiesLib.PDFs;
 using tulo.XMLeInvoiceToPdf.Services;
 using tulo.XMLeInvoiceToPdf.Utilities;
 using WpfApplication = System.Windows.Application;
@@ -126,14 +126,15 @@ public partial class App : WpfApplication
         AddToCollectorRequired<ISelectedInvoicePositionStore>(scope.ServiceProvider, collector);
 
         // --------------- services ----------------
+        AddToCollectorRequired<ITranslatorUiProvider>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IInvoiceBuilderService>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IInvoicePositionService>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IInvoicePositionLookupService>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IPdfGeneratorFromInvoice>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IXmlCiiExporter>(scope.ServiceProvider, collector);
         AddToCollectorRequired<ICiiMapper>(scope.ServiceProvider, collector);
         AddToCollectorRequired<ISnapShotService>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IPdfWatermarkService>(scope.ServiceProvider, collector);
-        AddToCollectorRequired<ITranslatorUiProvider>(scope.ServiceProvider, collector);
         #endregion
 
         #region App Process Name

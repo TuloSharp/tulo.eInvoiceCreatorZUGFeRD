@@ -5,7 +5,6 @@ using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.Stores;
 using tulo.CoreLib.SystemConfig;
-using tulo.CoreLib.Utilities;
 
 namespace tulo.eInvoice.eInvoiceApp.HostBuilders;
 
@@ -13,7 +12,7 @@ public static class AddCollectorHostBuilderExtensions
 {
     public static IHostBuilder AddCollector(this IHostBuilder host)
     {
-        host.ConfigureServices(delegate (HostBuilderContext context, IServiceCollection services)
+        host.ConfigureServices((HostBuilderContext context, IServiceCollection services) =>
         {
             services.AddSingleton<ICollectorCollection>(serviceProvider =>
             {
