@@ -4,10 +4,10 @@ using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.UiCommands;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.LoadingSpinnerControl.ViewModels;
-using tulo.ResourcesWpfLib.Commands;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 
@@ -16,6 +16,7 @@ public class EditInvoicePositionViewModel : BaseViewModel
     #region Services / Stores filled via CollectorCollection
     private readonly ISelectedInvoicePositionStore _selectedInvoicePositionStore;
     private readonly IGlobalPropsUiManage _globalPropsUiManage;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
     #endregion
 
     public InvoicePositionDetailsFormViewModel InvoicePositionDetailsFormViewModel { get; }
@@ -140,6 +141,7 @@ public class EditInvoicePositionViewModel : BaseViewModel
         #region Get Services / Stores from CollectorCollection
         _selectedInvoicePositionStore = collectorCollection.GetService<ISelectedInvoicePositionStore>();
         _globalPropsUiManage = collectorCollection.GetService<IGlobalPropsUiManage>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         StatusMessageViewModel = new MessageViewModel();
@@ -222,7 +224,7 @@ public class EditInvoicePositionViewModel : BaseViewModel
 
     private void FillAllEditInvoicePositionLabels()
     {
-        LabelEditInvoicePosition = "Edit invoice position";
+        LabelEditInvoicePosition = _translatorUiProvider.Translate("LabelEditInvoicePosition");
     }
     #endregion
 
@@ -232,8 +234,8 @@ public class EditInvoicePositionViewModel : BaseViewModel
 
     private void FillAllEditInvoicePositionToolTips()
     {
-        ToolTipReturn = "Return";
-        ToolTipSave = "Confirm";
+        ToolTipReturn = _translatorUiProvider.Translate("ToolTipReturn");
+        ToolTipSave = _translatorUiProvider.Translate("ToolTipSave");
     }
     #endregion
 

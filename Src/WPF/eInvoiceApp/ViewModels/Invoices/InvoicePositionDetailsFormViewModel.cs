@@ -601,8 +601,8 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
     public string LabelInvoicePositionGroupBox { get; set; } = string.Empty;
     private void FillAllInvoicePositionDetailsFormLabels()
     {
-        LabelSaveRequestMessage = "Would you like to save the changes?";
-        LabelInvoicePositionGroupBox = "Invoice position";
+        LabelSaveRequestMessage = _translatorUiProvider.Translate("LabelSaveRequestMessage");
+        LabelInvoicePositionGroupBox = _translatorUiProvider.Translate("LabelInvoicePositionGroupBox");
     }
 
     #endregion
@@ -656,53 +656,53 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
 
     private void FillAllInvoicePositionDetailsFormToolTips()
     {
-        ToolTipYesButtonSaveRequestMessage = "Yes (UI action)";
-        ToolTipNoButtonSaveRequestMessage = "No (UI action)";
-        ToolTipReturnButtonSaveRequestMessage = "Exit (UI action)";
+        ToolTipYesButtonSaveRequestMessage = _translatorUiProvider.Translate("ToolTipYesButtonSaveRequestMessage");
+        ToolTipNoButtonSaveRequestMessage = _translatorUiProvider.Translate("ToolTipNoButtonSaveRequestMessage");
+        ToolTipReturnButtonSaveRequestMessage = _translatorUiProvider.Translate("ToolTipReturnButtonSaveRequestMessage");
 
-        ToolTipVatCategory_S = "S - Standard rate (ram:ApplicableTradeTax/ram:CategoryCode)";
-        ToolTipVatCategory_Z = "Z - Zero rated (ram:ApplicableTradeTax/ram:CategoryCode)";
-        ToolTipVatCategory_E = "E - Exempt from VAT (ram:ApplicableTradeTax/ram:CategoryCode)";
-        ToolTipVatCategory_AE = "AE - Reverse charge (ram:ApplicableTradeTax/ram:CategoryCode)";
-        ToolTipVatCategory_K = "K - Intra-community supply (ram:ApplicableTradeTax/ram:CategoryCode)";
-        ToolTipVatCategory_G = "G - Export outside EU (ram:ApplicableTradeTax/ram:CategoryCode)";
+        ToolTipVatCategory_S = _translatorUiProvider.Translate("ToolTipVatCategory_S");
+        ToolTipVatCategory_Z = _translatorUiProvider.Translate("ToolTipVatCategory_Z");
+        ToolTipVatCategory_E = _translatorUiProvider.Translate("ToolTipVatCategory_E");
+        ToolTipVatCategory_AE = _translatorUiProvider.Translate("ToolTipVatCategory_AE");
+        ToolTipVatCategory_K = _translatorUiProvider.Translate("ToolTipVatCategory_K");
+        ToolTipVatCategory_G = _translatorUiProvider.Translate("ToolTipVatCategory_G");
 
-        ToolTipInvoicePositionNr = "Line/position number (ram:AssociatedDocumentLineDocument/ram:LineID)";
+        ToolTipInvoicePositionNr = _translatorUiProvider.Translate("ToolTipInvoicePositionNr");
 
-        ToolTipInvoicePositionDescription = "Item name (ram:SpecifiedTradeProduct/ram:Name)";
-        ToolTipInvoicePositionProductDescription = "Item description (ram:SpecifiedTradeProduct/ram:Description)";
+        ToolTipInvoicePositionDescription = _translatorUiProvider.Translate("ToolTipInvoicePositionDescription");
+        ToolTipInvoicePositionProductDescription = _translatorUiProvider.Translate("ToolTipInvoicePositionProductDescription");
 
-        ToolTipInvoicePositionItemNr = "Item number / Seller ID (ram:SpecifiedTradeProduct/ram:SellerAssignedID)";
-        ToolTipInvoicePositionEan = "GTIN/EAN (ram:SpecifiedTradeProduct/ram:GlobalID)";
-        ToolTipInvoicePositionQuantity = "Billed quantity (ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)";
-        ToolTipInvoicePostionUnit = "Unit code (ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)";
-        ToolTipInvoicePositionUnitPrice = "Net unit price (excl. VAT) (ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)";
+        ToolTipInvoicePositionItemNr = _translatorUiProvider.Translate("ToolTipInvoicePositionItemNr");
+        ToolTipInvoicePositionEan = _translatorUiProvider.Translate("ToolTipInvoicePositionEan");
+        ToolTipInvoicePositionQuantity = _translatorUiProvider.Translate("ToolTipInvoicePositionQuantity");
+        ToolTipInvoicePostionUnit = _translatorUiProvider.Translate("ToolTipInvoicePostionUnit");
+        ToolTipInvoicePositionUnitPrice = _translatorUiProvider.Translate("ToolTipInvoicePositionUnitPrice");
 
-        ToolTipInvoicePositionSelectedVat = "Tax type (ram:ApplicableTradeTax/ram:TypeCode)";
-        ToolTipInvoicePositionVatRate = "VAT rate % (ram:ApplicableTradeTax/ram:RateApplicablePercent)";
-        ToolTipInvoicePositionSelectedVatCategory = "VAT category (ram:ApplicableTradeTax/ram:CategoryCode)";
+        ToolTipInvoicePositionSelectedVat = _translatorUiProvider.Translate("ToolTipInvoicePositionSelectedVat");
+        ToolTipInvoicePositionVatRate = _translatorUiProvider.Translate("ToolTipInvoicePositionVatRate");
+        ToolTipInvoicePositionSelectedVatCategory = _translatorUiProvider.Translate("ToolTipInvoicePositionSelectedVatCategory");
 
-        ToolTipInvoicePositionDiscountReason = "Discount reason (ram:SpecifiedTradeAllowanceCharge/ram:Reason)";
-        ToolTipInvoicePositionDiscountNetAmount = "Discount amount (ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TotalAllowanceChargeAmount)";
+        ToolTipInvoicePositionDiscountReason = _translatorUiProvider.Translate("ToolTipInvoicePositionDiscountReason");
+        ToolTipInvoicePositionDiscountNetAmount = _translatorUiProvider.Translate("ToolTipInvoicePositionDiscountNetAmount");
 
-        ToolTipInvoicePositionNetAmount = "Line net total (ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)";
-        ToolTipInvoicePositionGrossAmount = "Gross total (not explicit; net + tax)";
-        ToolTipInvoicePositionNetAmountAfterDiscount = "Net after discount (net - allowance)";
+        ToolTipInvoicePositionNetAmount = _translatorUiProvider.Translate("ToolTipInvoicePositionNetAmount");
+        ToolTipInvoicePositionGrossAmount = _translatorUiProvider.Translate("ToolTipInvoicePositionGrossAmount");
+        ToolTipInvoicePositionNetAmountAfterDiscount = _translatorUiProvider.Translate("ToolTipInvoicePositionNetAmountAfterDiscount");
 
-        ToolTipCalculateTotalsAtInvoicePositionCommand = "Recalculate amounts (UI action)";
+        ToolTipCalculateTotalsAtInvoicePositionCommand = _translatorUiProvider.Translate("ToolTipCalculateTotalsAtInvoicePositionCommand");
 
-        ToolTipInvoicePositionOrderDate = "Order date (ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString)";
-        ToolTipInvoicePositionOrderId = "Order reference (ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID)";
+        ToolTipInvoicePositionOrderDate = _translatorUiProvider.Translate("ToolTipInvoicePositionOrderDate");
+        ToolTipInvoicePositionOrderId = _translatorUiProvider.Translate("ToolTipInvoicePositionOrderId");
 
-        ToolTipInvoicePositionDeliveryNoteDate = "Delivery note date (ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString)";
-        ToolTipInvoicePositionDeliveryNoteId = "Delivery note id (ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID)";
-        ToolTipInvoicePositionDeliveryNoteLineId = "Delivery note line id (ram:DeliveryNoteReferencedDocument/ram:LineID)";
+        ToolTipInvoicePositionDeliveryNoteDate = _translatorUiProvider.Translate("ToolTipInvoicePositionDeliveryNoteDate");
+        ToolTipInvoicePositionDeliveryNoteId = _translatorUiProvider.Translate("ToolTipInvoicePositionDeliveryNoteId");
+        ToolTipInvoicePositionDeliveryNoteLineId = _translatorUiProvider.Translate("ToolTipInvoicePositionDeliveryNoteLineId");
 
-        ToolTipInvoicePositionRefDocId = "Referenced doc id (ram:AdditionalReferencedDocument/ram:IssuerAssignedID)";
-        ToolTipInvoicePositionRefDocType = "Referenced doc type (ram:AdditionalReferencedDocument/ram:TypeCode)";
-        ToolTipInvoicePositionRefDocRefType = "Reference type (ram:AdditionalReferencedDocument/ram:ReferenceTypeCode)";
+        ToolTipInvoicePositionRefDocId = _translatorUiProvider.Translate("ToolTipInvoicePositionRefDocId");
+        ToolTipInvoicePositionRefDocType = _translatorUiProvider.Translate("ToolTipInvoicePositionRefDocType");
+        ToolTipInvoicePositionRefDocRefType = _translatorUiProvider.Translate("ToolTipInvoicePositionRefDocRefType");
 
-        ToolTipAdditionalInfosExpander = "Reference documents for this invoice position (order, delivery note, additional references).";
+        ToolTipAdditionalInfosExpander = _translatorUiProvider.Translate("ToolTipAdditionalInfosExpander");
     }
 
     #endregion
@@ -735,32 +735,31 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
 
     private void FillAllInvoicePositionDetailsFormPlaceholders()
     {
-        // ===== Placeholders =====
-        PlaceholderInvoicePositionDescription = "Description";
-        PlaceholderInvoicePositionProductDescription = "Product Description";
+        PlaceholderInvoicePositionDescription = _translatorUiProvider.Translate("PlaceholderInvoicePositionDescription");
+        PlaceholderInvoicePositionProductDescription = _translatorUiProvider.Translate("PlaceholderInvoicePositionProductDescription");
 
-        PlaceholderInvoicePositionItemNr = "Item Nr.";
-        PlaceholderInvoicePositionEan = "EAN";
-        PlaceholderInvoicePositionQuantity = "Quantity";
-        PlaceholderInvoicePostionUnit = "Unit";
-        PlaceholderInvoicePositionUnitPrice = "u/p [€]";
-        PlaceholderInvoicePositionVatRate = "%";
+        PlaceholderInvoicePositionItemNr = _translatorUiProvider.Translate("PlaceholderInvoicePositionItemNr");
+        PlaceholderInvoicePositionEan = _translatorUiProvider.Translate("PlaceholderInvoicePositionEan");
+        PlaceholderInvoicePositionQuantity = _translatorUiProvider.Translate("PlaceholderInvoicePositionQuantity");
+        PlaceholderInvoicePostionUnit = _translatorUiProvider.Translate("PlaceholderInvoicePostionUnit");
+        PlaceholderInvoicePositionUnitPrice = _translatorUiProvider.Translate("PlaceholderInvoicePositionUnitPrice");
+        PlaceholderInvoicePositionVatRate = _translatorUiProvider.Translate("PlaceholderInvoicePositionVatRate");
 
-        PlaceholderInvoicePositionDiscountReason = "Discount Reason";
-        PlaceholderInvoicePositionDiscountNetAmount = "Disc. Net[€]";
+        PlaceholderInvoicePositionDiscountReason = _translatorUiProvider.Translate("PlaceholderInvoicePositionDiscountReason");
+        PlaceholderInvoicePositionDiscountNetAmount = _translatorUiProvider.Translate("PlaceholderInvoicePositionDiscountNetAmount");
 
-        PlaceholderInvoicePositionNetAmount = "Total Net[€]";
-        PlaceholderInvoicePositionGrossAmount = "Total Gross[€]";
-        PlaceholderInvoicePositionNetAmountAfterDiscount = "Tot. Net Disc.[€]";
+        PlaceholderInvoicePositionNetAmount = _translatorUiProvider.Translate("PlaceholderInvoicePositionNetAmount");
+        PlaceholderInvoicePositionGrossAmount = _translatorUiProvider.Translate("PlaceholderInvoicePositionGrossAmount");
+        PlaceholderInvoicePositionNetAmountAfterDiscount = _translatorUiProvider.Translate("PlaceholderInvoicePositionNetAmountAfterDiscount");
 
-        // Expander
-        PlaceholderInvoicePositionOrderId = "Order Id";
-        PlaceholderInvoicePositionDeliveryNoteId = "Delivery Note Id";
-        PlaceholderInvoicePositionDeliveryNoteLineId = "Delivery Note Line Id";
+        PlaceholderInvoicePositionOrderId = _translatorUiProvider.Translate("PlaceholderInvoicePositionOrderId");
+        PlaceholderInvoicePositionDeliveryNoteId = _translatorUiProvider.Translate("PlaceholderInvoicePositionDeliveryNoteId");
+        PlaceholderInvoicePositionDeliveryNoteLineId = _translatorUiProvider.Translate("PlaceholderInvoicePositionDeliveryNoteLineId");
 
-        PlaceholderInvoicePositionRefDocId = "Ref Doc Id";
-        PlaceholderInvoicePositionRefDocType = "Ref Doc Type";
-        PlaceholderInvoicePositionRefDocRefType = "Ref Doc Ref Type";
+        PlaceholderInvoicePositionRefDocId = _translatorUiProvider.Translate("PlaceholderInvoicePositionRefDocId");
+        PlaceholderInvoicePositionRefDocType = _translatorUiProvider.Translate("PlaceholderInvoicePositionRefDocType");
+        PlaceholderInvoicePositionRefDocRefType = _translatorUiProvider.Translate("PlaceholderInvoicePositionRefDocRefType");
+
     }
     #endregion
 
@@ -770,8 +769,8 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
 
     private void FillAllInvoicePositionDetailsFormTags()
     {
-        TagInvoicePositionOrderDate = "Order date";
-        TagInvoicePositionDeliveryNoteDate = "Delivery date";
+        TagInvoicePositionOrderDate = _translatorUiProvider.Translate("TagInvoicePositionOrderDate");
+        TagInvoicePositionDeliveryNoteDate = _translatorUiProvider.Translate("TagInvoicePositionDeliveryNoteDate");
     }
     #endregion
 

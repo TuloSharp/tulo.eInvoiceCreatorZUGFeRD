@@ -1,15 +1,17 @@
 ﻿using System.Collections.ObjectModel;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Options;
-using tulo.LoadingSpinnerControl.ViewModels;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Sellers;
 
 public class SellerViewModel : BaseViewModel
 {
-    //private readonly ICollectorCollection _collectorCollection;
+    #region Get Services / Stores from CollectorCollection
     private readonly IAppOptions _appOptions;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
+    #endregion
 
     #region Seller Party
     private string _erpCustomerNumberSellerParty = string.Empty;
@@ -126,8 +128,10 @@ public class SellerViewModel : BaseViewModel
 
     public SellerViewModel(ICollectorCollection collectorCollection)
     {
-        //_collectorCollection = collectorCollection;
+        #region Get Services / Stores from CollectorCollection
         _appOptions = collectorCollection.GetService<IAppOptions>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
+        #endregion
 
         FillAllSellerToolTips();
         FillAllSellerPlaceholders();
@@ -233,26 +237,27 @@ public class SellerViewModel : BaseViewModel
     public string ToolTipContentInvoiceNote { get; private set; } = string.Empty;
     private void FillAllSellerToolTips()
     {
-        ToolTipCompanySellerParty = "Seller company / legal name.";
-        ToolTipFiscalIdSellerParty = "Seller fiscal ID / tax number (often schemeID=FC).";
-        ToolTipVatIdSellerParty = "Seller VAT ID (often schemeID=VA).";
-        ToolTipErpCustomerNumberSellerParty = "Seller ERP customer number (if applicable).";
-        ToolTipLeitwegIdSellerParty = "Leitweg-ID (if required).";
+        // Seller ToolTips
+        ToolTipCompanySellerParty = _translatorUiProvider.Translate("ToolTipCompanySellerParty");
+        ToolTipFiscalIdSellerParty = _translatorUiProvider.Translate("ToolTipFiscalIdSellerParty");
+        ToolTipVatIdSellerParty = _translatorUiProvider.Translate("ToolTipVatIdSellerParty");
+        ToolTipErpCustomerNumberSellerParty = _translatorUiProvider.Translate("ToolTipErpCustomerNumberSellerParty");
+        ToolTipLeitwegIdSellerParty = _translatorUiProvider.Translate("ToolTipLeitwegIdSellerParty");
 
-        ToolTipPersonSellerParty = "Contact person full name.";
-        ToolTipAddressSellerParty = "Full address (street, house number, postal code, city, country).";
-        ToolTipPhoneSellerParty = "Contact phone number.";
-        ToolTipEmailAddressSellerParty = "Contact email address.";
+        ToolTipPersonSellerParty = _translatorUiProvider.Translate("ToolTipPersonSellerParty");
+        ToolTipAddressSellerParty = _translatorUiProvider.Translate("ToolTipAddressSellerParty");
+        ToolTipPhoneSellerParty = _translatorUiProvider.Translate("ToolTipPhoneSellerParty");
+        ToolTipEmailAddressSellerParty = _translatorUiProvider.Translate("ToolTipEmailAddressSellerParty");
 
-        // Tooltips Payment
-        ToolTipBankNameSellerParty = "Bank name (if available).";
-        ToolTipIbanSellerParty = "Seller IBAN for payments.";
-        ToolTipBicSellerParty = "Seller BIC / SWIFT.";
-        ToolTipAccountHolderSellerParty = "Account holder name.";
+        // Bank connection ToolTips
+        ToolTipBankNameSellerParty = _translatorUiProvider.Translate("ToolTipBankNameSellerParty");
+        ToolTipIbanSellerParty = _translatorUiProvider.Translate("ToolTipIbanSellerParty");
+        ToolTipBicSellerParty = _translatorUiProvider.Translate("ToolTipBicSellerParty");
+        ToolTipAccountHolderSellerParty = _translatorUiProvider.Translate("ToolTipAccountHolderSellerParty");
 
-        //Invoice Notes
-        ToolTipSubjectCodeInvoiceNote = "Note Subject Code (i.e. REG/AAI/PTM)";
-        ToolTipContentInvoiceNote = "Note text / description";
+        // Invoice Notes ToolTips
+        ToolTipSubjectCodeInvoiceNote = _translatorUiProvider.Translate("ToolTipSubjectCodeInvoiceNote");
+        ToolTipContentInvoiceNote = _translatorUiProvider.Translate("ToolTipContentInvoiceNote");
     }
     #endregion
 
@@ -280,27 +285,28 @@ public class SellerViewModel : BaseViewModel
     // Invoice Notes
     public string PlaceholderContentInvoiceNote { get; private set; } = string.Empty;
 
-
-
     private void FillAllSellerPlaceholders()
     {
-        PlaceholderCompanySellerParty = "Company Name";
-        PlaceholderVatIdSellerParty = "VAT ID (schemeID=VA)";
-        PlaceholderFiscalIdSellerParty = "Tax number (schemeID=FC)";
-        PlaceholderErpCustomerNumberSellerParty = "ERP Customer Number";
-        PlaceholderLeitwegIdSellerParty = "Leitweg-ID";
+        // Seller Placeholders
+        PlaceholderCompanySellerParty = _translatorUiProvider.Translate("PlaceholderCompanySellerParty");
+        PlaceholderVatIdSellerParty = _translatorUiProvider.Translate("PlaceholderVatIdSellerParty");
+        PlaceholderFiscalIdSellerParty = _translatorUiProvider.Translate("PlaceholderFiscalIdSellerParty");
+        PlaceholderErpCustomerNumberSellerParty = _translatorUiProvider.Translate("PlaceholderErpCustomerNumberSellerParty");
+        PlaceholderLeitwegIdSellerParty = _translatorUiProvider.Translate("PlaceholderLeitwegIdSellerParty");
 
-        PlaceholderPersonSellerParty = "Person Fullname";
-        PlaceholderAddressSellerParty = "Full Address (street, house number, postal code, city, country)";
-        PlaceholderPhoneSellerParty = "Phone";
-        PlaceholderEmailAddressSellerParty = "E-Mail Address";
+        PlaceholderPersonSellerParty = _translatorUiProvider.Translate("PlaceholderPersonSellerParty");
+        PlaceholderAddressSellerParty = _translatorUiProvider.Translate("PlaceholderAddressSellerParty");
+        PlaceholderPhoneSellerParty = _translatorUiProvider.Translate("PlaceholderPhoneSellerParty");
+        PlaceholderEmailAddressSellerParty = _translatorUiProvider.Translate("PlaceholderEmailAddressSellerParty");
 
-        PlaceholderBankNameSellerParty = "Bank Name";
-        PlaceholderIbanSellerParty = "IBAN";
-        PlaceholderBicSellerParty = "BIC";
-        PlaceholderAccountHolderSellerParty = "Account name";
+        // Bank connection Placeholders
+        PlaceholderBankNameSellerParty = _translatorUiProvider.Translate("PlaceholderBankNameSellerParty");
+        PlaceholderIbanSellerParty = _translatorUiProvider.Translate("PlaceholderIbanSellerParty");
+        PlaceholderBicSellerParty = _translatorUiProvider.Translate("PlaceholderBicSellerParty");
+        PlaceholderAccountHolderSellerParty = _translatorUiProvider.Translate("PlaceholderAccountHolderSellerParty");
 
-        PlaceholderContentInvoiceNote = "Type your invoice note here...";
+        // Invoice Notes Placeholders
+        PlaceholderContentInvoiceNote = _translatorUiProvider.Translate("PlaceholderContentInvoiceNote");
     }
     #endregion
 
@@ -311,9 +317,10 @@ public class SellerViewModel : BaseViewModel
 
     private void FillAllSellerContents()
     {
-        ContentSellerInformation = "Seller Information";
-        ContenBankAccountDetails = "Bank Account Details";
-        ContentInvoiceNotes = "Invoice Notes";
+        // Seller Contents
+        ContentSellerInformation = _translatorUiProvider.Translate("ContentSellerInformation");
+        ContenBankAccountDetails = _translatorUiProvider.Translate("ContenBankAccountDetails");
+        ContentInvoiceNotes = _translatorUiProvider.Translate("ContentInvoiceNotes");
     }
     #endregion
 }

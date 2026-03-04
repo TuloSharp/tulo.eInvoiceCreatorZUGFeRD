@@ -6,22 +6,25 @@ using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.Stores;
 using tulo.CommonMVVM.UiCommands;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Commands.Common;
 using tulo.eInvoice.eInvoiceApp.Properties;
 using tulo.eInvoice.eInvoiceApp.Utilities;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Factories;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
-using tulo.LoadingSpinnerControl.ViewModels;
 using tulo.ResourcesWpfLib.Commands;
 using tulo.ResourcesWpfLib.Viewmodels;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels;
 public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 {
+    #region Get Services / Stores from CollectorCollection
     private readonly INavigatorViewModelFactory _navigatorViewModelFactory;
     private readonly INavigationStore _navigationStore;
     private readonly IModalStackNavigationStore _modalStackNavigationStore;
     private readonly IGlobalPropsUiManage _globalPropes4UiControl;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
+    #endregion
 
     #region Selected Font Size
     //private double _selectedFontSize = 12;
@@ -264,7 +267,8 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         _navigationStore = collectorCollection.GetService<INavigationStore>();
         _modalStackNavigationStore = collectorCollection.GetService<IModalStackNavigationStore>();
         _navigatorViewModelFactory = navigatorViewModelFactory;
-        _globalPropes4UiControl = collectorCollection.GetService<IGlobalPropsUiManage>(); ;
+        _globalPropes4UiControl = collectorCollection.GetService<IGlobalPropsUiManage>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         _navigationStore.CurrentViewModelChanged += OnNavigatorStateChanged_CurrentViewModelChanged;
@@ -304,7 +308,7 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         var onChangedCurrentViewModel = CurrentViewModel.GetType().Name;
         if (onChangedCurrentViewModel == SelectedViewModel)
         {
-            MainWindowTitle = "Create ZUGFeRD Invoice";
+            MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
             IsMainWindow = true;
         }
     }
@@ -316,9 +320,9 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 
     private void FillAllInvoiceToolTips()
     {
-        ToolTipInvoiceViewIcon = "Create a new invoice.";
-        ToolTipBuyerViewIcon = "Manage buyer information.";
-        ToolTipAboutViewIcon = "View app info and features.";
+        ToolTipInvoiceViewIcon = _translatorUiProvider.Translate("ToolTipInvoiceViewIcon");
+        ToolTipBuyerViewIcon = _translatorUiProvider.Translate("ToolTipBuyerViewIcon");
+        ToolTipAboutViewIcon = _translatorUiProvider.Translate("ToolTipAboutViewIcon");
     }
     #endregion
 
@@ -332,7 +336,7 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
     
     private void FillAllLabelsAndContents()
     {
-        MainWindowTitle = "Create ZUGFeRD Invoice";
+        MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
     }
     #endregion
 

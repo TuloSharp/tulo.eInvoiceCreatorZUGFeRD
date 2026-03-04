@@ -9,6 +9,7 @@ using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.UiCommands;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Commands;
 using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 using tulo.eInvoice.eInvoiceApp.DTOs;
@@ -30,6 +31,7 @@ public class InvoiceViewModel : BaseViewModel
     private readonly ICollectorCollection _collectorCollection;
     //private readonly IRenavigationService _renavServiceEmployeCardList;
     private readonly IAppOptions _appOptions;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
     #endregion
 
     public Invoice Invoice { get; private set; } = new Invoice();
@@ -374,6 +376,7 @@ public class InvoiceViewModel : BaseViewModel
         _globalPropsUiManage = collectorCollection.GetService<IGlobalPropsUiManage>();
         //_renavServiceEmployeCardList = collectorCollection.GetService<IRenavigationService<EmployeeCardListViewModel>>();
         _appOptions = collectorCollection.GetService<IAppOptions>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         _invoicePositionCardListItemViewModel = [];
@@ -525,35 +528,35 @@ public class InvoiceViewModel : BaseViewModel
     private void FillAllInvoiceToolTips()
     {
         // Buyer Party tooltips
-        ToolTipCompanyBuyerParty = "Buyer company / legal name.";
-        ToolTipFiscalIdBuyerParty = "Buyer fiscal ID / tax number (often schemeID=FC).";
-        ToolTipVatIdBuyerParty = "Buyer VAT ID (often schemeID=VA).";
-        ToolTipErpCustomerNumberBuyerParty = "Internal customer number (ERP reference).";
-        ToolTipLeitwegIdBuyerParty = "Leitweg-ID (required for German XRechnung public sector).";
-        ToolTipPersonBuyerParty = "Contact person full name.";
-        ToolTipStreetBuyerParty = "Street name (without house number if separated).";
-        ToolTipHouseNumberBuyerParty = "House number (if separated).";
-        ToolTipPostalCodeBuyerParty = "ZIP / postal code.";
-        ToolTipCityBuyerParty = "City.";
-        ToolTipCountryCodeBuyerParty = "Country code (e.g. DE).";
-        ToolTipPhoneBuyerParty = "Contact phone number.";
-        ToolTipEmailAddressBuyerParty = "Contact email address.";
+        ToolTipCompanyBuyerParty = _translatorUiProvider.Translate("ToolTipCompanyBuyerParty");
+        ToolTipFiscalIdBuyerParty = _translatorUiProvider.Translate("ToolTipFiscalIdBuyerParty");
+        ToolTipVatIdBuyerParty = _translatorUiProvider.Translate("ToolTipVatIdBuyerParty");
+        ToolTipErpCustomerNumberBuyerParty = _translatorUiProvider.Translate("ToolTipErpCustomerNumberBuyerParty");
+        ToolTipLeitwegIdBuyerParty = _translatorUiProvider.Translate("ToolTipLeitwegIdBuyerParty");
+        ToolTipPersonBuyerParty = _translatorUiProvider.Translate("ToolTipPersonBuyerParty");
+        ToolTipStreetBuyerParty = _translatorUiProvider.Translate("ToolTipStreetBuyerParty");
+        ToolTipHouseNumberBuyerParty = _translatorUiProvider.Translate("ToolTipHouseNumberBuyerParty");
+        ToolTipPostalCodeBuyerParty = _translatorUiProvider.Translate("ToolTipPostalCodeBuyerParty");
+        ToolTipCityBuyerParty = _translatorUiProvider.Translate("ToolTipCityBuyerParty");
+        ToolTipCountryCodeBuyerParty = _translatorUiProvider.Translate("ToolTipCountryCodeBuyerParty");
+        ToolTipPhoneBuyerParty = _translatorUiProvider.Translate("ToolTipPhoneBuyerParty");
+        ToolTipEmailAddressBuyerParty = _translatorUiProvider.Translate("ToolTipEmailAddressBuyerParty");
 
         // Payment tooltips
-        ToolTipPaymentMeansCode = "Payment means type code (e.g. 58 = SEPA credit transfer).";
-        ToolTipPaymentDueDateText = "Payment due date (text input).";
-        ToolTipPaymentReference = "Payment reference / remittance information.";
-        ToolTipPaymentTerms = "Payment terms / conditions text.";
+        ToolTipPaymentMeansCode = _translatorUiProvider.Translate("ToolTipPaymentMeansCode");
+        ToolTipPaymentDueDateText = _translatorUiProvider.Translate("ToolTipPaymentDueDateText");
+        ToolTipPaymentReference = _translatorUiProvider.Translate("ToolTipPaymentReference");
+        ToolTipPaymentTerms = _translatorUiProvider.Translate("ToolTipPaymentTerms");
 
-        //header
-        ToolTipInvoiceNumber = "Unique invoice number of the document.";
-        ToolTipCurrency = "Currency as ISO 4217 code (e.g., EUR, USD, CHF).";
-        ToolTipDocumentName = "Document display name (e.g., INVOICE).";
-        ToolTipDocumentTypeCode = "Document type code according to UNTDID 1001 (e.g., 380 = invoice, 381 = credit note).";
+        // Header tooltips
+        ToolTipInvoiceNumber = _translatorUiProvider.Translate("ToolTipInvoiceNumber");
+        ToolTipCurrency = _translatorUiProvider.Translate("ToolTipCurrency");
+        ToolTipDocumentName = _translatorUiProvider.Translate("ToolTipDocumentName");
+        ToolTipDocumentTypeCode = _translatorUiProvider.Translate("ToolTipDocumentTypeCode");
 
-        ToolTipCreatePreviewElectronicInvoice = "Create a preview of the electronic invoice.";
-        ToolTipCleanUpInvoiceView = "Clear data from te inovice view.";
-        ToolTipCreateElectronicInvoice = "Create and export the electronic PdfA3 invoice.";
+        ToolTipCreatePreviewElectronicInvoice = _translatorUiProvider.Translate("ToolTipCreatePreviewElectronicInvoice");
+        ToolTipCleanUpInvoiceView = _translatorUiProvider.Translate("ToolTipCleanUpInvoiceView");
+        ToolTipCreateElectronicInvoice = _translatorUiProvider.Translate("ToolTipCreateElectronicInvoice");
     }
     #endregion
 
@@ -583,27 +586,29 @@ public class InvoiceViewModel : BaseViewModel
     private void FillAllInvoicePlaceholders()
     {
         // Buyer Party placeholders
-        PlaceholderCompanyBuyerParty = "Company Name";
-        PlaceholderFiscalIdBuyerParty = "Tax number (schemeID=FC)";
-        PlaceholderVatIdBuyerParty = "VAT ID (schemeID=VA)";
-        PlaceholderErpCustomerNumberBuyerParty = "ERP Customer-Nr.";
-        PlaceholderLeitwegIdBuyerParty = "Leitweg-ID";
-        PlaceholderPersonBuyerParty = "Person Fullname";
-        PlaceholderStreetBuyerParty = "Street";
-        PlaceholderHouseNumberBuyerParty = "Nr.";
-        PlaceholderPostalCodeBuyerParty = "Zip code";
-        PlaceholderCityBuyerParty = "City";
-        PlaceholderCountryCodeBuyerParty = "Country";
-        PlaceholderPhoneBuyerParty = "Phone";
-        PlaceholderEmailAddressBuyerParty = "E-Mail Address";
+        PlaceholderCompanyBuyerParty = _translatorUiProvider.Translate("PlaceholderCompanyBuyerParty");
+        PlaceholderFiscalIdBuyerParty = _translatorUiProvider.Translate("PlaceholderFiscalIdBuyerParty");
+        PlaceholderVatIdBuyerParty = _translatorUiProvider.Translate("PlaceholderVatIdBuyerParty");
+        PlaceholderErpCustomerNumberBuyerParty = _translatorUiProvider.Translate("PlaceholderErpCustomerNumberBuyerParty");
+        PlaceholderLeitwegIdBuyerParty = _translatorUiProvider.Translate("PlaceholderLeitwegIdBuyerParty");
+        PlaceholderPersonBuyerParty = _translatorUiProvider.Translate("PlaceholderPersonBuyerParty");
+        PlaceholderStreetBuyerParty = _translatorUiProvider.Translate("PlaceholderStreetBuyerParty");
+        PlaceholderHouseNumberBuyerParty = _translatorUiProvider.Translate("PlaceholderHouseNumberBuyerParty");
+        PlaceholderPostalCodeBuyerParty = _translatorUiProvider.Translate("PlaceholderPostalCodeBuyerParty");
+        PlaceholderCityBuyerParty = _translatorUiProvider.Translate("PlaceholderCityBuyerParty");
+        PlaceholderCountryCodeBuyerParty = _translatorUiProvider.Translate("PlaceholderCountryCodeBuyerParty");
+        PlaceholderPhoneBuyerParty = _translatorUiProvider.Translate("PlaceholderPhoneBuyerParty");
+        PlaceholderEmailAddressBuyerParty = _translatorUiProvider.Translate("PlaceholderEmailAddressBuyerParty");
 
         // Payment placeholders
-        PlaceholderPaymentReference = "Payment reference";
-        PlaceholderPaymentTerms = "Payment terms";
+        PlaceholderPaymentReference = _translatorUiProvider.Translate("PlaceholderPaymentReference");
+        PlaceholderPaymentTerms = _translatorUiProvider.Translate("PlaceholderPaymentTerms");
 
-        //header
-        PlaceholderInvoiceNumber = "Invoice nr.";
-        PlaceholderDocumentName = "Document name";
+        // Header placeholders
+        PlaceholderInvoiceNumber = _translatorUiProvider.Translate("PlaceholderInvoiceNumber");
+        PlaceholderCurrency = _translatorUiProvider.Translate("PlaceholderCurrency");
+        PlaceholderDocumentName = _translatorUiProvider.Translate("PlaceholderDocumentName");
+        PlaceholderDocumentTypeCode = _translatorUiProvider.Translate("PlaceholderDocumentTypeCode");
 
     }
     #endregion
@@ -626,20 +631,20 @@ public class InvoiceViewModel : BaseViewModel
 
     private void FillAllInvoiceLabelsAndContents()
     {
-        LabelPaymentDueDate = "Due Date";
-        LabelPaymentMeansCode = "Payment means code";
+        LabelPaymentDueDate = _translatorUiProvider.Translate("LabelPaymentDueDate");
+        LabelPaymentMeansCode = _translatorUiProvider.Translate("LabelPaymentMeansCode");
 
-        LabelCurrency = "Currency";
-        LabelDocumentTypeCode = "Document type";
+        LabelCurrency = _translatorUiProvider.Translate("LabelCurrency");
+        LabelDocumentTypeCode = _translatorUiProvider.Translate("LabelDocumentTypeCode");
 
-        LabelContentInvoiceView = "Invoice View";
-        LabelContentPreview = "Preview";
-        ContentSlideText = "Create";
-        ContentSlideConfirmedText = "Created";
-        LabelContenBuyerInformation = "Buyer Information";
-        LabelContentHeader = "Header";
-        LabelContentPaymentInformation = "Payment Information";
-        LabelContentPositionsList = "Positions List";
+        LabelContentInvoiceView = _translatorUiProvider.Translate("LabelContentInvoiceView");
+        LabelContentPreview = _translatorUiProvider.Translate("LabelContentPreview");
+        ContentSlideText = _translatorUiProvider.Translate("ContentSlideText");
+        ContentSlideConfirmedText = _translatorUiProvider.Translate("ContentSlideConfirmedText");
+        LabelContenBuyerInformation = _translatorUiProvider.Translate("LabelContenBuyerInformation");
+        LabelContentHeader = _translatorUiProvider.Translate("LabelContentHeader");
+        LabelContentPaymentInformation = _translatorUiProvider.Translate("LabelContentPaymentInformation");
+        LabelContentPositionsList = _translatorUiProvider.Translate("LabelContentPositionsList");
     }
     #endregion
 

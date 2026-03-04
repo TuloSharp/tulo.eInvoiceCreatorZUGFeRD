@@ -4,10 +4,10 @@ using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.UiCommands;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.LoadingSpinnerControl.ViewModels;
-using BaseViewModel = tulo.CommonMVVM.ViewModels.BaseViewModel;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 
@@ -16,6 +16,7 @@ public class AddInvoicePositionViewModel : BaseViewModel
     #region Services / Stores filled via CollectorCollection
     private readonly ISelectedInvoicePositionStore _selectedInvoicePositionStore;
     private readonly IGlobalPropsUiManage _globalPropsUiManage;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
     #endregion
 
     public InvoicePositionDetailsFormViewModel InvoicePositionDetailsFormViewModel { get; }
@@ -139,6 +140,7 @@ public class AddInvoicePositionViewModel : BaseViewModel
         #region Get Services / Stores from CollectorCollection
         _selectedInvoicePositionStore = collectorCollection.GetService<ISelectedInvoicePositionStore>();
         _globalPropsUiManage = collectorCollection.GetService<IGlobalPropsUiManage>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         StatusMessageViewModel = new MessageViewModel();
@@ -184,7 +186,7 @@ public class AddInvoicePositionViewModel : BaseViewModel
 
     private void FillAllAddInvoicePositionLabels()
     {
-        LabelCreateInvoicePosition = "Create invoice position";
+        LabelCreateInvoicePosition = _translatorUiProvider.Translate("LabelCreateInvoicePosition");
     }
     #endregion
 
@@ -194,8 +196,8 @@ public class AddInvoicePositionViewModel : BaseViewModel
 
     private void FillAllAddInvoicePositionToolTips()
     {
-        ToolTipReturn = "Return";
-        ToolTipSave = "Confirm";
+        ToolTipReturn = _translatorUiProvider.Translate("ToolTipReturn");
+        ToolTipSave = _translatorUiProvider.Translate("ToolTipSave");
     }
     #endregion
 
