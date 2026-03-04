@@ -131,7 +131,8 @@ public class SellerViewModel : BaseViewModel
 
         FillAllSellerToolTips();
         FillAllSellerPlaceholders();
-     
+        FillAllSellerContents();
+
         MapperInvoiceSellerOptions(_appOptions);
         MapperInvoicePaymentOptions(_appOptions);
         MapperInvoiceNotesOptions(_appOptions);
@@ -279,7 +280,7 @@ public class SellerViewModel : BaseViewModel
     // Invoice Notes
     public string PlaceholderContentInvoiceNote { get; private set; } = string.Empty;
 
-    
+
 
     private void FillAllSellerPlaceholders()
     {
@@ -300,6 +301,19 @@ public class SellerViewModel : BaseViewModel
         PlaceholderAccountHolderSellerParty = "Account name";
 
         PlaceholderContentInvoiceNote = "Type your invoice note here...";
+    }
+    #endregion
+
+    #region Contents
+    public string ContentSellerInformation { get; set; } = string.Empty;
+    public string ContenBankAccountDetails { get; set; } = string.Empty;
+    public string ContentInvoiceNotes { get; set; } = string.Empty;
+
+    private void FillAllSellerContents()
+    {
+        ContentSellerInformation = "Seller Information";
+        ContenBankAccountDetails = "Bank Account Details";
+        ContentInvoiceNotes = "Invoice Notes";
     }
     #endregion
 }

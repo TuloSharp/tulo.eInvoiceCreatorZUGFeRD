@@ -35,7 +35,7 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
-        <Label Content="Seller Information"
+        <Label Content="{Binding ContentSellerInformation}"
                Grid.Row="1"
                Grid.Column="1"
                FontWeight="Bold"
@@ -47,7 +47,7 @@
                                      x:Name="sellerPartyControl"
                                      HorizontalAlignment="Left" />
 
-        <Label Content="Bank account details"
+        <Label Content="{Binding ContenBankAccountDetails}"
                Grid.Row="3"
                Grid.Column="1"
                FontWeight="Bold"
@@ -55,7 +55,7 @@
                VerticalAlignment="Center" />
         <controls:BankConnectionSellerControl Grid.Row="4" Grid.Column="1" />
 
-        <Label Content="Invoice Notes"
+        <Label Content="{Binding ContentInvoiceNotes}"
                Grid.Row="5"
                Grid.Column="1"
                FontWeight="Bold"
