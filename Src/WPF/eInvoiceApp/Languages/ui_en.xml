@@ -50,8 +50,10 @@
   <entry key="ToolTipDocumentTypeCode">Document type code according to UNTDID 1001 (e.g., 380 = invoice, 381 = credit note).</entry>
 
   <entry key="ToolTipCreatePreviewElectronicInvoice">Create a preview of the electronic invoice.</entry>
-  <entry key="ToolTipCleanUpInvoiceView">Clear data from te inovice view.</entry>
+  <entry key="ToolTipClearAllInvoiceView">Clear data from the inovice view.</entry>
   <entry key="ToolTipCreateElectronicInvoice">Create and export the electronic PdfA3 invoice.</entry>
+  <entry key="ToolTipSaveCustomerData">Customer data can saved into json file</entry>
+  <entry key="ToolTipLoadCustomerData">Customer data can be loaded from a json file</entry>
   <!--#endregion -->
 
   <!--#region Invoice Placeholders -->

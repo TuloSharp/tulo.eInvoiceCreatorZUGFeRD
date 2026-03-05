@@ -522,8 +522,10 @@ public class InvoiceViewModel : BaseViewModel
     public string ToolTipDocumentTypeCode { get; private set; } = string.Empty;
 
     public string ToolTipCreatePreviewElectronicInvoice { get; private set; } = string.Empty;
-    public string ToolTipCleanUpInvoiceView { get; private set; } = string.Empty;
+    public string ToolTipClearAllInvoiceView { get; private set; } = string.Empty;
     public string ToolTipCreateElectronicInvoice { get; private set; } = string.Empty;
+    public string ToolTipSaveCustomerData { get; private set; } = string.Empty;
+    public string ToolTipLoadCustomerData { get; private set; } = string.Empty;
 
     private void FillAllInvoiceToolTips()
     {
@@ -555,8 +557,10 @@ public class InvoiceViewModel : BaseViewModel
         ToolTipDocumentTypeCode = _translatorUiProvider.Translate("ToolTipDocumentTypeCode");
 
         ToolTipCreatePreviewElectronicInvoice = _translatorUiProvider.Translate("ToolTipCreatePreviewElectronicInvoice");
-        ToolTipCleanUpInvoiceView = _translatorUiProvider.Translate("ToolTipCleanUpInvoiceView");
+        ToolTipClearAllInvoiceView = _translatorUiProvider.Translate("ToolTipClearAllInvoiceView");
         ToolTipCreateElectronicInvoice = _translatorUiProvider.Translate("ToolTipCreateElectronicInvoice");
+        ToolTipSaveCustomerData = _translatorUiProvider.Translate("ToolTipSaveCustomerData");
+        ToolTipLoadCustomerData = _translatorUiProvider.Translate("ToolTipLoadCustomerData");
     }
     #endregion
 

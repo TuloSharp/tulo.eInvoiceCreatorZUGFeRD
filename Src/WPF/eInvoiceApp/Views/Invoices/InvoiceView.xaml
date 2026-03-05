@@ -73,20 +73,65 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
-
                         <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
 
+                    <Button Name="saveButton"
+                            Grid.Column="1"
+                            ToolTip="{Binding ToolTipSaveCustomerData}"
+                            HorizontalAlignment="Center"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding SaveCustomerDataCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource SaveDataIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                        </Grid>
+                    </Button>
+                    <Button Name="loadButton"
+                            Grid.Column="3"
+                            ToolTip="{Binding ToolTipLoadCustomerData}"
+                            HorizontalAlignment="Center"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding LoadCustomerDataCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource LoadCustomerDataIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                        </Grid>
+                    </Button>
+                    
+                    <Button Name="clearAllButton"
+                            Grid.Column="5"
+                            ToolTip="{Binding ToolTipClearAllInvoiceView}"
+                            HorizontalAlignment="Center"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding ClearAllInvoiceViewCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource ClearAllIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                        </Grid>
+                    </Button>
+
+
                     <Label Content="{Binding LabelContentPreview}"
-                           Grid.Column="1"
+                           Grid.Column="7"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
-                    <ToggleButton Grid.Column="2"
+                    <ToggleButton Grid.Column="8"
                                   ToolTip="{Binding ToolTipCreatePreviewElectronicInvoice}"
                                   Style="{StaticResource ModernSwitchToggle}"
                                   Command="{Binding CreateElectronicInvoiceComponentsCommand}">
@@ -98,23 +143,11 @@
                         </ToggleButton.CommandParameter>
                     </ToggleButton>
 
-                    <Button Name="cleanupButton"
-                            Grid.Column="4"
-                            ToolTip="{Binding ToolTipCleanUpInvoiceView}"
-                            HorizontalAlignment="Center"
-                            BorderBrush="Transparent"
-                            Foreground="Transparent"
-                            Command="{Binding CleanUpInvoiceViewCommand}">
-                        <Grid>
-                            <Path Style="{StaticResource ContentButtonPathStyle}"
-                                  Data="{StaticResource DeleteIconSVG}"
-                                  Fill="{StaticResource ButtonBrushIconColor}" />
-                        </Grid>
-                    </Button>
+
 
                     <!--  CommandParameter="{StaticResource TrueFlag}"> IsChecked="{Binding DataContext.IsPreviewEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}" Margin="0,5,0,5" />  -->
 
-                    <slidecontrol:SlideToConfirm Grid.Column="6"
+                    <slidecontrol:SlideToConfirm Grid.Column="10"
                                                  Text="{Binding ContentSlideText}"
                                                  ToolTip="{Binding ToolTipCreateElectronicInvoice}"
                                                  ConfirmedText="{Binding ContentSlideConfirmedText}"
@@ -177,6 +210,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <!--  Content="Header"  -->
                         <Label Content="{Binding LabelContentHeader}"
@@ -185,6 +220,12 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center" />
                         <invoicecontrols:HeaderInvoiceControl Grid.Row="1" HorizontalAlignment="Left" />
+                        <Label Content="{Binding LabelContentPaymentTerms}"
+          Grid.Row="2"
+          FontWeight="Bold"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Center" />
+                        <invoicecontrols:PaymentTermsControl Grid.Row="3" HorizontalAlignment="Left"/>
                     </Grid>
 
                 </Grid>

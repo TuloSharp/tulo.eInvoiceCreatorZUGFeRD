@@ -10,8 +10,8 @@
              xmlns:placeholder="clr-namespace:tulo.PlaceholderTextBoxControl;assembly=tulo.PlaceholderTextBoxControl"
              xmlns:utilities="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
              mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="400">
+             d:DesignHeight="150"
+             d:DesignWidth="250">
     <Border Background="{StaticResource PanelBackgroundBrushColor}"
             BorderBrush="{StaticResource PanelBorderBrushColor}"
             BorderThickness="2"
