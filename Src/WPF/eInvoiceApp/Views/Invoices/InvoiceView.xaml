@@ -285,7 +285,9 @@
                                   IsChecked="{Binding HasDiscount, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
 
-                    <invoicecontrols:PaymentTermsControl Grid.Row="1" HorizontalAlignment="Left" />
+                    <invoicecontrols:PaymentTermsControl Grid.Row="1"
+                                                         HorizontalAlignment="Left"
+                                                         Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
                 </Grid>
 
                 <Grid Grid.Row="8" Grid.Column="1">

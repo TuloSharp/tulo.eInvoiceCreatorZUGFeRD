@@ -203,7 +203,6 @@ public class InvoiceViewModel : BaseViewModel
         set => SetField(ref _paymentMeansCode, value);
     }
 
-
     private string _paymentReference = string.Empty;
     public string PaymentReference
     {
@@ -218,8 +217,6 @@ public class InvoiceViewModel : BaseViewModel
         set => SetField(ref _paymentTerms, value);
     }
 
-   
-
     private DateOnly? _paymentDueDate;
     public DateOnly? PaymentDueDate
     {
@@ -231,40 +228,7 @@ public class InvoiceViewModel : BaseViewModel
     public string PaymentDueDateText
     {
         get => _paymentDueDateText;
-        set
-        {
-            if (_paymentDueDateText == value) return;
-            _paymentDueDateText = value;
-            OnPropertyChanged(nameof(PaymentDueDateText));
-
-            HasDatePickerError = false;
-            DatePickerErrorMessage = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                PaymentDueDate = null;
-                return;
-            }
-
-            if (value.Length == 10 && DateTime.TryParseExact(value, DateFormat, _de, DateTimeStyles.None, out var dt))
-            {
-                if (dt.Date < _minDate || dt.Date > _maxDate)
-                {
-                    PaymentDueDate = null;
-                    HasDatePickerError = true;
-                    DatePickerErrorMessage = $"Date must be between {_minDate.ToString(DateFormat, _de)} & {_maxDate.ToString(DateFormat, _de)}.";
-
-                    return;
-                }
-
-                PaymentDueDate = DateOnly.FromDateTime(dt);
-            }
-            else
-            {
-                HasDatePickerError = true;
-                DatePickerErrorMessage = "Date is invalid.";
-            }
-        }
+        set => SetDateText(ref _paymentDueDateText, value, nameof(PaymentDueDateText), v => PaymentDueDate = v, v => HasDatePickerError = v, v => DatePickerErrorMessage = v);
     }
 
     private bool _hasDatePickerError;
@@ -283,7 +247,6 @@ public class InvoiceViewModel : BaseViewModel
     #endregion
 
     #region Payment Infos - Terms / Discount (ONLY XAML BINDINGS)
-
     private bool _hasDiscount;
     public bool HasDiscount
     {
@@ -323,49 +286,10 @@ public class InvoiceViewModel : BaseViewModel
     public string DiscountBasisDateText
     {
         get => _discountBasisDateText;
-        set
-        {
-            if (_discountBasisDateText == value) return;
-            _discountBasisDateText = value;
-            OnPropertyChanged(nameof(DiscountBasisDateText));
-
-            // Reset error state
-            HasDiscountBasisDateError = false;
-            DiscountBasisDateErrorMessage = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                DiscountBasisDate = null;
-                return;
-            }
-
-            if (value.Length == 10 && DateTime.TryParseExact(value, DateFormat, _de, DateTimeStyles.None, out var dt))
-            {
-                if (dt.Date < _minDate || dt.Date > _maxDate)
-                {
-                    DiscountBasisDate = null;
-                    HasDiscountBasisDateError = true;
-
-                    // From translation template: "Date must be between {0} and {1}"
-                    //DiscountBasisDateErrorMessage = string.Format(
-                    //    _de,
-                    //    TextErrorDateOutOfRangeTemplate,
-                    //    _minDate.ToString(DateFormat, _de),
-                    //    _maxDate.ToString(DateFormat, _de));
-
-                    return;
-                }
-
-                DiscountBasisDate = DateOnly.FromDateTime(dt);
-                return;
-            }
-
-            HasDiscountBasisDateError = true;
-            //DiscountBasisDateErrorMessage = TextErrorDateInvalid;
-        }
+        set => SetDateText(ref _discountBasisDateText, value, nameof(DiscountBasisDateText), v => DiscountBasisDate = v, v => HasDiscountBasisDateError = v, v => DiscountBasisDateErrorMessage = v);
     }
 
-    private bool _hasDiscountBasisDateError;
+private bool _hasDiscountBasisDateError;
     public bool HasDiscountBasisDateError
     {
         get => _hasDiscountBasisDateError;
@@ -379,7 +303,6 @@ public class InvoiceViewModel : BaseViewModel
         set => SetField(ref _discountBasisDateErrorMessage, value);
     }
 
-    
     private DateOnly? _paymentDueDateRange;
     public DateOnly? PaymentDueDateRange
     {
@@ -391,45 +314,7 @@ public class InvoiceViewModel : BaseViewModel
     public string PaymentDueDateRangeText
     {
         get => _paymentDueDateRangeText;
-        set
-        {
-            if (_paymentDueDateRangeText == value) return;
-            _paymentDueDateRangeText = value;
-            OnPropertyChanged(nameof(PaymentDueDateRangeText));
-
-            // Reset error state
-            HasPaymentDueDateRangeError = false;
-            PaymentDueDateRangeErrorMessage = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                PaymentDueDateRange = null;
-                return;
-            }
-
-            if (value.Length == 10 && DateTime.TryParseExact(value, DateFormat, _de, DateTimeStyles.None, out var dt))
-            {
-                if (dt.Date < _minDate || dt.Date > _maxDate)
-                {
-                    PaymentDueDateRange = null;
-                    HasPaymentDueDateRangeError = true;
-
-                    //PaymentDueDateRangeErrorMessage = string.Format(
-                    //    _de,
-                    //    TextErrorDateOutOfRangeTemplate,
-                    //    _minDate.ToString(DateFormat, _de),
-                    //    _maxDate.ToString(DateFormat, _de));
-
-                    return;
-                }
-
-                PaymentDueDateRange = DateOnly.FromDateTime(dt);
-                return;
-            }
-
-            HasPaymentDueDateRangeError = true;
-            //PaymentDueDateRangeErrorMessage = TextErrorDateInvalid;
-        }
+        set => SetDateText(ref _paymentDueDateRangeText, value, nameof(PaymentDueDateRangeText), v => PaymentDueDateRange = v, v => HasPaymentDueDateRangeError = v, v => PaymentDueDateRangeErrorMessage = v);
     }
 
     private bool _hasPaymentDueDateRangeError;
@@ -539,6 +424,44 @@ public class InvoiceViewModel : BaseViewModel
     public ICommand RequestBringIntoViewCommand { get; }
     public ICommand IsAltShortcutKeyReleasedCommand { get; }
     public ICommand IsAltShortcutKeyPressedCommand { get; }
+    #endregion
+
+    #region Datepicker error message 
+    private void SetDateText(ref string backingField, string? value, string propertyName, Action<DateOnly?> setDateValue, Action<bool> setHasError, Action<string> setErrorMessage)
+    {
+        if (backingField == value)
+            return;
+
+        backingField = value ?? string.Empty;
+        OnPropertyChanged(propertyName);
+
+        //reset error state
+        setHasError(false);
+        setErrorMessage(string.Empty);
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            setDateValue(null);
+            return;
+        }
+
+        if (value.Length == 10 && DateTime.TryParseExact(value, DateFormat, _de, DateTimeStyles.None, out var dt))
+        {
+            if (dt.Date < _minDate || dt.Date > _maxDate)
+            {
+                setDateValue(null);
+                setHasError(true);
+                setErrorMessage($"{ContentDateMustBeBetween} {_minDate.ToString(DateFormat, _de)} & {_maxDate.ToString(DateFormat, _de)}.");
+                return;
+            }
+
+            setDateValue(DateOnly.FromDateTime(dt));
+            return;
+        }
+
+        setHasError(true);
+        setErrorMessage(ContentDateInvalid);
+    }
     #endregion
 
     public InvoiceViewModel(ICollectorCollection collectorCollection)
@@ -822,8 +745,6 @@ public class InvoiceViewModel : BaseViewModel
     #region Labels, Tags & Contents
     public string ContentDateInvalid { get; private set; } = string.Empty;
     public string ContentDateMustBeBetween { get; private set; } = string.Empty;
-    //"Date must be between"  "Date is invalid.";
-
 
     public string LabelPaymentDueDate { get; private set; } = string.Empty;
     public string LabelPaymentMeansCode { get; private set; } = string.Empty;
