@@ -63,27 +63,19 @@
                     </Grid.ColumnDefinitions>
 
                     <!--  %  -->
-                    <!--
-                        Placeholder="... % Skonto"
-                        ToolTip="Skonto in Prozent"
-                    -->
                     <placeholder:PlaceholderTextBox Grid.Column="0"
-                                                    Text="{Binding SkontoPercent, UpdateSourceTrigger=PropertyChanged}"
-                                                    Placeholder="{Binding PlaceholderSkontoPercent}"
-                                                    ToolTip="{Binding ToolTipSkontoPercent}"
+                                                    Text="{Binding DiscountPercent, UpdateSourceTrigger=PropertyChanged}"
+                                                    Placeholder="{Binding PlaceholderDiscountPercent}"
+                                                    ToolTip="{Binding ToolTipDiscountPercent}"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
                                                     HorizontalAlignment="Left"
                                                     Width="120" />
                     <!--  Days  -->
-                    <!--
-                        Placeholder="till n days"
-                        ToolTip="Skonto-Frist in Tagen"
-                    -->
                     <placeholder:PlaceholderTextBox Grid.Column="2"
-                                                    Text="{Binding SkontoDays, UpdateSourceTrigger=PropertyChanged}"
-                                                    Placeholder="{Binding PlaceholderSkontoDays}"
-                                                    ToolTip="{Binding ToolTipSkontoDays}"
+                                                    Text="{Binding DiscountDays, UpdateSourceTrigger=PropertyChanged}"
+                                                    Placeholder="{Binding PlaceholderDiscountDays}"
+                                                    ToolTip="{Binding ToolTipDiscountDays}"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
                                                     HorizontalAlignment="Left"
@@ -91,10 +83,6 @@
                 </Grid>
 
                 <!--  Basis date  -->
-                <!--
-                    Tag="Basis date"
-                    ToolTip="Basisdatum für Skonto (z.B. Rechnungsdatum)"
-                -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
@@ -102,26 +90,25 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <utilities:ExtendedDatePicker Grid.Column="0"
-                                                  x:Name="SkontoBasisDatePicker"
+                                                  x:Name="DiscountBasisDatePicker"
                                                   HorizontalAlignment="Left"
-                                                  Tag="{Binding TagSkontoBasisDate}"
+                                                  Tag="{Binding TagDiscountBasisDate}"
                                                   Width="140"
                                                   Height="28"
                                                   Language="de-DE"
                                                   DisplayDateStart="1900-01-01"
                                                   DisplayDateEnd="2099-12-31"
-                                                  SelectedDate="{Binding SkontoBasisDate, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
-                                                  Text="{Binding SkontoBasisDateText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                                  ToolTip="{Binding ToolTipSkontoBasisDate}"
+                                                  SelectedDate="{Binding DiscountBasisDate, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                                  Text="{Binding DiscountBasisDateText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                  ToolTip="{Binding ToolTipDiscountBasisDate}"
                                                   Margin="0,4,0,0" />
 
                     <!--  Preview-Text (JSON Description)  -->
-
                     <placeholder:PlaceholderTextBox Grid.Column="4"
                                                     HorizontalAlignment="Left"
-                                                    Text="{Binding SkontoPreviewText}"
-                                                    Placeholder="{Binding PlaceholderSkontoPreviewText}"
-                                                    ToolTip="{Binding ToolTipSkontoPreviewText}"
+                                                    Text="{Binding DiscountPreviewText}"
+                                                    Placeholder="{Binding PlaceholderDiscountPreviewText}"
+                                                    ToolTip="{Binding ToolTipDiscountPreviewText}"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
                                                     Width="430"
@@ -132,8 +119,8 @@
                 <TextBlock Grid.Row="2"
                            Margin="10,2,0,0"
                            Foreground="Red"
-                           Visibility="{Binding HasSkontoBasisDateError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
-                           Text="{Binding SkontoBasisDateErrorMessage}" />
+                           Visibility="{Binding HasDiscountBasisDateError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                           Text="{Binding DiscountBasisDateErrorMessage}" />
 
             </Grid>
 

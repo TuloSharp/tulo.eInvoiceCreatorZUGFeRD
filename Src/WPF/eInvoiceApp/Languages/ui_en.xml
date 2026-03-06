@@ -253,4 +253,31 @@
   <entry key="ToolTipReturn">Back to the previous ui</entry>
   <entry key="ToolTipSave">Confirm your action</entry>
   <!--#endregion -->
+
+  <!--#region UI Payment Terms - Tags -->
+  <entry key="TagDiscountBasisDate">Basis date</entry>
+  <entry key="TagPaymentDueDateRangeText">Payble by date</entry>
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - Labels -->
+  <entry key="LabelContentPaymentTerms">Payment terms</entry>
+  <entry key="LabelApplyDiscount">Apply discount</entry>
+  
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - ToolTips -->
+  <entry key="ToolTipDiscountPercent">Discount in percent</entry>
+  <entry key="ToolTipDiscountDays">Discount period in days</entry>
+  <entry key="ToolTipDiscountBasisDate">Base date for discount calculation</entry>
+  <entry key="ToolTipDiscountPreviewText">Preview text for discount term</entry>
+  <entry key="ToolTipPaymentDueDateRangeText">Payment due date without deduction</entry>
+  <entry key="ToolTipNoDiscountPreviewText">Preview text for due date term</entry>
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - Placeholders -->
+  <entry key="PlaceholderDiscountPercent">... % discount</entry>
+  <entry key="PlaceholderDiscountDays">... days</entry>
+  <entry key="PlaceholderDiscountPreviewText">Until dd.MM.yyyy you receive ... % discount</entry>
+  <entry key="PlaceholderNoDiscountPreviewText">Until dd.MM.yyyy without deduction</entry>
+  <!--#endregion -->
 </properties>

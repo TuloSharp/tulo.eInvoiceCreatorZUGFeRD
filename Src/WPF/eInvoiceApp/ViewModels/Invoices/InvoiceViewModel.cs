@@ -279,60 +279,60 @@ public class InvoiceViewModel : BaseViewModel
 
     #endregion
 
-    #region Payment Infos - Terms / Skonto (ONLY XAML BINDINGS)
+    #region Payment Infos - Terms / Discount (ONLY XAML BINDINGS)
 
-    private bool _hasSkonto;
-    public bool HasSkonto
+    private bool _hasDiscount;
+    public bool HasDiscount
     {
-        get => _hasSkonto;
-        set => SetField(ref _hasSkonto, value);
+        get => _hasDiscount;
+        set => SetField(ref _hasDiscount, value);
     }
 
-    private string _skontoPreviewText = string.Empty;
-    public string SkontoPreviewText
+    private string _discountPreviewText = string.Empty;
+    public string DiscountPreviewText
     {
-        get => _skontoPreviewText;
-        set => SetField(ref _skontoPreviewText, value);
+        get => _discountPreviewText;
+        set => SetField(ref _discountPreviewText, value);
     }
 
-    private string _skontoPercent = string.Empty;
-    public string SkontoPercent
+    private string _discountPercent = string.Empty;
+    public string DiscountPercent
     {
-        get => _skontoPercent;
-        set => SetField(ref _skontoPercent, value);
+        get => _discountPercent;
+        set => SetField(ref _discountPercent, value);
     }
 
-    private string _skontoDays = string.Empty;
-    public string SkontoDays
+    private string _discountDays = string.Empty;
+    public string DiscountDays
     {
-        get => _skontoDays;
-        set => SetField(ref _skontoDays, value);
+        get => _discountDays;
+        set => SetField(ref _discountDays, value);
     }
 
-    private DateOnly? _skontoBasisDate;
-    public DateOnly? SkontoBasisDate
+    private DateOnly? _discountBasisDate;
+    public DateOnly? DiscountBasisDate
     {
-        get => _skontoBasisDate;
-        set => SetField(ref _skontoBasisDate, value);
+        get => _discountBasisDate;
+        set => SetField(ref _discountBasisDate, value);
     }
 
-    private string _skontoBasisDateText = string.Empty;
-    public string SkontoBasisDateText
+    private string _discountBasisDateText = string.Empty;
+    public string DiscountBasisDateText
     {
-        get => _skontoBasisDateText;
+        get => _discountBasisDateText;
         set
         {
-            if (_skontoBasisDateText == value) return;
-            _skontoBasisDateText = value;
-            OnPropertyChanged(nameof(SkontoBasisDateText));
+            if (_discountBasisDateText == value) return;
+            _discountBasisDateText = value;
+            OnPropertyChanged(nameof(DiscountBasisDateText));
 
             // Reset error state
-            HasSkontoBasisDateError = false;
-            SkontoBasisDateErrorMessage = string.Empty;
+            HasDiscountBasisDateError = false;
+            DiscountBasisDateErrorMessage = string.Empty;
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                SkontoBasisDate = null;
+                DiscountBasisDate = null;
                 return;
             }
 
@@ -340,11 +340,11 @@ public class InvoiceViewModel : BaseViewModel
             {
                 if (dt.Date < _minDate || dt.Date > _maxDate)
                 {
-                    SkontoBasisDate = null;
-                    HasSkontoBasisDateError = true;
+                    DiscountBasisDate = null;
+                    HasDiscountBasisDateError = true;
 
                     // From translation template: "Date must be between {0} and {1}"
-                    //SkontoBasisDateErrorMessage = string.Format(
+                    //DiscountBasisDateErrorMessage = string.Format(
                     //    _de,
                     //    TextErrorDateOutOfRangeTemplate,
                     //    _minDate.ToString(DateFormat, _de),
@@ -353,27 +353,27 @@ public class InvoiceViewModel : BaseViewModel
                     return;
                 }
 
-                SkontoBasisDate = DateOnly.FromDateTime(dt);
+                DiscountBasisDate = DateOnly.FromDateTime(dt);
                 return;
             }
 
-            HasSkontoBasisDateError = true;
-            //SkontoBasisDateErrorMessage = TextErrorDateInvalid;
+            HasDiscountBasisDateError = true;
+            //DiscountBasisDateErrorMessage = TextErrorDateInvalid;
         }
     }
 
-    private bool _hasSkontoBasisDateError;
-    public bool HasSkontoBasisDateError
+    private bool _hasDiscountBasisDateError;
+    public bool HasDiscountBasisDateError
     {
-        get => _hasSkontoBasisDateError;
-        set => SetField(ref _hasSkontoBasisDateError, value);
+        get => _hasDiscountBasisDateError;
+        set => SetField(ref _hasDiscountBasisDateError, value);
     }
 
-    private string _skontoBasisDateErrorMessage = string.Empty;
-    public string SkontoBasisDateErrorMessage
+    private string _discountBasisDateErrorMessage = string.Empty;
+    public string DiscountBasisDateErrorMessage
     {
-        get => _skontoBasisDateErrorMessage;
-        set => SetField(ref _skontoBasisDateErrorMessage, value);
+        get => _discountBasisDateErrorMessage;
+        set => SetField(ref _discountBasisDateErrorMessage, value);
     }
 
     
@@ -702,6 +702,14 @@ public class InvoiceViewModel : BaseViewModel
     public string ToolTipSaveCustomerData { get; private set; } = string.Empty;
     public string ToolTipLoadCustomerData { get; private set; } = string.Empty;
 
+
+    public string ToolTipDiscountPercent { get; private set; } = string.Empty;
+    public string ToolTipDiscountDays { get; private set; } = string.Empty;
+    public string ToolTipDiscountBasisDate { get; private set; } = string.Empty;
+    public string ToolTipDiscountPreviewText { get; private set; } = string.Empty;
+    public string ToolTipPaymentDueDateRangeText { get; private set; } = string.Empty;
+    public string ToolTipNoDiscountPreviewText { get; private set; } = string.Empty;
+
     private void FillAllInvoiceToolTips()
     {
         // Buyer Party tooltips
@@ -736,6 +744,14 @@ public class InvoiceViewModel : BaseViewModel
         ToolTipCreateElectronicInvoice = _translatorUiProvider.Translate("ToolTipCreateElectronicInvoice");
         ToolTipSaveCustomerData = _translatorUiProvider.Translate("ToolTipSaveCustomerData");
         ToolTipLoadCustomerData = _translatorUiProvider.Translate("ToolTipLoadCustomerData");
+
+        //payment terms
+        ToolTipDiscountPercent = _translatorUiProvider.Translate("ToolTipDiscountPercent");
+        ToolTipDiscountDays = _translatorUiProvider.Translate("ToolTipDiscountDays");
+        ToolTipDiscountBasisDate = _translatorUiProvider.Translate("ToolTipDiscountBasisDate");
+        ToolTipDiscountPreviewText = _translatorUiProvider.Translate("ToolTipDiscountPreviewText");
+        ToolTipPaymentDueDateRangeText = _translatorUiProvider.Translate("ToolTipPaymentDueDateRangeText");
+        ToolTipNoDiscountPreviewText = _translatorUiProvider.Translate("ToolTipNoDiscountPreviewText");
     }
     #endregion
 
@@ -761,6 +777,11 @@ public class InvoiceViewModel : BaseViewModel
     public string PlaceholderCurrency { get; private set; } = string.Empty;
     public string PlaceholderDocumentName { get; private set; } = string.Empty;
     public string PlaceholderDocumentTypeCode { get; private set; } = string.Empty;
+
+    public string PlaceholderDiscountPercent { get; private set; } = string.Empty;
+    public string PlaceholderDiscountDays { get; private set; } = string.Empty;
+    public string PlaceholderDiscountPreviewText { get; private set; } = string.Empty;
+    public string PlaceholderNoDiscountPreviewText { get; private set; } = string.Empty;
 
     private void FillAllInvoicePlaceholders()
     {
@@ -789,10 +810,16 @@ public class InvoiceViewModel : BaseViewModel
         PlaceholderDocumentName = _translatorUiProvider.Translate("PlaceholderDocumentName");
         PlaceholderDocumentTypeCode = _translatorUiProvider.Translate("PlaceholderDocumentTypeCode");
 
+        //payment terms
+        PlaceholderDiscountPercent = _translatorUiProvider.Translate("PlaceholderDiscountPercent");
+        PlaceholderDiscountDays = _translatorUiProvider.Translate("PlaceholderDiscountDays");
+        PlaceholderDiscountPreviewText = _translatorUiProvider.Translate("PlaceholderDiscountPreviewText");
+        PlaceholderNoDiscountPreviewText = _translatorUiProvider.Translate("PlaceholderNoDiscountPreviewText");
+
     }
     #endregion
 
-    #region Labels & Contents
+    #region Labels, Tags & Contents
     public string LabelPaymentDueDate { get; private set; } = string.Empty;
     public string LabelPaymentMeansCode { get; private set; } = string.Empty;
 
@@ -807,6 +834,12 @@ public class InvoiceViewModel : BaseViewModel
     public string LabelContentHeader { get; private set; } = string.Empty;
     public string LabelContentPaymentInformation { get; private set; } = string.Empty;
     public string LabelContentPositionsList { get; private set; } = string.Empty;
+
+    public string TagDiscountBasisDate { get; private set; } = string.Empty;
+    public string TagPaymentDueDateRangeText { get; private set; } = string.Empty;
+    public string LabelContentPaymentTerms { get; private set; } = string.Empty;
+
+    public string LabelApplyDiscount { get; private set; } = string.Empty;
 
     private void FillAllInvoiceLabelsAndContents()
     {
@@ -824,6 +857,11 @@ public class InvoiceViewModel : BaseViewModel
         LabelContentHeader = _translatorUiProvider.Translate("LabelContentHeader");
         LabelContentPaymentInformation = _translatorUiProvider.Translate("LabelContentPaymentInformation");
         LabelContentPositionsList = _translatorUiProvider.Translate("LabelContentPositionsList");
+
+        TagDiscountBasisDate = _translatorUiProvider.Translate("TagDiscountBasisDate");
+        TagPaymentDueDateRangeText = _translatorUiProvider.Translate("TagPaymentDueDateRangeText");
+        LabelContentPaymentTerms = _translatorUiProvider.Translate("LabelContentPaymentTerms");
+        LabelApplyDiscount = _translatorUiProvider.Translate("LabelApplyDiscount");
     }
     #endregion
 

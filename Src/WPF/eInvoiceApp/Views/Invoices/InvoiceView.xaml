@@ -69,7 +69,10 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
 
-                <Grid Grid.Row="2" Background="White" Height="40" Margin="10,0,0,0">
+                <Grid Grid.Row="2"
+                      Background="White"
+                      Height="40"
+                      Margin="10,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="auto" />
@@ -132,8 +135,8 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
                     <ToggleButton Grid.Column="8"
-                                   HorizontalAlignment="Center"
- VerticalAlignment="Center" 
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
                                   ToolTip="{Binding ToolTipCreatePreviewElectronicInvoice}"
                                   Style="{StaticResource ModernSwitchToggle}"
                                   Command="{Binding CreateElectronicInvoiceComponentsCommand}">
@@ -150,8 +153,8 @@
                     <!--  CommandParameter="{StaticResource TrueFlag}"> IsChecked="{Binding DataContext.IsPreviewEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}" Margin="0,5,0,5" />  -->
 
                     <slidecontrol:SlideToConfirm Grid.Column="10"
-                                                  HorizontalAlignment="Center"
- VerticalAlignment="Center" 
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
                                                  Text="{Binding ContentSlideText}"
                                                  ToolTip="{Binding ToolTipCreateElectronicInvoice}"
                                                  ConfirmedText="{Binding ContentSlideConfirmedText}"
@@ -161,7 +164,6 @@
                                                  Width="100"
                                                  Height="34"
                                                  Margin="0,0,0,0"
-                                  
                                                  FillBrush="#3B82F6"
                                                  TrackBrush="DarkGray"
                                                  ThumbBrush="#FFFFFF" />
@@ -258,7 +260,10 @@
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="4" />
                         </Grid.ColumnDefinitions>
                         <Label Content="{Binding LabelContentPaymentTerms}"
                                Grid.Column="0"
@@ -267,14 +272,17 @@
                                VerticalAlignment="Center"
                                Margin="0,0" />
 
+                        <Label Content="{Binding LabelApplyDiscount}"
+                               Grid.Column="2"
+                               HorizontalAlignment="Center" />
+
                         <!--  Checkbox  -->
-                        <CheckBox Grid.Column="1"
-                                  Content="Skonto anbieten"
+                        <CheckBox Grid.Column="3"
                                   HorizontalAlignment="Right"
                                   Height="20"
                                   Width="20"
                                   Style="{StaticResource CustomizedCheckBox}"
-                                  IsChecked="{Binding HasSkonto, UpdateSourceTrigger=PropertyChanged}" />
+                                  IsChecked="{Binding HasDiscount, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
 
                     <invoicecontrols:PaymentTermsControl Grid.Row="1" HorizontalAlignment="Left" />
