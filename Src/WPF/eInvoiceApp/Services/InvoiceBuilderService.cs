@@ -1,4 +1,5 @@
-﻿using tulo.CommonMVVM.Collector;
+﻿using s2industries.ZUGFeRD;
+using tulo.CommonMVVM.Collector;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
@@ -40,7 +41,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
     // If ViewModel fields are empty, the invoice fields stay empty.
     private static void FillInvoiceFromViewModel(InvoiceViewModel invoiceViewModel, Invoice invoice)
     {
-        invoice.Buyer ??= new Party();
+        invoice.Buyer ??= new eInvoiceXmlGeneratorCii.Models.Party();
         invoice.Payment ??= new PaymentDetails();
 
         // Invoice header
@@ -74,10 +75,11 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
 
         // Payment (no parsing/validation; due date stays untouched unless you have a real DateTime property)
         invoice.Payment.PaymentMeansTypeCode = invoiceViewModel.PaymentMeansCode?.Trim() ?? string.Empty;
-        invoice.Payment.PaymentTermsText = invoiceViewModel.PaymentTerms?.Trim() ?? string.Empty;
         invoice.Payment.PaymentReference = invoiceViewModel.PaymentReference?.Trim() ?? string.Empty;
 
-        // Payment DueDate:
+        //Payment terms text is determined by whether a discount is present or not. If discount is present, use the discount preview text, otherwise use the no-discount preview text.
+        invoice.Payment.PaymentTermsText = invoiceViewModel.HasDiscount ? invoiceViewModel.DiscountPreviewText?.Trim() ?? string.Empty : invoiceViewModel.NoDiscountPreviewText?.Trim() ?? string.Empty;
+
         if (invoiceViewModel.PaymentDueDate.HasValue)
         {
             var d = invoiceViewModel.PaymentDueDate.Value;
@@ -86,6 +88,52 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
         else
         {
             invoice.Payment.DueDate = null;
+        }
+
+        invoice.Payment.Terms.Clear();
+
+        var hasCompleteDiscountData = invoiceViewModel.HasDiscount &&
+                                          invoiceViewModel.DiscountBasisDate.HasValue &&
+                                          !string.IsNullOrWhiteSpace(invoiceViewModel.DiscountDays) &&
+                                          !string.IsNullOrWhiteSpace(invoiceViewModel.DiscountPercent) &&
+                                          !string.IsNullOrWhiteSpace(invoiceViewModel.DiscountPreviewText) &&
+                                          !string.IsNullOrWhiteSpace(invoiceViewModel.NoDiscountPreviewText);
+
+        if (hasCompleteDiscountData)
+        {
+            var basisDateValue = invoiceViewModel.DiscountBasisDate!.Value;
+            var discountBasisDate = new DateTime(basisDateValue.Year, basisDateValue.Month, basisDateValue.Day);
+
+            int basisPeriodDays = 0;
+            int.TryParse(invoiceViewModel.DiscountDays!.Trim(), out basisPeriodDays);
+
+            decimal calculationPercent = 0m;
+            decimal.TryParse(
+                invoiceViewModel.DiscountPercent!.Trim().Replace("%", string.Empty),
+                System.Globalization.NumberStyles.Number,
+                System.Globalization.CultureInfo.GetCultureInfo("de-DE"),
+                out calculationPercent);
+
+            invoice.Payment.Terms.Add(new PaymentTermDetails
+            {
+                Description = invoiceViewModel.DiscountPreviewText!.Trim(),
+                DueDate = null,
+                DiscountTerms = new PaymentDiscountTermsDetails
+                {
+                    BasisDate = discountBasisDate,
+                    BasisPeriodDays = basisPeriodDays,
+                    BasisAmount = 0m,
+                    CalculationPercent = calculationPercent,
+                    ActualDiscountAmount = 0m
+                }
+            });
+
+            invoice.Payment.Terms.Add(new PaymentTermDetails
+            {
+                Description = invoiceViewModel.NoDiscountPreviewText!.Trim(),
+                DueDate = invoice.Payment.DueDate,
+                DiscountTerms = null
+            });
         }
     }
 
@@ -153,7 +201,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
         var s = _appOptions.Invoice?.Seller;
         if (s == null) return;
 
-        invoice.Seller ??= new Party();
+        invoice.Seller ??= new eInvoiceXmlGeneratorCii.Models.Party();
 
         invoice.Seller.ID = s.ID ?? "";
         invoice.Seller.Name = s.Name ?? "";

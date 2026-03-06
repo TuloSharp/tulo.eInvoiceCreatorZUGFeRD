@@ -388,8 +388,6 @@
                     </Grid>
                 </Grid>
 
-
-
                 <!--<commoncontrols:SpinnerMessageControl Grid.Row="5"
                                                   Grid.Column="1"
                                                   Panel.ZIndex="10"

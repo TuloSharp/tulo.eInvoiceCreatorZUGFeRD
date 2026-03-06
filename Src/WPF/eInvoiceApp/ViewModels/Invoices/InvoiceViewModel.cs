@@ -246,7 +246,7 @@ public class InvoiceViewModel : BaseViewModel
     }
     #endregion
 
-    #region Payment Infos - Terms / Discount (ONLY XAML BINDINGS)
+    #region Payment Infos - Terms
     private bool _hasDiscount;
     public bool HasDiscount
     {
