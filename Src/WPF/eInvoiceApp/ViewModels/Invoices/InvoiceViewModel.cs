@@ -19,6 +19,7 @@ using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Models;
 using tulo.LoadingSpinnerControl.ViewModels;
 using tulo.ResourcesWpfLib.Commands;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 
@@ -32,6 +33,13 @@ public class InvoiceViewModel : BaseViewModel
     //private readonly IRenavigationService _renavServiceEmployeCardList;
     private readonly IAppOptions _appOptions;
     private readonly ITranslatorUiProvider _translatorUiProvider;
+    #endregion
+
+    #region Date constants
+    private static readonly CultureInfo _de = CultureInfo.GetCultureInfo("de-DE");
+    private static readonly DateTime _minDate = new(1900, 1, 1);
+    private static readonly DateTime _maxDate = new(2099, 12, 31);
+    private const string DateFormat = "dd.MM.yyyy"; 
     #endregion
 
     public Invoice Invoice { get; private set; } = new Invoice();
@@ -210,10 +218,7 @@ public class InvoiceViewModel : BaseViewModel
         set => SetField(ref _paymentTerms, value);
     }
 
-    private static readonly CultureInfo _de = CultureInfo.GetCultureInfo("de-DE");
-    private static readonly DateTime _minDate = new(1900, 1, 1);
-    private static readonly DateTime _maxDate = new(2099, 12, 31);
-    private const string DateFormat = "dd.MM.yyyy";
+   
 
     private DateOnly? _paymentDueDate;
     public DateOnly? PaymentDueDate
@@ -275,8 +280,6 @@ public class InvoiceViewModel : BaseViewModel
         get => _datePikerErrorMessage;
         set => SetField(ref _datePikerErrorMessage, value);
     }
-
-
     #endregion
 
     #region Payment Infos - Terms / Discount (ONLY XAML BINDINGS)
@@ -383,9 +386,6 @@ public class InvoiceViewModel : BaseViewModel
         get => _paymentDueDateRange;
         set => SetField(ref _paymentDueDateRange, value);
     }
-
-   
-
 
     private string _paymentDueDateRangeText = string.Empty;
     public string PaymentDueDateRangeText
@@ -820,6 +820,11 @@ public class InvoiceViewModel : BaseViewModel
     #endregion
 
     #region Labels, Tags & Contents
+    public string ContentDateInvalid { get; private set; } = string.Empty;
+    public string ContentDateMustBeBetween { get; private set; } = string.Empty;
+    //"Date must be between"  "Date is invalid.";
+
+
     public string LabelPaymentDueDate { get; private set; } = string.Empty;
     public string LabelPaymentMeansCode { get; private set; } = string.Empty;
 
@@ -862,6 +867,9 @@ public class InvoiceViewModel : BaseViewModel
         TagPaymentDueDateRangeText = _translatorUiProvider.Translate("TagPaymentDueDateRangeText");
         LabelContentPaymentTerms = _translatorUiProvider.Translate("LabelContentPaymentTerms");
         LabelApplyDiscount = _translatorUiProvider.Translate("LabelApplyDiscount");
+
+        ContentDateInvalid = _translatorUiProvider.Translate("ContentDateInvalid");
+        ContentDateMustBeBetween = _translatorUiProvider.Translate("ContentDateMustBeBetween");
     }
     #endregion
 

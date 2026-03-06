@@ -280,4 +280,8 @@
   <entry key="PlaceholderDiscountPreviewText">Until dd.MM.yyyy you receive ... % discount</entry>
   <entry key="PlaceholderNoDiscountPreviewText">Until dd.MM.yyyy without deduction</entry>
   <!--#endregion -->
+
+  <!--#region Date contest for validation -->
+  <entry key="ContentDateInvalid">Date is invalid.</entry>
+  <entry key="ContentDateMustBeBetweenTemplate">Date must be between</entry>
 </properties>
