@@ -279,6 +279,181 @@ public class InvoiceViewModel : BaseViewModel
 
     #endregion
 
+    #region Payment Infos - Terms / Skonto (ONLY XAML BINDINGS)
+
+    private bool _hasSkonto;
+    public bool HasSkonto
+    {
+        get => _hasSkonto;
+        set => SetField(ref _hasSkonto, value);
+    }
+
+    private string _skontoPreviewText = string.Empty;
+    public string SkontoPreviewText
+    {
+        get => _skontoPreviewText;
+        set => SetField(ref _skontoPreviewText, value);
+    }
+
+    private string _skontoPercent = string.Empty;
+    public string SkontoPercent
+    {
+        get => _skontoPercent;
+        set => SetField(ref _skontoPercent, value);
+    }
+
+    private string _skontoDays = string.Empty;
+    public string SkontoDays
+    {
+        get => _skontoDays;
+        set => SetField(ref _skontoDays, value);
+    }
+
+    private DateOnly? _skontoBasisDate;
+    public DateOnly? SkontoBasisDate
+    {
+        get => _skontoBasisDate;
+        set => SetField(ref _skontoBasisDate, value);
+    }
+
+    private string _skontoBasisDateText = string.Empty;
+    public string SkontoBasisDateText
+    {
+        get => _skontoBasisDateText;
+        set
+        {
+            if (_skontoBasisDateText == value) return;
+            _skontoBasisDateText = value;
+            OnPropertyChanged(nameof(SkontoBasisDateText));
+
+            // Reset error state
+            HasSkontoBasisDateError = false;
+            SkontoBasisDateErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                SkontoBasisDate = null;
+                return;
+            }
+
+            if (value.Length == 10 && DateTime.TryParseExact(value, DateFormat, _de, DateTimeStyles.None, out var dt))
+            {
+                if (dt.Date < _minDate || dt.Date > _maxDate)
+                {
+                    SkontoBasisDate = null;
+                    HasSkontoBasisDateError = true;
+
+                    // From translation template: "Date must be between {0} and {1}"
+                    //SkontoBasisDateErrorMessage = string.Format(
+                    //    _de,
+                    //    TextErrorDateOutOfRangeTemplate,
+                    //    _minDate.ToString(DateFormat, _de),
+                    //    _maxDate.ToString(DateFormat, _de));
+
+                    return;
+                }
+
+                SkontoBasisDate = DateOnly.FromDateTime(dt);
+                return;
+            }
+
+            HasSkontoBasisDateError = true;
+            //SkontoBasisDateErrorMessage = TextErrorDateInvalid;
+        }
+    }
+
+    private bool _hasSkontoBasisDateError;
+    public bool HasSkontoBasisDateError
+    {
+        get => _hasSkontoBasisDateError;
+        set => SetField(ref _hasSkontoBasisDateError, value);
+    }
+
+    private string _skontoBasisDateErrorMessage = string.Empty;
+    public string SkontoBasisDateErrorMessage
+    {
+        get => _skontoBasisDateErrorMessage;
+        set => SetField(ref _skontoBasisDateErrorMessage, value);
+    }
+
+    
+    private DateOnly? _paymentDueDateRange;
+    public DateOnly? PaymentDueDateRange
+    {
+        get => _paymentDueDateRange;
+        set => SetField(ref _paymentDueDateRange, value);
+    }
+
+   
+
+
+    private string _paymentDueDateRangeText = string.Empty;
+    public string PaymentDueDateRangeText
+    {
+        get => _paymentDueDateRangeText;
+        set
+        {
+            if (_paymentDueDateRangeText == value) return;
+            _paymentDueDateRangeText = value;
+            OnPropertyChanged(nameof(PaymentDueDateRangeText));
+
+            // Reset error state
+            HasPaymentDueDateRangeError = false;
+            PaymentDueDateRangeErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                PaymentDueDateRange = null;
+                return;
+            }
+
+            if (value.Length == 10 && DateTime.TryParseExact(value, DateFormat, _de, DateTimeStyles.None, out var dt))
+            {
+                if (dt.Date < _minDate || dt.Date > _maxDate)
+                {
+                    PaymentDueDateRange = null;
+                    HasPaymentDueDateRangeError = true;
+
+                    //PaymentDueDateRangeErrorMessage = string.Format(
+                    //    _de,
+                    //    TextErrorDateOutOfRangeTemplate,
+                    //    _minDate.ToString(DateFormat, _de),
+                    //    _maxDate.ToString(DateFormat, _de));
+
+                    return;
+                }
+
+                PaymentDueDateRange = DateOnly.FromDateTime(dt);
+                return;
+            }
+
+            HasPaymentDueDateRangeError = true;
+            //PaymentDueDateRangeErrorMessage = TextErrorDateInvalid;
+        }
+    }
+
+    private bool _hasPaymentDueDateRangeError;
+    public bool HasPaymentDueDateRangeError
+    {
+        get => _hasPaymentDueDateRangeError;
+        set => SetField(ref _hasPaymentDueDateRangeError, value);
+    }
+
+    private string _paymentDueDateRangeErrorMessage = string.Empty;
+    public string PaymentDueDateRangeErrorMessage
+    {
+        get => _paymentDueDateRangeErrorMessage;
+        set => SetField(ref _paymentDueDateRangeErrorMessage, value);
+    }
+
+    private string _noDiscountPreviewText = string.Empty;
+    public string NoDiscountPreviewText
+    {
+        get => _noDiscountPreviewText;
+        set => SetField(ref _noDiscountPreviewText, value);
+    }
+    #endregion
+
     #region Local Properties
     private bool _hasSelectedInvoicePosition;
     public bool HasSelectedInvoicePosition

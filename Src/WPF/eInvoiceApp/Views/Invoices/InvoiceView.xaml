@@ -58,7 +58,7 @@
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0" />
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="0" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
@@ -69,7 +69,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
 
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="2" Background="White" Height="40" Margin="10,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="auto" />
@@ -111,7 +111,7 @@
                                   Fill="{StaticResource ButtonBrushIconColor}" />
                         </Grid>
                     </Button>
-                    
+
                     <Button Name="clearAllButton"
                             Grid.Column="5"
                             ToolTip="{Binding ToolTipClearAllInvoiceView}"
@@ -132,6 +132,8 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
                     <ToggleButton Grid.Column="8"
+                                   HorizontalAlignment="Center"
+ VerticalAlignment="Center" 
                                   ToolTip="{Binding ToolTipCreatePreviewElectronicInvoice}"
                                   Style="{StaticResource ModernSwitchToggle}"
                                   Command="{Binding CreateElectronicInvoiceComponentsCommand}">
@@ -148,6 +150,8 @@
                     <!--  CommandParameter="{StaticResource TrueFlag}"> IsChecked="{Binding DataContext.IsPreviewEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}" Margin="0,5,0,5" />  -->
 
                     <slidecontrol:SlideToConfirm Grid.Column="10"
+                                                  HorizontalAlignment="Center"
+ VerticalAlignment="Center" 
                                                  Text="{Binding ContentSlideText}"
                                                  ToolTip="{Binding ToolTipCreateElectronicInvoice}"
                                                  ConfirmedText="{Binding ContentSlideConfirmedText}"
@@ -157,7 +161,7 @@
                                                  Width="100"
                                                  Height="34"
                                                  Margin="0,0,0,0"
-                                                 VerticalAlignment="Top"
+                                  
                                                  FillBrush="#3B82F6"
                                                  TrackBrush="DarkGray"
                                                  ThumbBrush="#FFFFFF" />
@@ -167,14 +171,16 @@
 
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="4" />
+                    <RowDefinition Height="0" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="8" />
+                    <RowDefinition Height="0" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="8" />
+                    <RowDefinition Height="0" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="12" />
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="18" />
 
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -202,7 +208,8 @@
                                Grid.Row="0"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Center" />
+                               VerticalAlignment="Center"
+                               Margin="0,0" />
                         <controls:BuyerPartyControl Grid.Row="1" HorizontalAlignment="Left" />
                     </Grid>
 
@@ -210,22 +217,16 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+
                         </Grid.RowDefinitions>
                         <!--  Content="Header"  -->
                         <Label Content="{Binding LabelContentHeader}"
                                Grid.Row="0"
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
-                               VerticalAlignment="Center" />
+                               VerticalAlignment="Center"
+                               Margin="0,0" />
                         <invoicecontrols:HeaderInvoiceControl Grid.Row="1" HorizontalAlignment="Left" />
-                        <Label Content="{Binding LabelContentPaymentTerms}"
-          Grid.Row="2"
-          FontWeight="Bold"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Center" />
-                        <invoicecontrols:PaymentTermsControl Grid.Row="3" HorizontalAlignment="Left"/>
                     </Grid>
 
                 </Grid>
@@ -241,11 +242,45 @@
                     <Label Content="{Binding LabelContentPaymentInformation}"
                            FontWeight="Bold"
                            HorizontalAlignment="Left"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center"
+                           Margin="0,0" />
                     <controls:PaymentInfosControl Grid.Row="1" />
                 </Grid>
 
-                <Grid Grid.Row="6" Grid.Column="1">
+                <Grid Grid.Row="6"
+                      Grid.Column="1"
+                      HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding LabelContentPaymentTerms}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0,0" />
+
+                        <!--  Checkbox  -->
+                        <CheckBox Grid.Column="1"
+                                  Content="Skonto anbieten"
+                                  HorizontalAlignment="Right"
+                                  Height="20"
+                                  Width="20"
+                                  Style="{StaticResource CustomizedCheckBox}"
+                                  IsChecked="{Binding HasSkonto, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <invoicecontrols:PaymentTermsControl Grid.Row="1" HorizontalAlignment="Left" />
+                </Grid>
+
+                <Grid Grid.Row="8" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
@@ -253,13 +288,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="300" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <!--  Content="Positions List"  -->
                     <Label Content="{Binding LabelContentPositionsList}"
                            Grid.Row="0"
                            FontWeight="Bold"
-                           HorizontalAlignment="Left" />
+                           HorizontalAlignment="Left"
+                           Margin="0,0" />
                     <invoicecontrols:HeaderInvoicePositionControl Grid.Row="1"
                                                                   HorizontalAlignment="Stretch"
                                                                   VerticalAlignment="Stretch" />
@@ -288,7 +324,7 @@
                                   SelectedItem="{Binding SelectedInvoicePositionCardListItemViewModel, Mode=TwoWay}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.CanContentScroll="True"
                                   behaviorsutilities:CustomMouseWheelScrolling.HandleMouseWheel="True">
 
                             <ListView.Resources>
@@ -303,21 +339,9 @@
                                 </Style>
                             </ListView.Resources>
 
-                            <ListView.Template>
-                                <ControlTemplate TargetType="ListView">
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                                  HorizontalScrollBarVisibility="Disabled"
-                                                  CanContentScroll="False"
-                                                  Background="Transparent"
-                                                  Padding="0">
-                                        <ItemsPresenter />
-                                    </ScrollViewer>
-                                </ControlTemplate>
-                            </ListView.Template>
-
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                                    <VirtualizingStackPanel />
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
 

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxBlueCheck">
+    <Style TargetType="{x:Type CheckBox}" x:Key="CustomizedCheckBox">
         <Setter Property="Margin" Value="4" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

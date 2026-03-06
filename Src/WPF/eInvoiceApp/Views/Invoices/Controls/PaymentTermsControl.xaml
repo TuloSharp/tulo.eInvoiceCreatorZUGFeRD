@@ -7,8 +7,8 @@
              xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
              xmlns:placeholder="clr-namespace:tulo.PlaceholderTextBoxControl;assembly=tulo.PlaceholderTextBoxControl"
              mc:Ignorable="d"
-             d:DesignHeight="280"
-             d:DesignWidth="300">
+             d:DesignHeight="200"
+             d:DesignWidth="600">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -35,176 +35,155 @@
         </Border.Effect>
 
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Skonto Bereich -->
-   
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="0"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="2"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="0"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <!--  Discount percentage + days + result date (display only)  -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Checkbox -->
-                    <CheckBox Grid.Row="0"
-                              Content="Skonto anbieten"
-                              IsChecked="{Binding HasSkonto, UpdateSourceTrigger=PropertyChanged}"
-                              FontSize="14"
-                              Margin="2,0,0,0"/>
-
-                    <!-- Skonto Prozent + Tage + Ergebnisdatum (nur Anzeige) -->
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- % -->
-                        <placeholder:PlaceholderTextBox Grid.Column="0"
-                                                        Text="{Binding SkontoPercent, UpdateSourceTrigger=PropertyChanged}"
-                                                        Placeholder="... % Skonto"
-                                                        ToolTip="Skonto in Prozent"
-                                                        BorderThickness="0.5"
-                                                        Padding="6,2"
-                                                        IsEnabled="{Binding HasSkonto}"
-                                                        HorizontalAlignment="Left"
-                                                        Width="90"/>
-
-                      
-
-                        <!-- Tage -->
-                        <placeholder:PlaceholderTextBox Grid.Column="2"
-                                                        Text="{Binding SkontoDays, UpdateSourceTrigger=PropertyChanged}"
-                                                        Placeholder="till n days"
-                                                        ToolTip="Skonto-Frist in Tagen"
-                                                        BorderThickness="0.5"
-                                                        Padding="6,2"
-                                                        IsEnabled="{Binding HasSkonto}"
-                                                        HorizontalAlignment="Left"
-                                                        Width="155"/>
-
-                        <TextBlock Grid.Column="4"
-                                   Text="{Binding SkontoUntilDateText}"
-                                   VerticalAlignment="Center"
-                                   Foreground="Black"
-                                   Margin="8,0,0,0"
-                                   Opacity="{Binding HasSkonto, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    </Grid>
-
-                    <!-- Basisdatum -->
-               
-
-
-                        <utilities:ExtendedDatePicker Grid.Row="6"
-                                                      x:Name="SkontoBasisDatePicker"
-                                                       HorizontalAlignment="Left"
-                                                       Tag="Basis date"
-                                                      Width="140"
-                                                      Height="28"
-                                                      Language="de-DE"
-                                                      DisplayDateStart="1900-01-01"
-                                                      DisplayDateEnd="2099-12-31"
-                                                      SelectedDate="{Binding SkontoBasisDate, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
-                                                      Text="{Binding SkontoBasisDateText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                                      ToolTip="Basisdatum für Skonto (z.B. Rechnungsdatum)"
-                                                      IsEnabled="{Binding HasSkonto}"
-                                                      Margin="0,0,0,0"/>
-
-                        
-                        <TextBlock Grid.Row="7"
-                                   Margin="10,2,0,0"
-                                   Foreground="Red"
-                                   Visibility="{Binding HasSkontoBasisDateError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
-                                   Text="{Binding SkontoBasisDateErrorMessage}" />
-                        
-                
-
-                    <!-- Preview-Text (genau wie in deinem JSON Description) -->
-                    <placeholder:PlaceholderTextBox Grid.Row="8"
-                                                    HorizontalAlignment="Left"
-                                                    Text="{Binding SkontoPreviewText}"
-                                                    Placeholder="Bis zum --.--.---- erhalten Sie ... % Skonto"
-                                                    IsReadOnly="True"
+                    <!--  %  -->
+                    <!--
+                        Placeholder="... % Skonto"
+                        ToolTip="Skonto in Prozent"
+                    -->
+                    <placeholder:PlaceholderTextBox Grid.Column="0"
+                                                    Text="{Binding SkontoPercent, UpdateSourceTrigger=PropertyChanged}"
+                                                    Placeholder="{Binding PlaceholderSkontoPercent}"
+                                                    ToolTip="{Binding ToolTipSkontoPercent}"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
-                                           Width="250"
-                                                    TextWrapping="Wrap"
-                                                    Margin="0,8,0,0"/>
+                                                    HorizontalAlignment="Left"
+                                                    Width="120" />
+                    <!--  Days  -->
+                    <!--
+                        Placeholder="till n days"
+                        ToolTip="Skonto-Frist in Tagen"
+                    -->
+                    <placeholder:PlaceholderTextBox Grid.Column="2"
+                                                    Text="{Binding SkontoDays, UpdateSourceTrigger=PropertyChanged}"
+                                                    Placeholder="{Binding PlaceholderSkontoDays}"
+                                                    ToolTip="{Binding ToolTipSkontoDays}"
+                                                    BorderThickness="0.5"
+                                                    Padding="6,2"
+                                                    HorizontalAlignment="Left"
+                                                    Width="70" />
                 </Grid>
-          
 
-            <!-- Ohne Abzug / Fälligkeit Bereich -->
-            <Border Grid.Row="3"
-                    Background="#0A000000"
-                    BorderBrush="#22000000"
-                    BorderThickness="1"
-                    CornerRadius="4"
-                    Padding="10">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-
-
-                
-                        <utilities:ExtendedDatePicker  Grid.Row="0"
-                                                  x:Name="NoDiscountDueDatePicker"
-                                                  Tag="payable by"
-                                                   HorizontalAlignment="Left"
+                <!--  Basis date  -->
+                <!--
+                    Tag="Basis date"
+                    ToolTip="Basisdatum für Skonto (z.B. Rechnungsdatum)"
+                -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <utilities:ExtendedDatePicker Grid.Column="0"
+                                                  x:Name="SkontoBasisDatePicker"
+                                                  HorizontalAlignment="Left"
+                                                  Tag="{Binding TagSkontoBasisDate}"
                                                   Width="140"
                                                   Height="28"
                                                   Language="de-DE"
                                                   DisplayDateStart="1900-01-01"
                                                   DisplayDateEnd="2099-12-31"
-                                                  SelectedDate="{Binding PaymentDueDate, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
-                                                  Text="{Binding PaymentDueDateText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                                  ToolTip="{Binding ToolTipPaymentDueDateText}"
-                                                  Margin="0,0,0,0"/> 
-                        
-                      
-                
+                                                  SelectedDate="{Binding SkontoBasisDate, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                                  Text="{Binding SkontoBasisDateText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                  ToolTip="{Binding ToolTipSkontoBasisDate}"
+                                                  Margin="0,4,0,0" />
 
-                    <TextBlock Grid.Row="1"
-                               Margin="4,2,0,0"
-                               Foreground="Red"
-                               Visibility="{Binding HasDatePickerError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
-                               Text="{Binding DatePickerErrorMessage}" /> 
-                    
-                    <placeholder:PlaceholderTextBox Grid.Row="2"
-                                                    Text="{Binding NoDiscountPreviewText}"
-                                                    Placeholder="Bis zum ... ohne Abzug"
+                    <!--  Preview-Text (JSON Description)  -->
+
+                    <placeholder:PlaceholderTextBox Grid.Column="4"
                                                     HorizontalAlignment="Left"
-                                                    IsReadOnly="True"
+                                                    Text="{Binding SkontoPreviewText}"
+                                                    Placeholder="{Binding PlaceholderSkontoPreviewText}"
+                                                    ToolTip="{Binding ToolTipSkontoPreviewText}"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
-                                                    Width="250"
-                                                    TextWrapping="Wrap"
-                                                    Margin="0,6,0,0"/>
-
-                   
+                                                    Width="430"
+                                                    Margin="0,4,0,0" />
+                    <!--  IsReadOnly="True"  -->
                 </Grid>
-            </Border>
 
+                <TextBlock Grid.Row="2"
+                           Margin="10,2,0,0"
+                           Foreground="Red"
+                           Visibility="{Binding HasSkontoBasisDateError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                           Text="{Binding SkontoBasisDateErrorMessage}" />
+
+            </Grid>
+
+            <!--  No deduction / Due date range  -->
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <utilities:ExtendedDatePicker Grid.Column="0"
+                                                  x:Name="NoDiscountDueDatePicker"
+                                                  Tag="{Binding TagPaymentDueDateRangeText}"
+                                                  HorizontalAlignment="Left"
+                                                  Width="140"
+                                                  Height="28"
+                                                  Language="de-DE"
+                                                  DisplayDateStart="1900-01-01"
+                                                  DisplayDateEnd="2099-12-31"
+                                                  SelectedDate="{Binding PaymentDueDateRange, Converter={StaticResource DateOnlyToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                                  Text="{Binding PaymentDueDateRangeText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                  ToolTip="{Binding ToolTipPaymentDueDateRangeText}"
+                                                  Margin="0,4,0,0" />
+                    
+                    <placeholder:PlaceholderTextBox Grid.Column="2"
+                                                    Text="{Binding NoDiscountPreviewText}"
+                                                    Placeholder="{Binding PlaceholderNoDiscountPreviewText}"
+                                                    ToolTip="{Binding ToolTipNoDiscountPreviewText}"
+                                                    HorizontalAlignment="Left"
+                                                    BorderThickness="0.5"
+                                                    Padding="6,2"
+                                                    Width="430"
+                                                    TextWrapping="Wrap"
+                                                    Margin="0,4,0,0" />
+                    <!--  IsReadOnly="True"  -->
+                </Grid>
+
+                <TextBlock Grid.Row="1"
+                           Margin="4,2,0,0"
+                           Foreground="Red"
+                           Visibility="{Binding HasPaymentDueDateRangeError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                           Text="{Binding PaymentDueDateRangeErrorMessage}" />
+
+            </Grid>
         </Grid>
     </Border>
 </UserControl>
