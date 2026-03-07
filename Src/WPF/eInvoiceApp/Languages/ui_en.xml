@@ -23,7 +23,6 @@
   <entry key="UnitPercent">%</entry>
   <!--#endregion -->
 
-
   <!--#region Invocie Tooltips -->
   <entry key="ToolTipCompanyBuyerParty">Buyer company / legal name.</entry>
   <entry key="ToolTipFiscalIdBuyerParty">Buyer fiscal ID / tax number (often schemeID=FC).</entry>
@@ -78,7 +77,6 @@
   <entry key="PlaceholderDocumentName">Document name</entry>
   <entry key="PlaceholderCurrency">EUR</entry>
   <entry key="PlaceholderDocumentTypeCode">380</entry>
-
   <!--#endregion -->
 
   <!--#region Invocie Labels & Contents -->
@@ -97,7 +95,6 @@
   <entry key="LabelContentPaymentInformation">Payment Information</entry>
   <entry key="LabelContentPositionsList">Positions List</entry>
   <!--#endregion -->
-
 
   <!--#region Seller ToolTips -->
   <entry key="ToolTipCompanySellerParty">Seller company / legal name.</entry>
@@ -284,4 +281,5 @@
   <!--#region Date contest for validation -->
   <entry key="ContentDateInvalid">Date is invalid.</entry>
   <entry key="ContentDateMustBeBetweenTemplate">Date must be between</entry>
+  <!--#endregion -->
 </properties>

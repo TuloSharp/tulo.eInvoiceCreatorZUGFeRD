@@ -1,5 +1,4 @@
-﻿using s2industries.ZUGFeRD;
-using tulo.CommonMVVM.Collector;
+﻿using tulo.CommonMVVM.Collector;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;

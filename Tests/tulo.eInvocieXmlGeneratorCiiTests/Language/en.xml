@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+	<entry key="PdfDisclamerText">This document visualizes the electronic invoice in XML format. It represents the data contained in the XML; no verification of correctness, completeness, or validity is performed:</entry>
+	<entry key="LabelInvoiceTable">The following services/items are invoiced</entry>
+	<entry key="InvoiceTypeCode">Invoice type</entry>
+	<entry key="PaymentCurrencyCode">Currency:</entry>
+	<entry key="SalesOrderReference">Order number</entry>
+	<entry key="InvoiceTotalAmountWithoutVat">Total amount (net)</entry>
+	<entry key="InvoiceTotalVatAmount">Total tax amount</entry>
+	<entry key="InvoiceChargeTotalAmount">Surcharge/charge</entry>
+	<entry key="InvoiceAllowanceTotalAmount">Discount</entry>
+	<entry key="InvoiceLineAllowanceReason">Discount reason</entry>
+	<entry key="PaidAmount">Paid amount</entry>
+	<entry key="AmountDueForPayment">Amount due</entry>
+	<entry key="VatCategoryCode">VAT category:</entry>
+	<entry key="VatCategoryRate">VAT rate</entry>
+	<entry key="PaymentTerms">Cash discount;|additional payment terms</entry>
+	<entry key="PaymentDueDate">Due date</entry>
+	<entry key="PaymentTypeCode">Payment means code</entry>
+	<entry key="RemittanceInfo">Payment reference</entry>
+	<entry key="PaymentCardPrimaryAccountNr">Card number</entry>
+	<entry key="PaymentCardHolderName">Cardholder</entry>
+	<entry key="InvoiceNote">Note</entry>
+	<entry key="BusinessProcessTypeId">Process identifier</entry>
+	<entry key="SpecificationId">Specification identifier</entry>
+	<entry key="ItemPriceDiscount" id="BT-147">Discount (net)</entry>
+	<entry key="OverviewCreditNote">Credit note</entry>
+	<entry key="OverviewSalesTax">VAT breakdown at invoice level</entry>
+	<entry key="OverviewPaymentsData">Payment terms &amp; bank details</entry>
+	<entry key="OverviewDiscount">Invoice-level discount</entry>
+	<entry key="OverviewHandyFlatRate">Invoice-level surcharge/charge</entry>
+	<entry key="OverviewInvoiceDescription">Invoice line descriptions at invoice level</entry>
+	<entry key="OverviewRemarks">Invoice remarks</entry>
+	<entry key="OverviewVarios">Miscellaneous</entry>
+	<entry key="OverviewInvoiceInfo">Invoice</entry>
+	<entry key="OverviewCreditInfo">Credit note</entry>
+	<entry key="OverviewDirectDebit">Direct debit</entry>
+	<entry key="OverviewSelfBilledInvoiceInfo">Self-billed invoice</entry>
+	<entry key="OverviewSelfBilledCreditNoteInfo">Self-billed credit note</entry>
+	<entry key="OverviewConsolidatedInvoice">Consolidated invoice</entry>
+	<entry key="OverviewInvoiceCorrection">Invoice correction</entry>
+	<entry key="OverviewAdvancePaymentInvoiceInfo">Advance payment invoice</entry>
+	<entry key="OverviewProformaInvoiceInfo">Proforma invoice</entry>
+
+	<entry key="NoLiabilityInfo">We accept no liability for the correctness of the data.</entry>
+	<entry key="Details">Details</entry>
+	<entry key="Disclaimer">We accept no liability for the correctness of the data.</entry>
+	<entry key="NoDdata">No data available</entry>
+	<entry key="Net">net</entry>
+	<entry key="Gross">gross</entry>
+	<entry key="NoContent">Sections without content are not displayed!</entry>
+	<entry key="Description">Description</entry>
+	<entry key="Price">Price</entry>
+	<entry key="PriceUnit">Price unit</entry>
+	<entry key="Vat">VAT rate</entry>
+	<entry key="VatID">VAT ID</entry>
+	<entry key="TaxNumber">Tax no.</entry>
+	<entry key="TaxCcode">Tax code</entry>
+	<entry key="Total">Total</entry>
+	<entry key="Page">Page</entry>
+	<entry key="SubjectCode">Subject</entry>
+	
+	<entry key="ChargeIndicatorFee">Fee</entry>
+	<entry key="ChargeIndicatorDiscount">Discount</entry>
+
+	<entry key="SubtotalTaxTableTypeCode">Tax type</entry>
+	<entry key="SubtotalTaxTableCategoryCode">Tax category</entry>
+	<entry key="SubtotalTaxTableReason">Reason</entry>
+	<entry key="SubtotalTaxTablePercent">Tax [%]</entry>
+	<entry key="SubtotalTaxTableBaseAmount">Net amount</entry>
+	<entry key="SubtotalTaxTableAmount">Tax amount</entry>
+	<entry key="ProjectId">Project number:</entry>
+	<entry key="ProjectName">Project name:</entry>
+	<entry key="ContractIissuerAssignedId">Contract number:</entry>
+	<entry key="BuyerIssuerAssignedId">Purchase order number:</entry>
+	
+	<entry key="DirectDebitMandantRef">Direct debit|mandate reference:</entry>
+	<entry key="DirectDebitIBAN">Direct debit IBAN:</entry>
+	<entry key="DirectDebitCreditorId">Direct debit|creditor ID:</entry>
+	<entry key="OccurrenceDateTime">Service date: </entry>
+	<entry key="BillingDateTimeFromTo">Billing from StartDate to EndDate</entry>
+
+	<entry key="InvoiceNr">Invoice number</entry>
+	<entry key="InvoiceIssueDate">Invoice date</entry>
+	<entry key="BuyerRefId">Business partner no.</entry>
+	
+	<entry key="Overview">Overview</entry>
+	<entry key="OverviewBuyer">Customer name / company</entry>
+	<entry key="OverviewSeller">Company</entry>
+	
+	<entry key="PaymentAccountId">IBAN</entry>
+	<entry key="PaymentServiceProviderId">BIC</entry>
+	<entry key="PaymentMeansMsg">Payment means:</entry>
+	<entry key="PaymentAccountName">Account holder</entry>
+	<entry key="PaymentMeansInfo">Payment means info</entry>
+	
+	<entry key="PdfFooterTitle">Payment information of the issuer:</entry>
+	
+	<!--#regiom currency-->
+	<entry key="EUR">€</entry>
+	<!--#endregion -->
+
+	<entry key="InfoFormatXML">XML format</entry>
+
+	<!--#region unite code -->
+	<entry key="C62">pcs</entry>		
+	<entry key="HUR">hr</entry>		
+	<entry key="KGM">kg</entry>		
+	<entry key="LTR">litre</entry>		
+	<entry key="MTR">m</entry>	
+	<entry key="LM">lm</entry>	
+	<entry key="M2">m²</entry>		
+	<entry key="MTK">m²</entry>		
+	<entry key="MTQ">m³</entry>		
+	<entry key="M3">m³</entry>		
+	<entry key="DAY">day</entry>		
+	<entry key="MIN">minute</entry>	
+	<entry key="SEC">second</entry>	
+	<entry key="HAR">hectare</entry>	
+	<entry key="KTM">km</entry>	
+	<entry key="KMT">km</entry>	
+	<entry key="LS">flat rate</entry>	
+	<entry key="XPP">flat rate</entry>	
+	<entry key="NAR">quantity</entry>	
+	<entry key="NPR">number of pairs</entry>	
+	<entry key="SET">set</entry>	
+	<entry key="TNE">tonne</entry>	
+	<entry key="WEE">week</entry>	
+	<entry key="H87">pcs</entry>	
+	<entry key="P1">%</entry>	
+	<!--#endregion -->
+	
+	<!-- Payment means typecode -->
+	<entry key="58">(SEPA credit transfer)</entry>
+	<entry key="59">(SEPA direct debit)</entry>
+	<entry key="57">(Standing agreement)</entry>
+	<entry key="30">(Credit transfer (non-SEPA))</entry>
+	<entry key="49">(Direct debit (non-SEPA))</entry>
+	<entry key="48">(Bank card)</entry>
+
+	<!--Umsatzsteuerkategorie-->
+	<entry key="AE">VAT reverse charge</entry>
+	<entry key="E">Exempt from tax</entry>
+	<entry key="G">Free export item, tax not charged</entry>
+	<entry key="K">VAT exempt for EEA intra-community supply of goods and services</entry>
+	<entry key="L">Reduced rate (Canary Islands general indirect tax)</entry>
+	<entry key="M">Mixed rates (Tax for production, services and importation in Ceuta and Melilla)</entry>
+	<entry key="O">Services outside scope of tax</entry>
+	<entry key="S">Standard rate</entry>
+	<entry key="Z">Zero rated goods</entry>
+	<entry key="NS">Not subject to tax</entry>
+
+	<!--#region Invoice Table-->
+	<entry key="InvoiceTableNr">#</entry>
+	<entry key="InvoiceTablePosDescription">Line item description</entry>
+	<entry key="InvoiceTablePosText">Line item description</entry>
+	<entry key="InvoiceTableItemNr">Item number \ EAN</entry>
+	<entry key="InvoiceTableQuantity">Quantity</entry>
+	<entry key="InvoiceTableUnit">Unit</entry>
+	<entry key="InvoiceTableUnitNetPrice">Unit price</entry>
+	<entry key="InvoiceTableTaxPrecentage">VAT [%]</entry>
+	<entry key="InvoiceTableNetAmount">Net</entry>
+	<entry key="InvoiceTableGrossAmount">Gross</entry>
+	<entry key="InvoiceTableTotalNetAmount">Total amount (net)</entry>
+	<entry key="InvoiceTableTotalTaxes">Total taxes</entry>
+	<entry key="InvoiceTableTotalGrossAmount">Total amount (gross)</entry>
+	<entry key="SumInvoiceLineNetAmount">Total amount (gross)</entry>
+	<!--#endregion -->
+</properties>

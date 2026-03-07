@@ -33,6 +33,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     {
         _logger.LogInformation($"{nameof(CreateElectronicInvoiceComponentsCommand)} start execution");
 
+        #region Command parameters
         Window? window = null;
         bool isPreview = false;
         bool hasToCreate = false;
@@ -61,8 +62,9 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 };
             }
         }
+        #endregion
 
-        // === UI UPDATE FIRST (must be on UI thread) ===
+        #region UI UPDATE FIRST (must be on UI thread)
         await Application.Current.Dispatcher.InvokeAsync(() =>
         {
             if (isPreview)
@@ -99,7 +101,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 }
             }
         }, System.Windows.Threading.DispatcherPriority.Render);
-
+        #endregion
         try
         {
             var invoice = await _invoiceBuilderService.BuildAsync(invoiceViewModel, default);
