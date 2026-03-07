@@ -1,17 +1,26 @@
 ﻿
 using System.IO;
 using System.Text.Json;
+using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Models;
 
 namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 
-public class SaveCustomerDataCommand(InvoiceViewModel invoiceViewModel) : BaseCommand
+public class SaveCustomerDataCommand(InvoiceViewModel invoiceViewModel, ICollectorCollection collectorCollection) : BaseCommand
 {
+    #region Services / Stores filled via CollectorCollection
     private readonly InvoiceViewModel _invoiceViewModel = invoiceViewModel;
+    private readonly ITranslatorUiProvider _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
+    #endregion
     public override void Execute(object parameter)
     {
+        var title = _translatorUiProvider.Translate("TitelSaveCustomerData");
+        var fileName = _invoiceViewModel.VatIdBuyerParty + _translatorUiProvider.Translate("FileNameCustomerData");
+        var filter = _translatorUiProvider.Translate("FilterJsonFile") + " (*.json)|*.json";
+        
         var buyer = new Party
         {
             ID = _invoiceViewModel.ErpCustomerNumberBuyerParty ?? string.Empty,
@@ -29,6 +38,8 @@ public class SaveCustomerDataCommand(InvoiceViewModel invoiceViewModel) : BaseCo
             ContactEmail = _invoiceViewModel.EmailAddressBuyerParty ?? string.Empty
         };
 
+       
+
         var options = new JsonSerializerOptions
         {
             WriteIndented = true
@@ -38,11 +49,11 @@ public class SaveCustomerDataCommand(InvoiceViewModel invoiceViewModel) : BaseCo
 
         var saveFileDialog = new Microsoft.Win32.SaveFileDialog
         {
-            Title = "Buyer als JSON speichern",
-            Filter = "JSON-Datei (*.json)|*.json",
+            Title = title,
+            Filter = filter,
             DefaultExt = ".json",
             AddExtension = true,
-            FileName = "buyer"
+            FileName = fileName
         };
 
         bool? result = saveFileDialog.ShowDialog();

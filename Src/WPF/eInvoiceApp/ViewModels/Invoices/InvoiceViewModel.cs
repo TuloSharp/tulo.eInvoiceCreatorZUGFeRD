@@ -457,6 +457,8 @@ private bool _hasDiscountBasisDateError;
     public ICommand RequestBringIntoViewCommand { get; }
     public ICommand IsAltShortcutKeyReleasedCommand { get; }
     public ICommand IsAltShortcutKeyPressedCommand { get; }
+    public ICommand SaveCustomerDataCommand {  get; }
+    public ICommand LoadCustomerDataCommand { get; }
     #endregion
 
     #region Datepicker error message 
@@ -524,6 +526,8 @@ private bool _hasDiscountBasisDateError;
         RequestBringIntoViewCommand = new RequestBringIntoViewCommand();
         IsAltShortcutKeyReleasedCommand = new IsAltShortcutKeyReleasedCommand(collectorCollection);
         IsAltShortcutKeyPressedCommand = new IsAltShortcutKeyPressedCommand(collectorCollection);
+        SaveCustomerDataCommand = new SaveCustomerDataCommand(this, _collectorCollection);
+        LoadCustomerDataCommand = new LoadCustomerDataCommand(this, _collectorCollection);
         #endregion
 
         LoadInvoicePositionsCommand = new LoadInvoicePositionsCommand(this, _collectorCollection);

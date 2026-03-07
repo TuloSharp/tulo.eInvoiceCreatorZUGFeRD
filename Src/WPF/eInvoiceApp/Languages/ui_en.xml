@@ -282,4 +282,11 @@
   <entry key="ContentDateInvalid">Date is invalid.</entry>
   <entry key="ContentDateMustBeBetweenTemplate">Date must be between</entry>
   <!--#endregion -->
+
+  <!--#region save & Load customer data -->
+  <entry key="TitelSaveCustomerData">Save customer data</entry>
+  <entry key="FileNameCustomerData">_customer_data</entry>
+  <entry key="FilterJsonFile">JSON file</entry>
+  <entry key="TitelLoadCustomerData">Load customer data</entry>
+  <!--#endregion -->
 </properties>
