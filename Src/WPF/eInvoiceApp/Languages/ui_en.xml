@@ -263,8 +263,8 @@
   <!--#endregion -->
 
   <!--#region UI Payment Terms - ToolTips -->
-  <entry key="ToolTipDiscountPercent">Discount in percent</entry>
-  <entry key="ToolTipDiscountDays">Discount period in days</entry>
+  <entry key="ToolTipDiscountPercent">Discount in percent, e.g 1.5</entry>
+  <entry key="ToolTipDiscountDays">Discount period in days, e.g 10</entry>
   <entry key="ToolTipDiscountBasisDate">Base date for discount calculation</entry>
   <entry key="ToolTipDiscountPreviewText">Preview text for discount term</entry>
   <entry key="ToolTipPaymentDueDateRangeText">Payment due date without deduction</entry>

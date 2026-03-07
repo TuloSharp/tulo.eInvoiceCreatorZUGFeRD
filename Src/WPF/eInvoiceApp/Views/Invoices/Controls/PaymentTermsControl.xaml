@@ -64,21 +64,27 @@
 
                     <!--  %  -->
                     <placeholder:PlaceholderTextBox Grid.Column="0"
-                                                    Text="{Binding DiscountPercent, UpdateSourceTrigger=PropertyChanged}"
                                                     Placeholder="{Binding PlaceholderDiscountPercent}"
                                                     ToolTip="{Binding ToolTipDiscountPercent}"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
                                                     HorizontalAlignment="Left"
-                                                    Width="120" />
+                                                    MaxLength="5"
+                                                    Width="120"
+                                                    utilities:MoneyInput.IsEnabled="True"
+                                                    utilities:MoneyInput.ShowZeroWhenEmpty="False"
+                                                    utilities:MoneyInput.Value="{Binding DiscountPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    utilities:MoneyInput.Mode="ShiftCents" />
                     <!--  Days  -->
                     <placeholder:PlaceholderTextBox Grid.Column="2"
                                                     Text="{Binding DiscountDays, UpdateSourceTrigger=PropertyChanged}"
                                                     Placeholder="{Binding PlaceholderDiscountDays}"
                                                     ToolTip="{Binding ToolTipDiscountDays}"
+                                                    utilities:TextBoxProperties.AllowedCharactersRegex="^[0-9]*$"
                                                     BorderThickness="0.5"
                                                     Padding="6,2"
                                                     HorizontalAlignment="Left"
+                                                    MaxLength="3"
                                                     Width="70" />
                 </Grid>
 
@@ -150,7 +156,7 @@
                                                   Text="{Binding PaymentDueDateRangeText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                                                   ToolTip="{Binding ToolTipPaymentDueDateRangeText}"
                                                   Margin="0,4,0,0" />
-                    
+
                     <placeholder:PlaceholderTextBox Grid.Column="2"
                                                     Text="{Binding NoDiscountPreviewText}"
                                                     Placeholder="{Binding PlaceholderNoDiscountPreviewText}"

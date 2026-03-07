@@ -19,7 +19,6 @@ using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Models;
 using tulo.LoadingSpinnerControl.ViewModels;
 using tulo.ResourcesWpfLib.Commands;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 
@@ -261,11 +260,30 @@ public class InvoiceViewModel : BaseViewModel
         set => SetField(ref _discountPreviewText, value);
     }
 
-    private string _discountPercent = string.Empty;
-    public string DiscountPercent
+    private void UpdateDiscountPreviewText()
+    {
+        DateOnly? previewDate = null;
+
+        if (DiscountBasisDate.HasValue && int.TryParse(DiscountDays, out int days))
+            previewDate = DiscountBasisDate.Value.AddDays(days);
+        else
+            previewDate = DiscountBasisDate;
+
+        string dateText = previewDate?.ToString(DateFormat) ?? DateFormat;
+        string percentText = DiscountPercent.ToString() ?? "...";
+
+        DiscountPreviewText = PlaceholderDiscountPreviewText.Replace(DateFormat, dateText).Replace("...", percentText);
+    }
+
+    private decimal _discountPercent;
+    public decimal DiscountPercent
     {
         get => _discountPercent;
-        set => SetField(ref _discountPercent, value);
+        set
+        {
+            if (SetField(ref _discountPercent, value))
+                UpdateDiscountPreviewText();
+        }
     }
 
     private string _discountDays = string.Empty;
@@ -279,14 +297,18 @@ public class InvoiceViewModel : BaseViewModel
     public DateOnly? DiscountBasisDate
     {
         get => _discountBasisDate;
-        set => SetField(ref _discountBasisDate, value);
+        set
+        {
+            if (SetField(ref _discountBasisDate, value))
+                UpdateDiscountPreviewText();
+        }
     }
 
     private string _discountBasisDateText = string.Empty;
     public string DiscountBasisDateText
     {
         get => _discountBasisDateText;
-        set => SetDateText(ref _discountBasisDateText, value, nameof(DiscountBasisDateText), v => DiscountBasisDate = v, v => HasDiscountBasisDateError = v, v => DiscountBasisDateErrorMessage = v);
+        set => SetDateText(ref _discountBasisDateText, value, nameof(DiscountBasisDateText), v => { DiscountBasisDate = v; UpdateDiscountPreviewText(); }, v => HasDiscountBasisDateError = v, v => DiscountBasisDateErrorMessage = v);
     }
 
 private bool _hasDiscountBasisDateError;
@@ -307,14 +329,18 @@ private bool _hasDiscountBasisDateError;
     public DateOnly? PaymentDueDateRange
     {
         get => _paymentDueDateRange;
-        set => SetField(ref _paymentDueDateRange, value);
+        set
+        {
+            if (SetField(ref _paymentDueDateRange, value))
+                UpdateNoDiscountPreviewText();
+        }
     }
 
     private string _paymentDueDateRangeText = string.Empty;
     public string PaymentDueDateRangeText
     {
         get => _paymentDueDateRangeText;
-        set => SetDateText(ref _paymentDueDateRangeText, value, nameof(PaymentDueDateRangeText), v => PaymentDueDateRange = v, v => HasPaymentDueDateRangeError = v, v => PaymentDueDateRangeErrorMessage = v);
+        set => SetDateText(ref _paymentDueDateRangeText, value, nameof(PaymentDueDateRangeText), v => { PaymentDueDateRange = v; UpdateNoDiscountPreviewText(); }, v => HasPaymentDueDateRangeError = v, v => PaymentDueDateRangeErrorMessage = v);
     }
 
     private bool _hasPaymentDueDateRangeError;
@@ -336,6 +362,13 @@ private bool _hasDiscountBasisDateError;
     {
         get => _noDiscountPreviewText;
         set => SetField(ref _noDiscountPreviewText, value);
+    }
+
+    private void UpdateNoDiscountPreviewText()
+    {
+        string dateText = PaymentDueDateRange?.ToString(DateFormat) ?? DateFormat;
+
+        NoDiscountPreviewText = PlaceholderNoDiscountPreviewText.Replace(DateFormat, dateText);
     }
     #endregion
 

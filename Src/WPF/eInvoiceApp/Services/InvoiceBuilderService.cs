@@ -94,7 +94,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
         var hasCompleteDiscountData = invoiceViewModel.HasDiscount &&
                                           invoiceViewModel.DiscountBasisDate.HasValue &&
                                           !string.IsNullOrWhiteSpace(invoiceViewModel.DiscountDays) &&
-                                          !string.IsNullOrWhiteSpace(invoiceViewModel.DiscountPercent) &&
+                                          invoiceViewModel.DiscountPercent > 0 &&
                                           !string.IsNullOrWhiteSpace(invoiceViewModel.DiscountPreviewText) &&
                                           !string.IsNullOrWhiteSpace(invoiceViewModel.NoDiscountPreviewText);
 
@@ -106,13 +106,6 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
             int basisPeriodDays = 0;
             int.TryParse(invoiceViewModel.DiscountDays!.Trim(), out basisPeriodDays);
 
-            decimal calculationPercent = 0m;
-            decimal.TryParse(
-                invoiceViewModel.DiscountPercent!.Trim().Replace("%", string.Empty),
-                System.Globalization.NumberStyles.Number,
-                System.Globalization.CultureInfo.GetCultureInfo("de-DE"),
-                out calculationPercent);
-
             invoice.Payment.Terms.Add(new PaymentTermDetails
             {
                 Description = invoiceViewModel.DiscountPreviewText!.Trim(),
@@ -122,7 +115,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
                     BasisDate = discountBasisDate,
                     BasisPeriodDays = basisPeriodDays,
                     BasisAmount = 0m,
-                    CalculationPercent = calculationPercent,
+                    CalculationPercent = invoiceViewModel.DiscountPercent,
                     ActualDiscountAmount = 0m
                 }
             });
@@ -258,10 +251,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
 
         foreach (var l in invoice.Lines)
         {
-            var net = l.ForcedLineTotalAmount.HasValue
-                ? Round2(l.ForcedLineTotalAmount.Value)
-                : Round2(l.Quantity * l.UnitPrice);
-
+            var net = l.ForcedLineTotalAmount.HasValue ? Round2(l.ForcedLineTotalAmount.Value) : Round2(l.Quantity * l.UnitPrice);
             var tax = Round2(net * (l.TaxPercent / 100m));
 
             sumNet += net;
