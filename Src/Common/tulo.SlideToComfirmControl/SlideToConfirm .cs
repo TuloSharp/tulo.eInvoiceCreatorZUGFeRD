@@ -347,6 +347,58 @@ public class SlideToConfirm : Control
         set => SetValue(ResetSignalProperty, value);
     }
 
+    public static readonly DependencyProperty ThumbHoverBrushProperty =
+    DependencyProperty.Register(
+        nameof(ThumbHoverBrush),
+        typeof(Brush),
+        typeof(SlideToConfirm),
+        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0xFF, 0xD1, 0x66))));
+
+    public Brush ThumbHoverBrush
+    {
+        get => (Brush)GetValue(ThumbHoverBrushProperty);
+        set => SetValue(ThumbHoverBrushProperty, value);
+    }
+
+    public static readonly DependencyProperty TrackHoverBrushProperty =
+        DependencyProperty.Register(
+            nameof(TrackHoverBrush),
+            typeof(Brush),
+            typeof(SlideToConfirm),
+            new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44))));
+
+    public Brush TrackHoverBrush
+    {
+        get => (Brush)GetValue(TrackHoverBrushProperty);
+        set => SetValue(TrackHoverBrushProperty, value);
+    }
+
+    public static readonly DependencyProperty TextBrushProperty =
+    DependencyProperty.Register(
+        nameof(TextBrush),
+        typeof(Brush),
+        typeof(SlideToConfirm),
+        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0xF2, 0xF2, 0xF2))));
+
+    public Brush TextBrush
+    {
+        get => (Brush)GetValue(TextBrushProperty);
+        set => SetValue(TextBrushProperty, value);
+    }
+
+    public static readonly DependencyProperty TextHoverBrushProperty =
+        DependencyProperty.Register(
+            nameof(TextHoverBrush),
+            typeof(Brush),
+            typeof(SlideToConfirm),
+            new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0xFF, 0xD1, 0x66))));
+
+    public Brush TextHoverBrush
+    {
+        get => (Brush)GetValue(TextHoverBrushProperty);
+        set => SetValue(TextHoverBrushProperty, value);
+    }
+
     private static void OnResetSignalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var c = (SlideToConfirm)d;

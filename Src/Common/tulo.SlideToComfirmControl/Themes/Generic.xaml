@@ -5,65 +5,91 @@
 
         <Setter Property="CornerRadius" Value="4" />
         <Setter Property="TrackBrush" Value="#2B2B2B" />
+        <Setter Property="TrackHoverBrush" Value="#3A3A3A" />
         <Setter Property="FillBrush" Value="#2ECC71" />
+        <Setter Property="ThumbBrush" Value="#EDEDED" />
+        <Setter Property="ThumbHoverBrush" Value="#FFD166" />
+        <Setter Property="TextBrush" Value="#F2F2F2" />
+        <Setter Property="TextHoverBrush" Value="#FFD166" />
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SlideToConfirm}">
                     <Grid ClipToBounds="True">
                         <Border x:Name="PART_Track"
-                                Background="{TemplateBinding TrackBrush}"
-                                CornerRadius="{TemplateBinding CornerRadius}" />
+                            Background="{TemplateBinding TrackBrush}"
+                            CornerRadius="{TemplateBinding CornerRadius}" />
 
                         <Border x:Name="PART_Fill"
-                                Background="{TemplateBinding FillBrush}"
-                                CornerRadius="{TemplateBinding CornerRadius}"
-                                HorizontalAlignment="Left"
-                                Width="0" />
+                            Background="{TemplateBinding FillBrush}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            HorizontalAlignment="Left"
+                            Width="0" />
 
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="12"
-                                   Foreground="#F2F2F2"
-                                   Opacity="0.9"
-                                   TextTrimming="CharacterEllipsis">
+                        <TextBlock x:Name="PART_Text"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Foreground="{TemplateBinding TextBrush}"
+                               Opacity="0.9"
+                               TextTrimming="CharacterEllipsis">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <Setter Property="Text"
+                                        Value="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsConfirmed, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
-                                            <Setter Property="Text" Value="{Binding ConfirmedText, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <Setter Property="Text"
+                                                Value="{Binding ConfirmedText, RelativeSource={RelativeSource TemplatedParent}}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <!--  Thumb: kein Hintergrund / kein Kreis  -->
                         <Thumb x:Name="PART_Thumb"
-                               Width="28"
-                               Height="28"
-                               Margin="2"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               Background="Transparent"
-                               Cursor="Hand">
+                           Width="28"
+                           Height="28"
+                           Margin="2"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Background="Transparent"
+                           Cursor="Hand">
                             <Thumb.Template>
                                 <ControlTemplate TargetType="Thumb">
                                     <Grid Background="Transparent">
-                                        <Path Stroke="#EDEDED"
-                                              StrokeThickness="2"
-                                              StrokeLineJoin="Round"
-                                              StrokeStartLineCap="Round"
-                                              StrokeEndLineCap="Round"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Data="M 2 2 L 10 8 L 2 14" />
+                                        <Path x:Name="ArrowPath"
+                                          Stroke="{Binding ThumbBrush, RelativeSource={RelativeSource AncestorType={x:Type local:SlideToConfirm}}}"
+                                          StrokeThickness="2"
+                                          StrokeLineJoin="Round"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Data="M 2 2 L 10 8 L 2 14" />
                                     </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ArrowPath"
+                                                Property="Stroke"
+                                                Value="{Binding ThumbHoverBrush, RelativeSource={RelativeSource AncestorType={x:Type local:SlideToConfirm}}}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Thumb.Template>
                         </Thumb>
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="PART_Thumb" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Track"
+                                Property="Background"
+                                Value="{Binding TrackHoverBrush, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="PART_Text"
+                                Property="Foreground"
+                                Value="{Binding TextHoverBrush, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

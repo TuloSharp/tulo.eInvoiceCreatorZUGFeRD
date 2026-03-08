@@ -165,8 +165,12 @@
                                                  Height="34"
                                                  Margin="0,0,0,0"
                                                  FillBrush="#3B82F6"
-                                                 TrackBrush="DarkGray"
-                                                 ThumbBrush="#FFFFFF" />
+                                                 TrackBrush="{StaticResource ButtonIconPrimaryColorBrush}"
+                                                 ThumbBrush="#FFFFFF" 
+                                                 ThumbHoverBrush ="{StaticResource ButtonIconPrimaryColorBrush}"
+                                                 TrackHoverBrush ="{StaticResource BackgroundTextBoxDisableBrushColor}"
+                                                 TextBrush="White"
+                                                 TextHoverBrush="{StaticResource ButtonIconPrimaryColorBrush}" />
 
                 </Grid>
             </Grid>
