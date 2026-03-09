@@ -71,7 +71,7 @@
                               SelectedValue="{Binding Currency, UpdateSourceTrigger=PropertyChanged}"
                               ToolTip="{Binding ToolTipCurrency}"
                               SelectedValuePath="Tag"
-                               Padding="4,2"
+                              Padding="8,2"
                               Margin="0,2,0,4">
                         <ComboBoxItem Content="EUR" Tag="EUR" />
                         <ComboBoxItem Content="USD" Tag="USD" />
@@ -113,26 +113,23 @@
             <!--  DocumentTypeCode  -->
             <Grid Grid.Row="3" Grid.Column="1">
 
-                <ComboBox x:Name="cbDocumentTypeCode" Grid.Column="0" Template="{StaticResource ComboBoxCustomized}"
-                          HorizontalAlignment="Left"
-                          SelectedValue="{Binding DocumentTypeCode, UpdateSourceTrigger=PropertyChanged}"
-                          ToolTip="{Binding ToolTipDocumentTypeCode}"
-                          SelectedValuePath="Tag"
-                          Margin="0,2,0,4"
-                           Padding="4,2"
-                          Height="24"
-                          Width="150">
-                    <ComboBoxItem Content="Rechnung" Tag="380" />
-                    <ComboBoxItem Content="Gutschrift" Tag="381" />
-                    <ComboBoxItem Content="Lastschrift" Tag="383" />
-                    <ComboBoxItem Content="Proforma" Tag="325" />
-                    <ComboBoxItem Content="Berichtigte Rechnung" Tag="384" />
-                </ComboBox>
+                <ComboBox x:Name="cbDocumentTypeCode"
+              Template="{StaticResource ComboBoxCustomized}"
+              HorizontalAlignment="Left"
+              ItemsSource="{Binding DocumentTypeCodesObservableCollection}"
+              SelectedItem="{Binding SelectedDocumentTypeItem, UpdateSourceTrigger=PropertyChanged}"
+              DisplayMemberPath="DisplayText"
+              ToolTip="{Binding SelectedDocumentTypeTooltip}"
+              Margin="0,2,0,4"
+              Padding="8,2"
+              Height="24"
+              Width="150" />
+
                 <TextBlock Text="{Binding LabelDocumentTypeCode}"
-                           Margin="5,1,30,0"
-                           VerticalAlignment="Center"
-                           Foreground="Gray"
-                           IsHitTestVisible="False">
+               Margin="5,1,30,0"
+               VerticalAlignment="Center"
+               Foreground="Gray"
+               IsHitTestVisible="False">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -146,7 +143,6 @@
                 </TextBlock>
 
             </Grid>
-
         </Grid>
     </Border>
 </UserControl>

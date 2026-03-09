@@ -40,6 +40,10 @@
     <EmbeddedResource Include="Fonts\ROBOTO.TTF" />
     <EmbeddedResource Include="Fonts\VERDANA.TTF" />
   </ItemGroup>
+  
+  	<ItemGroup>
+		<PackageReference Include="Markdig.Wpf" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />

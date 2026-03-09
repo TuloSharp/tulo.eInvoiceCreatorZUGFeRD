@@ -801,7 +801,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)">
-                                <LinearColorKeyFrame KeyTime="0:0:0.2" Value="ForestGreen" />
+                                <LinearColorKeyFrame KeyTime="0:0:0.2" Value="{StaticResource ButtonIconPrimaryColor}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </BeginStoryboard>
@@ -810,7 +810,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)">
-                                <LinearColorKeyFrame KeyTime="0:0:0.2" Value="{StaticResource ButtonIconPrimaryColor}" />
+                                <LinearColorKeyFrame KeyTime="0:0:0.2" Value="{StaticResource ButtonIconColor}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </BeginStoryboard>

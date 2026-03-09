@@ -117,8 +117,8 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             "381" => "OverviewCreditInfo", // Gutschrift (Credit Note)
             "383" => "OverviewDirectDebit", // Lastschrift (Debit Note)
             "384" => "OverviewInvoiceCorrection", // Rechnungskorrektur (corrected Invoice)
-            "388" => "OverviewSelfBilledCreditNoteInfo", // Selbstfakturierte Gutschrift (SelfBilledInvoice)
-            "389" => "OverviewConsolidatedInvoice", // Konsolidierte Rechnung (Consolidate Invoice)
+            "389" => "OverviewSelfBilledCreditNoteInfo", // Selbstfakturierte Gutschrift (SelfBilledInvoice)
+            //"388" => "OverviewConsolidatedInvoice", // Konsolidierte Rechnung (Consolidate Invoice)
             "572" => "OverviewAdvancePaymentInvoiceInfo", // Vorauszahlungsrechnung
             "875" => "OverviewProformaInvoiceInfo", // Proformarechnung
             _ => "InvoiceTypeCode not found"

@@ -57,19 +57,15 @@
                               Template="{StaticResource ComboBoxCustomized}"
                               Height="24"
                               HorizontalAlignment="Left"
-                              SelectedValue="{Binding PaymentMeansCode, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding PaymentMeansCodesObservableCollection}"
+                              SelectedItem="{Binding SelectedPaymentMeansItem, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="DisplayText"
                               ToolTip="{Binding ToolTipPaymentMeansCode}"
-                              SelectedValuePath="Tag"
                               Margin="0,2,0,4"
                               Padding="4,2"
                               MinWidth="180"
-                              MaxWidth="220">
-                        <ComboBoxItem Content="Überweisung" Tag="58" />
-                        <ComboBoxItem Content="SEPA Überweisung" Tag="59" />
-                        <ComboBoxItem Content="SEPA Lastschrift" Tag="49" />
-                        <ComboBoxItem Content="Barzahlung" Tag="10" />
-                        <ComboBoxItem Content="Karte" Tag="48" />
-                    </ComboBox>
+                              MaxWidth="220" />
+
                     <TextBlock Text="{Binding LabelPaymentMeansCode}"
                                Margin="5,1,30,0"
                                VerticalAlignment="Center"

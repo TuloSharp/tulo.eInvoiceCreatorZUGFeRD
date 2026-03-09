@@ -38,7 +38,6 @@
   <entry key="ToolTipPhoneBuyerParty">Contact phone number.</entry>
   <entry key="ToolTipEmailAddressBuyerParty">Contact email address.</entry>
 
-  <entry key="ToolTipPaymentMeansCode">Payment means type code (e.g. 58 = SEPA credit transfer).</entry>
   <entry key="ToolTipPaymentDueDateText">Payment due date (text input).</entry>
   <entry key="ToolTipPaymentReference">Payment reference / remittance information.</entry>
   <entry key="ToolTipPaymentTerms">Payment terms / conditions text.</entry>
@@ -289,4 +288,29 @@
   <entry key="FilterJsonFile">JSON file</entry>
   <entry key="TitelLoadCustomerData">Load customer data</entry>
   <!--#endregion -->
+
+  <!--#region DocumentTypeCode -->
+<entry key="DocumentTypeCode_380">Invoice</entry>
+<entry key="DocumentTypeCode_381">Credit note</entry>
+<entry key="DocumentTypeCode_383">Debit note</entry>
+
+<entry key="ToolTipDocumentTypeCode_380">Select this option for a standard invoice.</entry>
+<entry key="ToolTipDocumentTypeCode_381">Select this option for a credit note.</entry>
+<entry key="ToolTipDocumentTypeCode_383">Select this option for a debit note.</entry>
+<!--#endregion -->
+
+
+<!--#region PaymentMeansCode -->
+<entry key="PaymentMeansCode_58">Credit transfer</entry>
+<entry key="PaymentMeansCode_59">SEPA credit transfer</entry>
+<entry key="PaymentMeansCode_49">SEPA direct debit</entry>
+<entry key="PaymentMeansCode_10">Cash payment</entry>
+<entry key="PaymentMeansCode_48">Card payment</entry>
+
+<entry key="ToolTipPaymentMeansCode_58">Payment by standard bank transfer.</entry>
+<entry key="ToolTipPaymentMeansCode_59">Payment by SEPA bank transfer within the SEPA area.</entry>
+<entry key="ToolTipPaymentMeansCode_49">Payment by SEPA direct debit from the customer's account.</entry>
+<entry key="ToolTipPaymentMeansCode_10">Payment made in cash.</entry>
+<entry key="ToolTipPaymentMeansCode_48">Payment made by debit or credit card.</entry>
+<!--#endregion -->
 </properties>

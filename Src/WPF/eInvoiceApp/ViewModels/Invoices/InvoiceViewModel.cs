@@ -38,7 +38,7 @@ public class InvoiceViewModel : BaseViewModel
     private static readonly CultureInfo _de = CultureInfo.GetCultureInfo("de-DE");
     private static readonly DateTime _minDate = new(1900, 1, 1);
     private static readonly DateTime _maxDate = new(2099, 12, 31);
-    private const string DateFormat = "dd.MM.yyyy"; 
+    private const string DateFormat = "dd.MM.yyyy";
     #endregion
 
     public Invoice Invoice { get; private set; } = new Invoice();
@@ -92,12 +92,80 @@ public class InvoiceViewModel : BaseViewModel
         set => SetField(ref _documentName, value);
     }
 
+
+
     private string _documentTypeCode = string.Empty;
     public string DocumentTypeCode
     {
         get => _documentTypeCode;
-        set => SetField(ref _documentTypeCode, value);
+        set
+        {
+            if (SetField(ref _documentTypeCode, value))
+            {
+                // Code -> SelectedDocumentType sync
+                var documentType = string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : DocumentTypeCodesObservableCollection.FirstOrDefault(d => d.Code == value);
+
+                if (!ReferenceEquals(_selectedDocumentTypeItem, documentType))
+                {
+                    _selectedDocumentTypeItem = documentType;
+                    OnPropertyChanged(nameof(SelectedDocumentTypeItem));
+                    OnPropertyChanged(nameof(SelectedDocumentTypeTooltip));
+                }
+            }
+        }
     }
+
+    public sealed class DocumentTypeItem
+    {
+        public string Code { get; }
+        public string TextKey { get; }
+        public string DisplayText { get; }
+
+        public DocumentTypeItem(string code, string textKey, string displayText)
+        {
+            Code = code;
+            TextKey = textKey;
+            DisplayText = displayText;
+        }
+    }
+
+    public ObservableCollection<DocumentTypeItem> DocumentTypeCodesObservableCollection { get; } = new();
+
+    private void LoadDocumentTypeCodesList()
+    {
+        DocumentTypeCodesObservableCollection.Clear();
+        void Add(string code, string key) =>
+            DocumentTypeCodesObservableCollection.Add(
+                new DocumentTypeItem(code, key, _translatorUiProvider.Translate(key)));
+
+        Add("380", "DocumentTypeCode_380");
+        Add("381", "DocumentTypeCode_381");
+        Add("383", "DocumentTypeCode_383");
+    }
+
+    private DocumentTypeItem? _selectedDocumentTypeItem;
+    public DocumentTypeItem? SelectedDocumentTypeItem
+    {
+        get => _selectedDocumentTypeItem;
+        set
+        {
+            if (!SetField(ref _selectedDocumentTypeItem, value))
+                return;
+
+            OnPropertyChanged(nameof(SelectedDocumentTypeTooltip));
+
+            if (!string.Equals(DocumentTypeCode, value?.Code ?? string.Empty, StringComparison.Ordinal))
+                DocumentTypeCode = value?.Code ?? string.Empty;
+        }
+    }
+
+    public string SelectedDocumentTypeTooltip =>
+        SelectedDocumentTypeItem is null
+            ? string.Empty
+            : _translatorUiProvider.Translate($"ToolTip{SelectedDocumentTypeItem.TextKey}");
+
     #endregion
 
     #region Buyer Party
@@ -195,13 +263,6 @@ public class InvoiceViewModel : BaseViewModel
     #endregion
 
     #region Payment Infos
-    private string _paymentMeansCode = string.Empty;
-    public string PaymentMeansCode
-    {
-        get => _paymentMeansCode;
-        set => SetField(ref _paymentMeansCode, value);
-    }
-
     private string _paymentReference = string.Empty;
     public string PaymentReference
     {
@@ -243,6 +304,78 @@ public class InvoiceViewModel : BaseViewModel
         get => _datePikerErrorMessage;
         set => SetField(ref _datePikerErrorMessage, value);
     }
+
+    private string _paymentMeansCode = string.Empty;
+    public string PaymentMeansCode
+    {
+        get => _paymentMeansCode;
+        set
+        {
+            if (SetField(ref _paymentMeansCode, value))
+            {
+                // Code -> SelectedPaymentMeans sync
+                var paymentMeans = string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : PaymentMeansCodesObservableCollection.FirstOrDefault(p => p.Code == value);
+
+                if (!ReferenceEquals(_selectedPaymentMeansItem, paymentMeans))
+                {
+                    _selectedPaymentMeansItem = paymentMeans;
+                    OnPropertyChanged(nameof(SelectedPaymentMeansItem));
+                    OnPropertyChanged(nameof(ToolTipPaymentMeansCode));
+                }
+            }
+        }
+    }
+
+    public sealed class PaymentMeansItem
+    {
+        public string Code { get; }
+        public string TextKey { get; }
+        public string DisplayText { get; }
+
+        public PaymentMeansItem(string code, string textKey, string displayText)
+        {
+            Code = code;
+            TextKey = textKey;
+            DisplayText = displayText;
+        }
+    }
+
+    public ObservableCollection<PaymentMeansItem> PaymentMeansCodesObservableCollection { get; } = new();
+
+    private void LoadPaymentMeansCodesList()
+    {
+        PaymentMeansCodesObservableCollection.Clear();
+        void Add(string code, string key) => PaymentMeansCodesObservableCollection.Add(new PaymentMeansItem(code, key, _translatorUiProvider.Translate(key)));
+
+        Add("58", "PaymentMeansCode_58");
+        Add("59", "PaymentMeansCode_59");
+        Add("49", "PaymentMeansCode_49");
+        Add("10", "PaymentMeansCode_10");
+        Add("48", "PaymentMeansCode_48");
+    }
+
+    private PaymentMeansItem? _selectedPaymentMeansItem;
+    public PaymentMeansItem? SelectedPaymentMeansItem
+    {
+        get => _selectedPaymentMeansItem;
+        set
+        {
+            if (!SetField(ref _selectedPaymentMeansItem, value))
+                return;
+
+            OnPropertyChanged(nameof(ToolTipPaymentMeansCode));
+
+            if (!string.Equals(PaymentMeansCode, value?.Code ?? string.Empty, StringComparison.Ordinal))
+                PaymentMeansCode = value?.Code ?? string.Empty;
+        }
+    }
+
+    public string ToolTipPaymentMeansCode => SelectedPaymentMeansItem is null ? string.Empty : _translatorUiProvider.Translate($"ToolTip{SelectedPaymentMeansItem.TextKey}");
+
+
+
     #endregion
 
     #region Payment Infos - Terms
@@ -311,7 +444,7 @@ public class InvoiceViewModel : BaseViewModel
         set => SetDateText(ref _discountBasisDateText, value, nameof(DiscountBasisDateText), v => { DiscountBasisDate = v; UpdateDiscountPreviewText(); }, v => HasDiscountBasisDateError = v, v => DiscountBasisDateErrorMessage = v);
     }
 
-private bool _hasDiscountBasisDateError;
+    private bool _hasDiscountBasisDateError;
     public bool HasDiscountBasisDateError
     {
         get => _hasDiscountBasisDateError;
@@ -457,7 +590,7 @@ private bool _hasDiscountBasisDateError;
     public ICommand RequestBringIntoViewCommand { get; }
     public ICommand IsAltShortcutKeyReleasedCommand { get; }
     public ICommand IsAltShortcutKeyPressedCommand { get; }
-    public ICommand SaveCustomerDataCommand {  get; }
+    public ICommand SaveCustomerDataCommand { get; }
     public ICommand LoadCustomerDataCommand { get; }
     #endregion
 
@@ -497,7 +630,7 @@ private bool _hasDiscountBasisDateError;
         setHasError(true);
         setErrorMessage(ContentDateInvalid);
     }
-    #endregion
+    #endregion 
 
     public InvoiceViewModel(ICollectorCollection collectorCollection)
     {
@@ -541,6 +674,9 @@ private bool _hasDiscountBasisDateError;
         _invoicePositionService.InvoicePositionDeleted += OnInvoicePositionDeleted;
 
         _invoicePositionService.InvoicePositionsLoaded += OnInvoicePositionsLoaded;
+
+        LoadDocumentTypeCodesList();
+        LoadPaymentMeansCodesList();
 
         FillAllInvoiceToolTips();
         FillAllInvoicePlaceholders();
@@ -645,7 +781,6 @@ private bool _hasDiscountBasisDateError;
     public string ToolTipPhoneBuyerParty { get; private set; } = string.Empty;
     public string ToolTipEmailAddressBuyerParty { get; private set; } = string.Empty;
 
-    public string ToolTipPaymentMeansCode { get; private set; } = string.Empty;
     public string ToolTipPaymentDueDateText { get; private set; } = string.Empty;
     public string ToolTipPaymentReference { get; private set; } = string.Empty;
     public string ToolTipPaymentTerms { get; private set; } = string.Empty;
@@ -688,7 +823,6 @@ private bool _hasDiscountBasisDateError;
         ToolTipEmailAddressBuyerParty = _translatorUiProvider.Translate("ToolTipEmailAddressBuyerParty");
 
         // Payment tooltips
-        ToolTipPaymentMeansCode = _translatorUiProvider.Translate("ToolTipPaymentMeansCode");
         ToolTipPaymentDueDateText = _translatorUiProvider.Translate("ToolTipPaymentDueDateText");
         ToolTipPaymentReference = _translatorUiProvider.Translate("ToolTipPaymentReference");
         ToolTipPaymentTerms = _translatorUiProvider.Translate("ToolTipPaymentTerms");
