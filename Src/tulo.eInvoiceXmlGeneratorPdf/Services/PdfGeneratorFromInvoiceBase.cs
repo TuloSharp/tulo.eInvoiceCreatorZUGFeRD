@@ -41,6 +41,8 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
     protected const string ContentNotFound = "N/A";
 
+    protected CultureInfo culture = CultureInfo.GetCultureInfo("de-DE");
+
     #region Fonts
     protected static string familyFontName = "Roboto";
     protected XFont fontTitle = new(familyFontName, 12);
@@ -214,10 +216,9 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         const int lineGap = 2;
         const int bottomGap = 8;
 
-        XPen linePen = new XPen(_grayColor, 0.4);
+        XPen linePen = new(_grayColor, 0.4);
 
-        // Header blau/fett wie Template
-        XBrush headerBlue = _darkBlueBrushColor; // oder _blueBrushColor, je nach deinem Template
+        XBrush headerBlue = _darkBlueBrushColor;
         XFont headerBold;
         try { headerBold = new XFont(fontHeader.FontFamily.Name, fontHeader.Size + 2, XFontStyleEx.Bold); }
         catch { headerBold = new XFont(fontHeader.FontFamily.Name, fontHeader.Size + 2); }
@@ -241,7 +242,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         double ReservedRightWidth(double yTop, double height)
         {
             if (!OverlapsQrVertically(yTop, height)) return 0;
-            return qrRect!.Value.Width + 12; // kleiner Abstand zur QR-Grafik
+            return qrRect!.Value.Width + 12;
         }
 
         bool LooksLikeXPath(string s) => !string.IsNullOrWhiteSpace(s) && (s.StartsWith("/") || s.StartsWith("."));
@@ -267,7 +268,6 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             }
         }
 
-        // Prüfen ob überhaupt Werte da sind
         var visibleItems = new List<(string label, string value, string xpathOrLiteral, string fieldKey)>();
         foreach (var kvp in fields)
         {
@@ -293,61 +293,42 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         if (visibleItems.Count == 0)
             return;
 
-        // Höhe grob reservieren (Titel + Linien + Zeilen)
         double lineH = fontBody.GetHeight();
         double titleH = headerBold.GetHeight();
         double approxH = topLineGap + 1 + afterTitleGap + titleH + (visibleItems.Count * (lineH + lineGap)) + bottomGap + 1;
 
         AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition, requiredHeight: (int)Math.Ceiling(approxH));
 
-        // =========================
-        // obere graue Linie
-        // =========================
         yPosition += topLineGap;
         xGraphics.DrawLine(linePen, leftX, yPosition, leftX + contentW, yPosition);
         yPosition += afterTitleGap;
 
-        // =========================
-        // Titel (blau/fett)
-        // =========================
-        xGraphics.DrawString(title, headerBold, headerBlue,
-            new XRect(leftX, yPosition, contentW, titleH),
-            XStringFormats.TopLeft);
+        xGraphics.DrawString(title, headerBold, headerBlue, new XRect(leftX, yPosition, contentW, titleH), XStringFormats.TopLeft);
 
         yPosition += (int)Math.Ceiling(titleH + afterTitleGap);
 
-        // =========================
-        // Zeilen: "Label: Wert"
-        // =========================
+    
         foreach (var item in visibleItems)
         {
             AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition);
 
-            // verfügbare Breite ggf. wegen QR einschränken
             double reservedRight = ReservedRightWidth(yPosition, lineH);
             double usableW = contentW - reservedRight;
             if (usableW < 160) usableW = 160;
 
             string leftText = $"{item.label}: ";
-            // wir zeichnen "Label:" normal, Wert normal (wie Template)
-            // Wrap: gesamter String, damit Zeilen sauber umbrechen
             string full = leftText + item.value;
 
             string[] wrapped = WrapText(ref xGraphics, full, fontBody, (int)usableW);
 
             for (int i = 0; i < wrapped.Length; i++)
             {
-                xGraphics.DrawString(wrapped[i], fontBody, XBrushes.Black,
-                    new XRect(leftX, yPosition, usableW, lineH),
-                    XStringFormats.TopLeft);
+                xGraphics.DrawString(wrapped[i], fontBody, XBrushes.Black, new XRect(leftX, yPosition, usableW, lineH), XStringFormats.TopLeft);
 
                 yPosition += (int)Math.Ceiling(lineH + lineGap);
             }
         }
 
-        // =========================
-        // untere graue Linie (wie Template)
-        // =========================
         yPosition += 2;
         xGraphics.DrawLine(linePen, leftX, yPosition, leftX + contentW, yPosition);
         yPosition += bottomGap;
@@ -686,8 +667,6 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         XmlNodeList? lineItems = xmlDoc?.SelectNodes(lineItemsNode, nsmgr);
         if (lineItems == null) return;
 
-        var culture = CultureInfo.GetCultureInfo("de-DE");
-
         foreach (XmlNode lineItem in lineItems)
         {
             // Order comes from dictionary (insertion order). Important: Call below in the same order!
@@ -707,11 +686,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             // Position description (2 lines): Description above, name below
             string descTop = (itemRow[2] ?? string.Empty).Trim();
             string descBottom = (itemRow[1] ?? string.Empty).Trim();
-            string positionBeschreibung = string.IsNullOrEmpty(descTop)
-                ? descBottom
-                : string.IsNullOrEmpty(descBottom)
-                    ? descTop
-                    : $"{descTop}\n{descBottom}";
+            string positionBeschreibung = string.IsNullOrEmpty(descTop) ? descBottom : string.IsNullOrEmpty(descBottom) ? descTop : $"{descTop}\n{descBottom}";
 
             // Item number/EAN (2 lines): SellerAssignedID above, GlobalID below (if available)
             string artikelNr = (itemRow[3] ?? string.Empty).Trim();
@@ -850,11 +825,10 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             xGraphics.DrawLine(_grayPen, x, yPosition, x, yPosition + rowHeaderHeight);
         }
 
-        // Header Text unverändert
         for (int i = 0; i < columnHeaders.Length; i++)
         {
             var headerRect = new XRect(startX + GetColumnOffset(columnWidths, i) + 2, yPosition, columnWidths[i], rowHeaderHeight);
-            DrawMultilineTextByBlanks(ref xGraphics, columnHeaders[i], fontColumnHeader, XBrushes.Black, headerRect, XStringFormats.TopLeft);
+            xGraphics.DrawString(columnHeaders[i], fontColumnHeader, XBrushes.Black, headerRect, alignments[i]);
         }
 
         yPosition += rowHeaderHeight;
@@ -865,8 +839,6 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
         if (lineItems != null)
         {
-            var culture = CultureInfo.GetCultureInfo("de-DE");
-
             foreach (XmlNode lineItem in lineItems)
             {
                 AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition);
@@ -1135,7 +1107,6 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             if (!string.IsNullOrWhiteSpace(subjectRelativeXpath))
                 subject = note.SelectSingleNode(subjectRelativeXpath, nsmgr)?.InnerText?.Trim() ?? "";
 
-            // ✅ Filter anwenden
             if (filter != null)
             {
                 if (string.IsNullOrWhiteSpace(subject) || !filter.Contains(subject))
@@ -1144,7 +1115,6 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
             if (includeSubject && !string.IsNullOrWhiteSpace(subjectRelativeXpath))
             {
-                //string subject = note.SelectSingleNode(subjectRelativeXpath, nsmgr)?.InnerText?.Trim() ?? "";
                 if (!string.IsNullOrWhiteSpace(subject))
                     result.Add($"{subject}: {content}");
                 else
