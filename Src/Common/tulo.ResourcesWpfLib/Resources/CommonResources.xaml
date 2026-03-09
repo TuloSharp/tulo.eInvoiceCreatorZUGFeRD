@@ -795,26 +795,27 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Stretch" Value="Fill" />
+        <Setter Property="Fill">
+            <Setter.Value>
+                <SolidColorBrush Color="{StaticResource ButtonIconColor}" />
+            </Setter.Value>
+        </Setter>
+
         <Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=IsMouseOver}" Value="True">
-                <DataTrigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)">
-                                <LinearColorKeyFrame KeyTime="0:0:0.2" Value="{StaticResource ButtonIconPrimaryColor}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </DataTrigger.EnterActions>
-                <DataTrigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)">
-                                <LinearColorKeyFrame KeyTime="0:0:0.2" Value="{StaticResource ButtonIconColor}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </DataTrigger.ExitActions>
+                <Setter Property="Fill">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource ButtonIconPrimaryColor}" />
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=IsChecked}" Value="True">
+                <Setter Property="Fill">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource ButtonIconPrimaryColor}" />
+                    </Setter.Value>
+                </Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -879,20 +880,20 @@
 
     <!--  Modern Bubble ToolTip with arrow  -->
     <Style TargetType="{x:Type ToolTip}">
-        <!-- Placement -->
+        <!--  Placement  -->
         <Setter Property="Placement" Value="Top" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="HasDropShadow" Value="False" />
 
-        <!-- Visuals -->
+        <!--  Visuals  -->
         <Setter Property="Foreground" Value="#FF1E5AA8" />
         <Setter Property="Background" Value="#FFE8F2FF" />
         <Setter Property="BorderBrush" Value="#FF8BB8F2" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="10,6" />
 
-        <!-- Offsets: helps prevent the tooltip bubble from "hugging" the control's left edge -->
-        <!-- Adjust HorizontalOffset to taste (e.g. 0..20) -->
+        <!--  Offsets: helps prevent the tooltip bubble from "hugging" the control's left edge  -->
+        <!--  Adjust HorizontalOffset to taste (e.g. 0..20)  -->
         <Setter Property="HorizontalOffset" Value="12" />
         <Setter Property="VerticalOffset" Value="2" />
 
@@ -900,9 +901,9 @@
             <Setter.Value>
                 <DataTemplate>
                     <TextBlock Text="{Binding}"
-                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=ToolTip}, Path=Foreground}"
-                           TextWrapping="Wrap"
-                           MaxWidth="260" />
+                               Foreground="{Binding RelativeSource={RelativeSource AncestorType=ToolTip}, Path=Foreground}"
+                               TextWrapping="Wrap"
+                               MaxWidth="260" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -910,20 +911,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToolTip}">
-                    <!-- CornerRadius = 10; desired gap to corner = 2px => right inset = 12px -->
-                    <!-- Arrow size: 16x8 -->
+                    <!--  CornerRadius = 10; desired gap to corner = 2px => right inset = 12px  -->
+                    <!--  Arrow size: 16x8  -->
                     <Grid SnapsToDevicePixels="True" UseLayoutRounding="True">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition Height="8" />
                         </Grid.RowDefinitions>
 
-                        <!-- Shadow layer (kept separate so the border stays crisp) -->
+                        <!--  Shadow layer (kept separate so the border stays crisp)  -->
                         <Grid Grid.RowSpan="2">
                             <Grid.Effect>
                                 <DropShadowEffect BlurRadius="12"
-                                              ShadowDepth="2"
-                                              Opacity="0.25" />
+                                                  ShadowDepth="2"
+                                                  Opacity="0.25" />
                             </Grid.Effect>
 
                             <Grid.RowDefinitions>
@@ -932,36 +933,35 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.Row="0"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="10" />
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="10" />
 
-                            <!-- Arrow shadow: aligned to the LEFT, inset from rounded corner -->
+                            <!--  Arrow shadow: aligned to the LEFT, inset from rounded corner  -->
                             <Polygon Grid.Row="1"
-                                 Margin="8,0,0,0"
-                                 HorizontalAlignment="LEFT"
-                                 Points="0,0 16,0 8,8"
-                                 Fill="{TemplateBinding Background}" />
+                                     Margin="8,0,0,0"
+                                     HorizontalAlignment="LEFT"
+                                     Points="0,0 16,0 8,8"
+                                     Fill="{TemplateBinding Background}" />
                         </Grid>
 
-                        <!-- Main bubble -->
+                        <!--  Main bubble  -->
                         <Border Grid.Row="0"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="10"
-                            Padding="{TemplateBinding Padding}">
-                            <ContentPresenter Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
                         </Border>
 
-                        <!-- Arrow with stroke: aligned to the LEFT, inset from rounded corner -->
+                        <!--  Arrow with stroke: aligned to the LEFT, inset from rounded corner  -->
                         <Polygon Grid.Row="1"
-                             Margin="8,0,0,0"
-                             HorizontalAlignment="Left"
-                             Points="0,0 16,0 8,8"
-                             Fill="{TemplateBinding Background}"
-                             Stroke="{TemplateBinding BorderBrush}"
-                             StrokeThickness="{TemplateBinding BorderThickness}" />
+                                 Margin="8,0,0,0"
+                                 HorizontalAlignment="Left"
+                                 Points="0,0 16,0 8,8"
+                                 Fill="{TemplateBinding Background}"
+                                 Stroke="{TemplateBinding BorderBrush}"
+                                 StrokeThickness="{TemplateBinding BorderThickness}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

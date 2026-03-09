@@ -70,12 +70,8 @@
                                       Data="{StaticResource InvoiceIconSVG}"
                                       Style="{StaticResource ContentRadioButtonPathStyle}"
                                       Width="30"
-                                      Height="30">
-                                    <Path.Fill>
-                                        <SolidColorBrush Color="{StaticResource ButtonIconColor}" />
-                                    </Path.Fill>
-                                </Path>
-                            
+                                      Height="30"/>
+
                             </Grid>
                         </RadioButton.Content>
                     </RadioButton>
@@ -97,12 +93,7 @@
                                       Data="{StaticResource SellerIconSVG}"
                                       Style="{StaticResource ContentRadioButtonPathStyle}"
                                       Width="30"
-                                      Height="30">
-                                    <Path.Fill>
-                                        <SolidColorBrush Color="{StaticResource ButtonIconColor}" />
-                                    </Path.Fill>
-                                </Path>
-                           
+                                      Height="30"/>
                             </Grid>
                         </RadioButton.Content>
                     </RadioButton>
@@ -124,12 +115,7 @@
                                   Data="{StaticResource AboutIconSVG}"
                                   Style="{StaticResource ContentRadioButtonPathStyle}"
                                   Width="30"
-                                  Height="30">
-                                <Path.Fill>
-                                    <SolidColorBrush Color="{StaticResource ButtonIconColor}" />
-                                </Path.Fill>
-                            </Path>
-                        
+                                  Height="30"/>
                         </Grid>
                     </RadioButton>
                 </Grid>
