@@ -12,7 +12,7 @@
 
   <PropertyGroup>
 	  <PackageId>tulo.eInvoice.eInvoiceViewer</PackageId>
-	  <Version>0.0.1</Version>
+	  <Version>1.0.0</Version>
 	  <Authors>Andrade's Team</Authors>
 	  <Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
 	  <Description>
@@ -49,7 +49,6 @@
     <ProjectReference Include="..\..\Common\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
     <ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
     <ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
-    <ProjectReference Include="..\..\Common\tulo.RevealPasswordBox\tulo.RevealPasswordBox.csproj" />
     <ProjectReference Include="..\..\Common\tulo.SerilogLib\tulo.SerilogLib.csproj" />
     <ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
 

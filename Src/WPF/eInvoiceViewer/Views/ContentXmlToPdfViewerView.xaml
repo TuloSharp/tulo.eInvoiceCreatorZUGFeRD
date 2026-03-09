@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:tulo.eInvoice.eInvoiceViewer.Views"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:controls="clr-namespace:tulo.eInvoice.eInvoiceViewer.Controls"
-             xmlns:revealpassword="clr-namespace:tulo.RevealPasswordBox;assembly=tulo.RevealPasswordBox"
              xmlns:utilities="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -38,13 +37,6 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="4" />
             </Grid.RowDefinitions>
-
-            <!--<revealpassword:RevealPasswordBox Grid.Column="0"
-                                              Grid.Row="1"
-                                              Width="180"
-                                              Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                              IsPasswordVisible="{Binding IsPasswordVisible, Mode=TwoWay}" />-->
-
 
             <Border Grid.Column="1"
                     Grid.Row="1"
