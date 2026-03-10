@@ -266,10 +266,11 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         #region Get Services / Stores from CollectorCollection
         _navigationStore = collectorCollection.GetService<INavigationStore>();
         _modalStackNavigationStore = collectorCollection.GetService<IModalStackNavigationStore>();
-        _navigatorViewModelFactory = navigatorViewModelFactory;
         _globalPropes4UiControl = collectorCollection.GetService<IGlobalPropsUiManage>();
         _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
+
+        _navigatorViewModelFactory = navigatorViewModelFactory;
 
         _navigationStore.CurrentViewModelChanged += OnNavigatorStateChanged_CurrentViewModelChanged;
         _modalStackNavigationStore.CurrentViewModelChanged += OnModalStackNavigationStore_CurrentModalStackViewModelChanged;

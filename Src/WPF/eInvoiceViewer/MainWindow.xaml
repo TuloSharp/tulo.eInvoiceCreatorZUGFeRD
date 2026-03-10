@@ -10,6 +10,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:livelogscontrol="clr-namespace:tulo.ResourcesWpfLib.Controls.LiveLogs;assembly=tulo.ResourcesWpfLib"
         xmlns:views="clr-namespace:tulo.eInvoice.eInvoiceViewer.Views"
+        xmlns:navigator="clr-namespace:tulo.eInvoice.eInvoiceViewer.Controls"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -222,9 +223,18 @@
         <!--</Border>-->
 
         <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <views:ContentXmlToPdfViewerView DataContext="{Binding ContentXmlToPdfViewerViewModel}" />
+            <Grid Grid.Column="0">
+                <navigator:NavigatoreInvoiceViewer FocusVisualStyle="{x:Null}" />
+            </Grid>
 
+            <Grid Grid.Column="1">
+                <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
+            </Grid>
         </Grid>
 
     </Grid>

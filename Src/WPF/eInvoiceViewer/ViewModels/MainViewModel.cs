@@ -1,93 +1,42 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Stores;
 using tulo.CommonMVVM.ViewModels;
-using tulo.CoreLib.SystemConfig;
+using tulo.eInvoice.eInvoiceViewer.Commands.Common;
+using tulo.eInvoice.eInvoiceViewer.Properties;
+using tulo.eInvoice.eInvoiceViewer.Utilities;
+using tulo.eInvoice.eInvoiceViewer.ViewModels.Factories;
 using tulo.ResourcesWpfLib.Commands;
 using tulo.ResourcesWpfLib.Viewmodels;
 
 namespace tulo.eInvoice.eInvoiceViewer.ViewModels;
 public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 {
+    private readonly INavigatorViewModelFactory _navigatorViewModelFactory;
     private readonly INavigationStore _navigationStore;
-    private readonly IModalNavigationStore _modalNavigationStore;
-    private readonly ISystemConfiguration _systemConfiguration;
+    private readonly IModalStackNavigationStore _modalStackNavigationStore;
+
+    #region BaseViewModel
+    public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
+    public BaseViewModel CurrentModalViewModel => _modalStackNavigationStore.CurrentViewModel;
+    public ObservableCollection<BaseViewModel> Modals => _modalStackNavigationStore.Modals;
+
+    public bool IsModalOpen => _modalStackNavigationStore.IsModalOpen;
+
+
+    private ICommand _updateCurrentViewModelCommand = null!;
+    public ICommand UpdateCurrentViewModelCommand
+    {
+        get => _updateCurrentViewModelCommand;
+        set => SetField(ref _updateCurrentViewModelCommand, value);
+    }
+    #endregion
+
+    #region Size& Pos Window Properties
 
     private int Counter2AvoidSaveProperties { get; set; }
-
-    #region Properties to manage VIEWS into the shell
-    private bool _isMainWindow;
-    public bool IsMainWindow
-    {
-        get => _isMainWindow;
-        set
-        {
-            if (_isMainWindow == value) return;
-            _isMainWindow = value;
-            OnPropertyChanged(nameof(IsMainWindow));
-        }
-    }
-
-    private string _mainWindowTitle = string.Empty;
-    public string MainWindowTitle
-    {
-        get => _mainWindowTitle;
-        set
-        {
-            if (_mainWindowTitle == value) return;
-            _mainWindowTitle = value;
-            OnPropertyChanged(nameof(MainWindowTitle));
-        }
-    }
-    #endregion
-
-    #region Helper Properties for UI ViewModel
-    private bool _isAltShortcutKeyPressed;
-    public bool IsAltShortcuKeyPressed
-    {
-        get => _isAltShortcutKeyPressed;
-        set => SetField(ref _isAltShortcutKeyPressed, value);
-    }
-    public bool IsKeyAlreadyPressed { get; set; }
-
-    public bool IsDuplicate { get; set; }
-    public bool EnableSaveRequestInUI { get; set; }
-    public bool IsEnableToSaveData { get; set; }
-    #endregion
-
-    #region Window UI Commands
-    private bool _isWindowMaximized;
-    public bool IsWindowMaximized
-    {
-        get => _isWindowMaximized;
-        set
-        {
-            if (_isWindowMaximized == value) return;
-            _isWindowMaximized = value;
-            OnPropertyChanged(nameof(IsWindowMaximized));
-        }
-    }
-
-    private bool _isWindowCustomResized;
-    public bool IsWindowCustomResized
-    {
-        get => _isWindowCustomResized;
-        set
-        {
-            if (_isWindowCustomResized == value) return;
-            _isWindowCustomResized = value;
-            OnPropertyChanged(nameof(IsWindowCustomResized));
-        }
-    }
-
-    public ICommand CloseMainWindowCommand { get; }
-    public ICommand MinimizedMainWindowCommand { get; }
-    public ICommand ResizeMainWindowCommand { get; }
-    public ICommand DragMoveMainWindowCommand { get; }
-    public ICommand MouseLeftDoubleClickResizeWindowCommand { get; }
-    public ICommand ExecuteAltF4Command { get; }
-    //public ICommand OpenAppInfoMessageCommand { get; }
 
     private double _left;
     public double Left
@@ -95,10 +44,9 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         get => _left;
         set
         {
-            if (_left == value) return;
-            _left = value;
+            if (!SetField(ref _left, value)) return;
+
             Counter2AvoidSaveProperties++;
-            OnPropertyChanged(nameof(Left));
             if (_windowState == WindowState.Normal && Counter2AvoidSaveProperties > 4)
                 SaveWindowPosition();
         }
@@ -110,10 +58,9 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         get => _top;
         set
         {
-            if (_top == value) return;
-            _top = value;
+            if (!SetField(ref _top, value)) return;
+
             Counter2AvoidSaveProperties++;
-            OnPropertyChanged(nameof(Top));
             if (_windowState == WindowState.Normal && Counter2AvoidSaveProperties > 4)
                 SaveWindowPosition();
         }
@@ -125,10 +72,9 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         get => _width;
         set
         {
-            if (_width == value) return;
-            _width = value;
+            if (!SetField(ref _width, value)) return;
+
             Counter2AvoidSaveProperties++;
-            OnPropertyChanged(nameof(Width));
             if (_windowState == WindowState.Normal && Counter2AvoidSaveProperties > 4)
                 SaveWindowSize();
         }
@@ -140,10 +86,9 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         get => _height;
         set
         {
-            if (_height == value) return;
-            _height = value;
+            if (!SetField(ref _height, value)) return;
+
             Counter2AvoidSaveProperties++;
-            OnPropertyChanged(nameof(Height));
             if (_windowState == WindowState.Normal && Counter2AvoidSaveProperties > 4)
                 SaveWindowSize();
         }
@@ -151,16 +96,18 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 
     private void SaveWindowPosition()
     {
-        Properties.Settings.Default.NormalLeft = _left;
-        Properties.Settings.Default.NormalTop = _top;
-        Properties.Settings.Default.Save();
+        Settings.Default.NormalLeft = _left;
+        Settings.Default.NormalTop = _top;
+        Settings.Default.Save();
     }
 
     private void SaveWindowSize()
     {
-        Properties.Settings.Default.NormalWidth = _width;
-        Properties.Settings.Default.NormalHeight = _height;
-        Properties.Settings.Default.Save();
+        //only for this app 
+        Settings.Default.NormalWidth = 740;
+        //Settings.Default.NormalWidth = _width;
+        Settings.Default.NormalHeight = _height;
+        Settings.Default.Save();
     }
 
     private WindowState _windowState;
@@ -169,34 +116,107 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         get => _windowState;
         set
         {
-            if (_windowState == value) return;
-            _windowState = value;
-            OnPropertyChanged(nameof(WindowState));
+            if (!SetField(ref _windowState, value)) return;
             SaveWindowState();
         }
     }
 
     private void SaveWindowState()
     {
-        Properties.Settings.Default.WindowState = _windowState.ToString();
-        Properties.Settings.Default.Save();
+        Settings.Default.WindowState = _windowState.ToString();
+        Settings.Default.Save();
+    }
+
+    #endregion
+
+    #region IManagementVisibleView
+    private bool _focusableSecondaryControls;
+    public bool FocusableSecondaryControls
+    {
+        get => _focusableSecondaryControls;
+        set => SetField(ref _focusableSecondaryControls, value);
+    }
+
+    private bool _isMainWindow;
+    public bool IsMainWindow
+    {
+        get => _isMainWindow;
+        set => SetField(ref _isMainWindow, value);
     }
     #endregion
 
-    #region Management UI Commands
-    public ICommand MakeScreenshotCommand { get; }
-    //public ICommand IsAltKeyPressedCommand { get; }
+    #region UI Control Properties + IUiControlPropsViewModel
+    private bool _isEnabledSaveRequestInUI;
+    public bool IsEnabledSaveRequestInUI
+    {
+        get => _isEnabledSaveRequestInUI;
+        set => SetField(ref _isEnabledSaveRequestInUI, value);
+    }
+
+    private bool _isAltShortcutKeyPressed;
+    public bool IsAltShortcutKeyPressed
+    {
+        get => _isAltShortcutKeyPressed;
+        set => SetField(ref _isAltShortcutKeyPressed, value);
+    }
+
+    private bool _isShortcutKeyAlreadyPressed;
+    public bool IsAltShortcutKeyAlreadyPressed
+    {
+        get => _isShortcutKeyAlreadyPressed;
+        set => SetField(ref _isShortcutKeyAlreadyPressed, value);
+    }
+
+    private bool _isDuplicate;
+    public bool IsDuplicate
+    {
+        get => _isDuplicate;
+        set => SetField(ref _isDuplicate, value);
+    }
+
+    private string _statusMessage = string.Empty;
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        set => SetField(ref _statusMessage, value);
+    }
+    public static string SelectedViewModel => nameof(ContentXmlToPdfViewerViewModel);
+    public string CurrentViewModelName => SelectedViewModel;
     #endregion
 
-    public string StatusMessage { get; set; } = string.Empty;
-    public string CurrentViewModelName { get; set; } = string.Empty;
-
-    public ContentXmlToPdfViewerViewModel ContentXmlToPdfViewerViewModel { get; }
-
-    public MainViewModel(ICollectorCollection collectorCollection)
+    #region IResizeWindowViewModel
+    private bool _isWindowMaximized;
+    public bool IsWindowMaximized
     {
-        IsMainWindow = true;
-        MainWindowTitle = "eInvoice Viewer";
+        get => _isWindowMaximized;
+        set => SetField(ref _isWindowMaximized, value);
+    }
+
+    private bool _isWindowCustomResized;
+    public bool IsWindowCustomResized
+    {
+        get => _isWindowCustomResized;
+        set => SetField(ref _isWindowCustomResized, value);
+    }
+
+    #endregion
+
+    #region Commands
+    public ICommand MakeScreenshotCommand { get; }
+    public ICommand CloseMainWindowCommand { get; }
+    public ICommand MinimizedMainWindowCommand { get; }
+    public ICommand ResizeMainWindowCommand { get; }
+    public ICommand DragMoveMainWindowCommand { get; }
+    public ICommand MouseLeftDoubleClickResizeWindowCommand { get; }
+    public ICommand ExecuteAltF4Command { get; }
+    #endregion
+
+    //public ContentXmlToPdfViewerViewModel ContentXmlToPdfViewerViewModel { get; }
+
+    public MainViewModel(INavigatorViewModelFactory navigatorViewModelFactory, ICollectorCollection collectorCollection)
+    {
+        //IsMainWindow = true;
+        //MainWindowTitle = "eInvoice Viewer";
 
         #region window size states
         var windowCurrentState = Properties.Settings.Default.WindowState.ToLower();
@@ -219,10 +239,11 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 
         #region resolve service from CollectorCollection
         _navigationStore = collectorCollection.GetService<INavigationStore>();
-        _modalNavigationStore = collectorCollection.GetService<IModalNavigationStore>();
-        _systemConfiguration = collectorCollection.GetService<ISystemConfiguration>();
+        _modalStackNavigationStore = collectorCollection.GetService<IModalStackNavigationStore>();
         #endregion
 
+        _navigatorViewModelFactory = navigatorViewModelFactory;
+        
         #region Window UI Commands
         CloseMainWindowCommand = new CloseMainWindowCommand();
         MinimizedMainWindowCommand = new MinimizedWindowCommand();
@@ -239,11 +260,51 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         //ShortcutKeyIsReleased = new ShortcutKeyIsReleased(this);
         #endregion
 
-        ContentXmlToPdfViewerViewModel = new ContentXmlToPdfViewerViewModel(collectorCollection);
+        _navigationStore.CurrentViewModelChanged += OnNavigatorStateChanged_CurrentViewModelChanged;
+        _modalStackNavigationStore.CurrentViewModelChanged += OnModalStackNavigationStore_CurrentModalStackViewModelChanged;
+
+        UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(_navigatorViewModelFactory, collectorCollection);
+        UpdateCurrentViewModelCommand.Execute(NavTypes.ContentXmlToPdfViewerView);
     }
+
+    private void OnModalStackNavigationStore_CurrentModalStackViewModelChanged()
+    {
+        OnPropertyChanged(nameof(CurrentModalViewModel));
+        OnPropertyChanged(nameof(IsModalOpen));
+        OnPropertyChanged(nameof(Modals));
+    }
+
+    private void OnNavigatorStateChanged_CurrentViewModelChanged()
+    {
+        OnPropertyChanged(nameof(CurrentViewModel));
+
+        //this used when the renavigation is called, the navigation item views are changed to the inital state
+        var onChangedCurrentViewModel = CurrentViewModel.GetType().Name;
+        if (onChangedCurrentViewModel == SelectedViewModel)
+        {
+            //MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
+            IsMainWindow = true;
+        }
+    }
+
+    #region Labels&Contents
+    private string _mainWindowTitle = string.Empty;
+    public string MainWindowTitle
+    {
+        get => _mainWindowTitle;
+        set => SetField(ref _mainWindowTitle, value);
+    }
+
+    //private void FillAllLabelsAndContents()
+    //{
+    //    MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
+    //}
+    #endregion
 
     public override void Dispose()
     {
+        _navigationStore.CurrentViewModelChanged -= OnNavigatorStateChanged_CurrentViewModelChanged;
+        _modalStackNavigationStore.CurrentViewModelChanged -= OnModalStackNavigationStore_CurrentModalStackViewModelChanged;
         base.Dispose();
     }
 }

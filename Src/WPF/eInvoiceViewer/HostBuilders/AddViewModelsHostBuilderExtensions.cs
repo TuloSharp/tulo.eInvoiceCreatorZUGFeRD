@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using tulo.CommonMVVM.Collector;
+using tulo.CommonMVVM.ViewModels;
 using tulo.eInvoice.eInvoiceViewer.ViewModels;
 using tulo.eInvoice.eInvoiceViewer.ViewModels.Factories;
 
@@ -20,7 +21,8 @@ namespace tulo.eInvoice.eInvoiceViewer.HostBuilders
 
                 //Main
                 services.AddSingleton<MainViewModel>();
-
+                services.AddSingleton<CreateViewModel<ContentXmlToPdfViewerViewModel>>(services => () => services.GetRequiredService<ContentXmlToPdfViewerViewModel>());
+                services.AddSingleton<CreateViewModel<AboutViewModel>>(services => () => services.GetRequiredService<AboutViewModel>());
             });
 
             return host;
