@@ -177,7 +177,6 @@
                                Margin="0,2,0,0" />
                 </Grid>
 
-
             </Grid>
 
             <Button x:Name="btnMinimize"
