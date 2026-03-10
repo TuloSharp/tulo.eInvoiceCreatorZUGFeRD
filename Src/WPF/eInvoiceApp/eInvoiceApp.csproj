@@ -28,12 +28,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Markdig.Wpf" />
+		<PackageReference Include="tulo.CommonMVVM.WPF" />
 		<PackageReference Include="tulo.ModalViewControl" />
 		<PackageReference Include="tulo.PlaceholderTextBoxControl" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Common\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
 		<ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
 		<ProjectReference Include="..\..\Common\tulo.DropdownMenuControl\tulo.DropdownMenuControl.csproj" />
 		<ProjectReference Include="..\..\Common\tulo.FontSizePicker\tulo.FontSizePicker.csproj" />
