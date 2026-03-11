@@ -12,8 +12,6 @@ using tulo.eInvoice.eInvoiceViewer.Options;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
-using MainAppOptions = tulo.eInvoice.eInvoiceViewer.Options.AppOptions;
-using PdfAppOptions = tulo.XMLeInvoiceToPdf.Options.AppOptions;
 
 namespace tulo.eInvoice.eInvoiceViewer.HostBuilders;
 public static class AddServicesHostBuilderExtension
@@ -80,22 +78,13 @@ public static class AddServicesHostBuilderExtension
 
 
         #region Options
-        services.AddOptions<MainAppOptions>()
-                .Bind(configuration, o => o.BindNonPublicProperties = true)
-                //.Validate(o => !string.IsNullOrWhiteSpace(o.Archive.Path), "Archive:Path is required.")
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
+        services.AddOptions<AppOptions>()
+            .Bind(configuration, o => o.BindNonPublicProperties = true)
+            //.Validate(o => !string.IsNullOrWhiteSpace(o.Archive.Path), "Archive:Path is required.")
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
-        services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<MainAppOptions>>().Value);
-        #endregion
-
-        #region PdfA Options
-        services.AddOptions<PdfAppOptions>()
-                .BindConfiguration("XMLeInvoiceToPdf")
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
-
-        services.AddSingleton<tulo.XMLeInvoiceToPdf.Options.IAppOptions>(sp => sp.GetRequiredService<IOptions<PdfAppOptions>>().Value);
+        services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
         #endregion
 
         #region Translation
@@ -132,10 +121,6 @@ public static class AddServicesHostBuilderExtension
             return new TranslatorUiProvider(file);
         });
 
-        #endregion
-
-        #region Converter to PdfA
-        services.AddSingleton<IToPdfAConverterService, ToPdfAConverterService>();
         #endregion
 
         #region AppRunner

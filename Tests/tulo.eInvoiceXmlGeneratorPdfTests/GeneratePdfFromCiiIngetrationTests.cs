@@ -1,11 +1,8 @@
-﻿using PdfSharp.Fonts;
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
-using System.Diagnostics;
-using tulo.XMLeInvoiceToPdf.Languages;
-using tulo.XMLeInvoiceToPdf.Options;
+﻿using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
 using tulo.XMLeInvoiceToPdf.Utilities;
+using PdfSharp.Fonts;
+using System.Diagnostics;
 
 namespace tulo.XMLeInvoiceToPdfTests;
 
@@ -14,12 +11,8 @@ public class GeneratePdfFromCiiIngetrationTests
 {
     private ITranslatorProvider _translatorProvider = null!;
     private IPdfGeneratorFromInvoice _pdfGeneratorInvoiceCii = null!;
-    private IToPdfAConverterService _pdfAService = null!;
-    private IAppOptions _appOptions = null!;
-
     private string _tempDir = null!;
     private string _translationPath = null!;
-    private string _iccProfilePath = null!;
 
     [TestInitialize]
     public void Setup()
@@ -28,32 +21,11 @@ public class GeneratePdfFromCiiIngetrationTests
         Directory.CreateDirectory(_tempDir);
         _translationPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Languages", "de.xml");
 
-        _iccProfilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Assets", "ColorProfiles", "sRGB.icc");
-
         if (GlobalFontSettings.FontResolver == null)
             GlobalFontSettings.FontResolver = new EmbeddedFontResolver();
 
         _translatorProvider = new TranslatorProvider(_translationPath);
-        _pdfAService = new ToPdfAConverterService();
-
-        _appOptions = new AppOptions
-        {
-            PdfA = new AppOptions.PdfAOptions
-            {
-                IccProfilePath = _iccProfilePath,
-                CreatorTool = "IntegrationTests",
-                Creator = "IntegrationTests",
-                Producer = "PdfSharp",
-                Title = "Test Invoice",
-                Description = "Integration test invoice PDF/A",
-                Author = "TestRunner",
-                Language = "de-DE",
-                Conformance = "B",
-                Part = 2
-            }
-        };
-
-        _pdfGeneratorInvoiceCii = new PdfGeneratorFromInvoiceCii(_translatorProvider, _pdfAService, _appOptions);
+        _pdfGeneratorInvoiceCii = new PdfGeneratorFromInvoiceCii(_translatorProvider);
     }
 
     [TestMethod(DisplayName = "Create an pdf from xml ZF_Extended__Sammelrechnung_3_Bestellungen ")]
@@ -73,29 +45,6 @@ public class GeneratePdfFromCiiIngetrationTests
         Assert.IsFalse(string.IsNullOrWhiteSpace(createdPath), "Generator returned an empty output path.");
         Assert.AreEqual(outputPdfPath, createdPath, "Generator returned an unexpected output path.");
         Assert.IsTrue(File.Exists(createdPath), $"PDF output file was not created: '{createdPath}'");
-
-        Assert.IsTrue(new FileInfo(createdPath).Length > 0, "Generated PDF file is empty.");
-
-        // PDF erneut laden und Struktur prüfen
-        using PdfDocument document = PdfReader.Open(createdPath, PdfDocumentOpenMode.Import);
-
-        // PDf contains pages
-        Assert.IsTrue(document.PageCount > 0, "PDF contains no pages.");
-
-        var outputIntents = document.Internals.Catalog.Elements["/OutputIntents"];
-        Assert.IsNotNull(outputIntents, "PDF does not contain /OutputIntents.");
-
-        var metadata = document.Internals.Catalog.Elements["/Metadata"];
-        Assert.IsNotNull(metadata, "PDF does not contain /Metadata.");
-
-        var lang = document.Internals.Catalog.Elements["/Lang"];
-        Assert.IsNotNull(lang, "PDF does not contain /Lang.");
-
-        // Document info
-        Assert.IsFalse(string.IsNullOrWhiteSpace(document.Info.Title), "PDF title is missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(document.Info.Author), "PDF author is missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(document.Info.Creator), "PDF creator is missing.");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(document.Info.Producer), "PDF producer is missing.");
 
         var fileInfo = new FileInfo(createdPath);
         Assert.IsGreaterThan(0, fileInfo.Length, "Generated PDF file is empty.");

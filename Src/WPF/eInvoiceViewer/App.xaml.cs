@@ -18,7 +18,6 @@ using tulo.eInvoice.eInvoiceViewer.Options;
 using tulo.eInvoice.eInvoiceViewer.Properties;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 using tulo.SerilogLib.Common;
-using tulo.XMLeInvoiceToPdf.Services;
 using WpfApplication = System.Windows.Application;
 
 namespace tulo.eInvoiceViewer;
@@ -122,9 +121,6 @@ public partial class App : WpfApplication
         AddToCollectorRequired<IStartupFileContext>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IAppRunner>(scope.ServiceProvider, collector);
         AddToCollectorRequired<ITranslatorUiProvider>(scope.ServiceProvider, collector);
-
-        //---------------- PdfA Converter ----------------
-        AddToCollectorRequired<IToPdfAConverterService>(scope.ServiceProvider, collector);
         #endregion
 
         #region App Process Name

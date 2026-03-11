@@ -36,11 +36,5 @@
     <PackageReference Include="ZUGFeRD.PDF-csharp" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Assets\sRGB.icc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 
 </Project>
