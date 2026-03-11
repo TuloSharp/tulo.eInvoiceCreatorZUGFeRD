@@ -21,6 +21,12 @@
             <DataTemplate DataType="{x:Type viewmodels:ContentXmlToPdfViewerViewModel}">
                 <views:ContentXmlToPdfViewerView />
             </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewmodels:AboutViewModel}">
+                <views:AboutView />
+            </DataTemplate>
+            
+            
 
         </ResourceDictionary>
     </Application.Resources>

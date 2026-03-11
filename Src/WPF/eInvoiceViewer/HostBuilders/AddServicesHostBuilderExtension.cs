@@ -2,14 +2,18 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Core;
 using System.IO;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CoreLib.Translators;
+using tulo.eInvoice.eInvoiceViewer.Options;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
+using MainAppOptions = tulo.eInvoice.eInvoiceViewer.Options.AppOptions;
+using PdfAppOptions = tulo.XMLeInvoiceToPdf.Options.AppOptions;
 
 namespace tulo.eInvoice.eInvoiceViewer.HostBuilders;
 public static class AddServicesHostBuilderExtension
@@ -74,20 +78,24 @@ public static class AddServicesHostBuilderExtension
         services.AddSingleton<IGlobalPropsUiManage, GlobalPropsUiManage>();
         #endregion
 
-        #region Options
-        //services
-        //    .AddOptions<AppOptions>()
-        //    .Bind(configuration, o => o.BindNonPublicProperties = true)
-        //    .Validate(o => !string.IsNullOrWhiteSpace(o.Archive.Path),
-        //        "Archive:Path is required.")
-        //    .ValidateDataAnnotations()
-        //    .ValidateOnStart();
 
-        //services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+        #region Options
+        services.AddOptions<MainAppOptions>()
+                .Bind(configuration, o => o.BindNonPublicProperties = true)
+                //.Validate(o => !string.IsNullOrWhiteSpace(o.Archive.Path), "Archive:Path is required.")
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+        services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<MainAppOptions>>().Value);
         #endregion
 
-        #region LoggingLevelSwitch Serilog
-        services.AddSingleton<LoggingLevelSwitch>();
+        #region PdfA Options
+        services.AddOptions<PdfAppOptions>()
+                .BindConfiguration("XMLeInvoiceToPdf")
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+        services.AddSingleton<tulo.XMLeInvoiceToPdf.Options.IAppOptions>(sp => sp.GetRequiredService<IOptions<PdfAppOptions>>().Value);
         #endregion
 
         #region Translation
@@ -108,6 +116,26 @@ public static class AddServicesHostBuilderExtension
             var resourceName = "tulo.XMLeInvoiceToPdf.Languages.de.xml";
             return new TranslatorProvider(asm, resourceName);
         });
+        //translator for ui
+        services.AddSingleton<ITranslatorUiProvider>(sp =>
+        {
+            var opt = sp.GetRequiredService<IAppOptions>();
+
+            var culture = opt?.Language?.Culture;
+            culture = string.IsNullOrWhiteSpace(culture) ? "en" : culture.Trim();
+
+            // optional: "de-DE" -> "de"
+            var dash = culture.IndexOf('-');
+            if (dash > 0) culture = culture.Substring(0, dash);
+
+            var file = Path.Combine(AppContext.BaseDirectory, "Languages", $"Ui_{culture}.xml");
+            return new TranslatorUiProvider(file);
+        });
+
+        #endregion
+
+        #region Converter to PdfA
+        services.AddSingleton<IToPdfAConverterService, ToPdfAConverterService>();
         #endregion
 
         #region AppRunner
@@ -118,7 +146,7 @@ public static class AddServicesHostBuilderExtension
         #endregion
 
         #region File Context
-        services.AddSingleton<IStartupFileContext>(_ => new StartupFileContext(pathToFile)); 
+        services.AddSingleton<IStartupFileContext>(_ => new StartupFileContext(pathToFile));
         #endregion
     }
     internal class WebServicesHostBuilderExtension { }

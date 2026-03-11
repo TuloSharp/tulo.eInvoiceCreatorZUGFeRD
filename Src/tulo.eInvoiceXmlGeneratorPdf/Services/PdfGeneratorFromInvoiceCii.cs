@@ -1,13 +1,17 @@
-﻿using tulo.XMLeInvoiceToPdf.Languages;
-using PdfSharp;
+﻿using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using tulo.XMLeInvoiceToPdf.Languages;
+using tulo.XMLeInvoiceToPdf.Options;
+using tulo.XMLeInvoiceToPdf.ResultPattern;
 
 namespace tulo.XMLeInvoiceToPdf.Services;
 
-public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider) : PdfGeneratorFromInvoiceBase(translationProvider), IPdfGeneratorFromInvoice
+public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider, IToPdfAConverterService pdfAService, IAppOptions appOptions) : PdfGeneratorFromInvoiceBase(translationProvider), IPdfGeneratorFromInvoice
 {
     private readonly ITranslatorProvider _translationProvider = translationProvider;
+    private readonly IToPdfAConverterService _pdfAService = pdfAService;
+    private readonly IAppOptions _appOptions = appOptions;
     public string Name => "CII";
 
     protected override void SetupNamespaces()
@@ -26,6 +30,8 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
         {
             CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
             ApplyFooterToAllPages(pdfDoc);
+            ApplyPdfA(pdfDoc);
+
             pdfDoc.Save(pdfPath);
         }
         return pdfPath;
@@ -352,6 +358,17 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
         {
             xGraphics.Dispose();
         }
+    }
+    #endregion
+
+    #region PdfA
+    private bool ApplyPdfA(PdfDocument pdfDoc)
+    {
+        OperationResult result = _pdfAService.ApplyPdfA(pdfDoc, _appOptions);
+        if (!result.Success)
+            return false;
+
+        return true;
     }
     #endregion
 }

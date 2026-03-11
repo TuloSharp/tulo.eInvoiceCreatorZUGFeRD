@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceViewer.Commands;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 
@@ -9,19 +9,13 @@ namespace tulo.eInvoice.eInvoiceViewer.ViewModels;
 public class ContentXmlToPdfViewerViewModel : BaseViewModel
 {
     private readonly ICollectorCollection _collectorCollection;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
 
     private string _documentSource = string.Empty;
     public string DocumentSource
     {
         get => _documentSource;
         set => SetField(ref _documentSource, value);
-    }
-
-    private string _versionApp = string.Empty;
-    public string VersionApp
-    {
-        get => _versionApp;
-        set => SetField(ref _versionApp, value);
     }
 
     private bool _hasMessage;
@@ -60,6 +54,7 @@ public class ContentXmlToPdfViewerViewModel : BaseViewModel
         _collectorCollection = collectorCollection;
         #region Get Services / Stores from CollectorCollection
         var startupFileContext = _collectorCollection.GetService<IStartupFileContext>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         StatusMessageViewModel = new MessageViewModel();
@@ -68,15 +63,30 @@ public class ContentXmlToPdfViewerViewModel : BaseViewModel
         SelectXmlFilePathCommand = new SelectXmlFilePathCommand(this, _collectorCollection);
         FileDroppedCommand = new FileDroppedCommand(this, _collectorCollection);
 
-        VersionApp = GetProgramVersion();
-
         var filePath = startupFileContext.FilePath;
         XmlToPdfContentCommand.Execute(filePath);
+
+        FillAllLabelsAndContents();
+        FillAllToolTips();
     }
 
-    public static string GetProgramVersion()
-    {
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        return version != null ? $"Version: v{version.Major}.{version.Minor}.{version.Build}" : "Unknown Version";
+    #region Labels&Contents
+    public string DragAndDropText { get; set; } = string.Empty;
+
+    void FillAllLabelsAndContents()
+    { 
+        DragAndDropText = _translatorUiProvider.Translate("DragAndDropText");
     }
+    #endregion
+
+    #region ToolTips
+    public string ToolTipDragAndDrop { get; set; } = string.Empty;
+    public string ToolTipSelectFile { get; set; } = string.Empty;
+
+    void FillAllToolTips()
+    {
+        ToolTipDragAndDrop = _translatorUiProvider.Translate("ToolTipDragAndDrop");
+        ToolTipSelectFile = _translatorUiProvider.Translate("ToolTipSelectFile");
+    } 
+    #endregion
 }

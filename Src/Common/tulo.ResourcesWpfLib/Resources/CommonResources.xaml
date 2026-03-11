@@ -295,7 +295,6 @@
     </Style>
     <!--#endregion-->
 
-
     <!--#region Border-->
     <Style x:Key="CustomBorderStyle" TargetType="{x:Type Border}">
         <Setter Property="BorderThickness" Value="1" />
@@ -310,16 +309,11 @@
                 <Setter Property="BorderBrush" Value="{StaticResource HighlightBrushColor}" />
             </Trigger>
 
-            <!--  TextBox focused (focus is on TextBox, not on Border)  -->
-            <DataTrigger Binding="{Binding IsFocused, RelativeSource={RelativeSource AncestorType=TextBox}}" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource HighlightBrushColor}" />
-            </DataTrigger>
-
             <!--  TextBox disabled  -->
-            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=TextBox}}" Value="False">
-                <Setter Property="Background" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
-                <Setter Property="BorderBrush" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
-            </DataTrigger>
+              <Trigger Property="IsEnabled" Value="False">
+            <Setter Property="Background" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
+        </Trigger>
         </Style.Triggers>
     </Style>
     <!--#endregion-->

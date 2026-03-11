@@ -12,10 +12,13 @@ using System.Reflection;
 using System.Windows;
 using tulo.CommonMVVM.Collector;
 using tulo.CoreLib.Exceptions;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceViewer;
+using tulo.eInvoice.eInvoiceViewer.Options;
 using tulo.eInvoice.eInvoiceViewer.Properties;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 using tulo.SerilogLib.Common;
+using tulo.XMLeInvoiceToPdf.Services;
 using WpfApplication = System.Windows.Application;
 
 namespace tulo.eInvoiceViewer;
@@ -107,7 +110,7 @@ public partial class App : WpfApplication
         var collector = scope.ServiceProvider.GetRequiredService<ICollectorCollection>();
 
         //---------------- AppOptions ----------------
-        //AddToCollectorRequired<IAppOptions>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IAppOptions>(scope.ServiceProvider, collector);
 
         //---------------- LogSink for LiveLogs in UI ----------------
         AddToCollectorRequired<IObservableLogSink>(scope.ServiceProvider, collector);
@@ -118,6 +121,10 @@ public partial class App : WpfApplication
         //---------------- AppRunner ----------------
         AddToCollectorRequired<IStartupFileContext>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IAppRunner>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<ITranslatorUiProvider>(scope.ServiceProvider, collector);
+
+        //---------------- PdfA Converter ----------------
+        AddToCollectorRequired<IToPdfAConverterService>(scope.ServiceProvider, collector);
         #endregion
 
         #region App Process Name

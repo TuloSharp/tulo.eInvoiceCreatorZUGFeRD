@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.Extensions.Primitives;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Stores;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceViewer.Commands.Common;
 using tulo.eInvoice.eInvoiceViewer.Properties;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
@@ -14,9 +16,12 @@ using tulo.ResourcesWpfLib.Viewmodels;
 namespace tulo.eInvoice.eInvoiceViewer.ViewModels;
 public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 {
+    #region resolve service from CollectorCollection
     private readonly INavigatorViewModelFactory _navigatorViewModelFactory;
     private readonly INavigationStore _navigationStore;
     private readonly IModalStackNavigationStore _modalStackNavigationStore;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
+    #endregion
 
     #region BaseViewModel
     public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
@@ -103,9 +108,7 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 
     private void SaveWindowSize()
     {
-        //only for this app 
-        Settings.Default.NormalWidth = 740;
-        //Settings.Default.NormalWidth = _width;
+        Settings.Default.NormalWidth = _width;
         Settings.Default.NormalHeight = _height;
         Settings.Default.Save();
     }
@@ -198,7 +201,6 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         get => _isWindowCustomResized;
         set => SetField(ref _isWindowCustomResized, value);
     }
-
     #endregion
 
     #region Commands
@@ -211,12 +213,10 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
     public ICommand ExecuteAltF4Command { get; }
     #endregion
 
-    //public ContentXmlToPdfViewerViewModel ContentXmlToPdfViewerViewModel { get; }
-
     public MainViewModel(INavigatorViewModelFactory navigatorViewModelFactory, ICollectorCollection collectorCollection)
     {
         //IsMainWindow = true;
-        //MainWindowTitle = "eInvoice Viewer";
+        //MainWindowTitle = "";
 
         #region window size states
         var windowCurrentState = Properties.Settings.Default.WindowState.ToLower();
@@ -240,6 +240,7 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         #region resolve service from CollectorCollection
         _navigationStore = collectorCollection.GetService<INavigationStore>();
         _modalStackNavigationStore = collectorCollection.GetService<IModalStackNavigationStore>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         _navigatorViewModelFactory = navigatorViewModelFactory;
@@ -251,7 +252,6 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         DragMoveMainWindowCommand = new MouseDownWindowCommand(this);
         MouseLeftDoubleClickResizeWindowCommand = new MouseLeftDoubleClickResizeWindowCommand(this);
         ExecuteAltF4Command = new ExecuteAltF4Command();
-       
         #endregion
 
         #region Management UI Commands
@@ -265,6 +265,9 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 
         UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(_navigatorViewModelFactory, collectorCollection);
         UpdateCurrentViewModelCommand.Execute(NavTypes.ContentXmlToPdfViewerView);
+
+        FillAllLabelsAndContents();
+        FillAllToolTips();
     }
 
     private void OnModalStackNavigationStore_CurrentModalStackViewModelChanged()
@@ -282,23 +285,34 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
         var onChangedCurrentViewModel = CurrentViewModel.GetType().Name;
         if (onChangedCurrentViewModel == SelectedViewModel)
         {
-            //MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
+            MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
             IsMainWindow = true;
         }
     }
 
     #region Labels&Contents
-    private string _mainWindowTitle = string.Empty;
-    public string MainWindowTitle
-    {
-        get => _mainWindowTitle;
-        set => SetField(ref _mainWindowTitle, value);
-    }
+    public string MainWindowTitle { get; set; } = string.Empty;
+    public string DonateText { get; set; } = string.Empty;
+   // Gefällt dir die App? Spende
 
-    //private void FillAllLabelsAndContents()
-    //{
-    //    MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
-    //}
+    private void FillAllLabelsAndContents()
+    {
+        MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
+        DonateText = _translatorUiProvider.Translate("DonateText");
+    }
+    #endregion
+
+    #region ToolTips
+    public string ToolTipPdfViewIcon { get; set; } = string.Empty;
+    public string ToolTipAboutViewIcon { get; set; } = string.Empty;
+    public string ToolTipDonateText { get; set; } = string.Empty;
+
+    private void FillAllToolTips()
+    {
+        ToolTipPdfViewIcon = _translatorUiProvider.Translate("ToolTipPdfViewIcon");
+        ToolTipAboutViewIcon = _translatorUiProvider.Translate("ToolTipAboutViewIcon");
+        ToolTipDonateText = _translatorUiProvider.Translate("ToolTipDonateText");
+    }
     #endregion
 
     public override void Dispose()

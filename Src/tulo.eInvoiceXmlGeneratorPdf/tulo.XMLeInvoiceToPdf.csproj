@@ -53,6 +53,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Assets\ColorProfiles\sRGB.icc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="icons\EmailAddress.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

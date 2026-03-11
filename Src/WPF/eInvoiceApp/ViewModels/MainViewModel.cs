@@ -27,13 +27,6 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
     #endregion
 
     #region Selected Font Size
-    //private double _selectedFontSize = 12;
-    //public double SelectedFontSize
-    //{
-    //    get => _selectedFontSize;
-    //    set => SetField(ref _selectedFontSize, value);
-    //}
-
     private double _uiFontSize = 12;
 
     public double UiFontSize
@@ -315,29 +308,31 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
     }
 
     #region ToolTips
-    public string ToolTipInvoiceViewIcon { get; set; }= string.Empty;
-    public string ToolTipBuyerViewIcon { get; set; }  = string.Empty;
+    public string ToolTipInvoiceViewIcon { get; set; } = string.Empty;
+    public string ToolTipBuyerViewIcon { get; set; } = string.Empty;
     public string ToolTipAboutViewIcon { get; set; } = string.Empty;
+    public string ToolTipDonateText { get; set; } = string.Empty;
 
     private void FillAllInvoiceToolTips()
     {
         ToolTipInvoiceViewIcon = _translatorUiProvider.Translate("ToolTipInvoiceViewIcon");
         ToolTipBuyerViewIcon = _translatorUiProvider.Translate("ToolTipBuyerViewIcon");
         ToolTipAboutViewIcon = _translatorUiProvider.Translate("ToolTipAboutViewIcon");
+        ToolTipDonateText = _translatorUiProvider.Translate("ToolTipDonateText");
     }
     #endregion
 
     #region Labels&Contents
-    private string _mainWindowTitle = string.Empty;
-    public string MainWindowTitle
-    {
-        get => _mainWindowTitle;
-        set => SetField(ref _mainWindowTitle, value);
-    }
-    
+
+    public string MainWindowTitle { get; set; } = string.Empty;
+
+    public string DonateText { get; set; } = string.Empty;
+
+
     private void FillAllLabelsAndContents()
     {
         MainWindowTitle = _translatorUiProvider.Translate("MainWindowTitle");
+        DonateText = _translatorUiProvider.Translate("DonateText");
     }
     #endregion
 

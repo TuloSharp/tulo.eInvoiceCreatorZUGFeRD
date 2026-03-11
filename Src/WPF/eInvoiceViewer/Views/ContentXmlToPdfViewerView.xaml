@@ -45,7 +45,8 @@
                 <behaviors:Interaction.Behaviors>
                     <utilities:DropZoneBehavior DropCommand="{Binding FileDroppedCommand}" AllowedExtensions=".xml;.pdf" />
                 </behaviors:Interaction.Behaviors>
-                <TextBlock Text="Drag &amp; drop an XML/PDF file here."
+                <TextBlock Text="{Binding DragAndDropText}"
+                           ToolTip="{Binding ToolTipDragAndDrop}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Margin="4" />
@@ -55,7 +56,7 @@
                     Grid.Column="3"
                     Grid.Row="1"
                     Command="{Binding SelectXmlFilePathCommand}"
-                    ToolTip="Datei auswählen">
+                    ToolTip="{Binding ToolTipSelectFile}">
                 <Grid>
                     <Viewbox Style="{StaticResource ViewBox4Icon}">
                         <Path Data="{StaticResource OpenInBrowserIconSVG}"
@@ -75,8 +76,6 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="140" />
-                <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="10" />
             </Grid.ColumnDefinitions>
@@ -87,13 +86,8 @@
                 <RowDefinition Height="2" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="1"
-                       Grid.Row="1"
-                       FontWeight="Bold"
-                       Text="{Binding VersionApp}" />
-
             <Grid Visibility="{Binding HasMessage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
-                  Grid.Column="3"
+                  Grid.Column="1"
                   Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40" />
@@ -101,7 +95,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
-                    <Path Style="{StaticResource ContentButtonPathStyle}"
+                    <Path
                           Data="{StaticResource InfoIconSVG}"
                           Fill="{StaticResource InfoBrushColor}"
                           Width="24"

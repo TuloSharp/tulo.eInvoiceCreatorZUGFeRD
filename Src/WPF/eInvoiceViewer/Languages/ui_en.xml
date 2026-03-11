@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+   <!--#region MainViewModel -->
+  <entry key="MainWindowTitle">eInvoice Viewer</entry>
+  <entry key="ToolTipPdfViewIcon">Open eInvoice PDF view</entry>
+  <entry key="ToolTipAboutViewIcon">Open About view</entry>
+  <entry key="DonateText">Like the app? Please donate.</entry>
+  <!--#endregion -->
+
+  <!--#region ContentXmlToPdfViewerViewModel -->
+  <entry key="DragAndDropText">Drag &amp; drop an XML/PDF file here.</entry>
+  <entry key="ToolTipDragAndDrop">Drop an XML or PDF file here.</entry>
+  <entry key="ToolTipSelectFile">Open an XML or PDF file.</entry>
+  <entry key="ToolTipDonateText">You can find the donation link in the About view.</entry>
+  <!--#endregion -->
+</properties>
