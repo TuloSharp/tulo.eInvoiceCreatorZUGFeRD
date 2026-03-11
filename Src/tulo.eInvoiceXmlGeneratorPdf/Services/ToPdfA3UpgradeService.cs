@@ -47,11 +47,11 @@ public class ToPdfA3UpgradeService : IToPdfA3UpgradeService
         }
     }
 
-    private PdfReference AddEmbeddedXml(PdfDocument document, string xmlFileName, byte[] xmlBytes, IAppOptions appOptions)
+    private static PdfReference AddEmbeddedXml(PdfDocument document, string xmlFileName, byte[] xmlBytes, IAppOptions appOptions)
     {
         PdfDictionary embeddedFileStream = new PdfDictionary(document);
         embeddedFileStream.Elements["/Type"] = new PdfName("/EmbeddedFile");
-        embeddedFileStream.Elements["/Subtype"] = new PdfName("/text#2Fxml");
+        embeddedFileStream.Elements["/Subtype"] = new PdfName("/text2Fxml");
         embeddedFileStream.Elements["/Params"] = BuildEmbeddedFileParams(document, xmlBytes);
 
         embeddedFileStream.CreateStream(xmlBytes);
@@ -133,6 +133,13 @@ public class ToPdfA3UpgradeService : IToPdfA3UpgradeService
         string escapedXmlFileName = EscapeXml(xmlFileName);
         string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
+        // Build the XMP metadata packet for the resulting PDF/A-3 document.
+        // The xpacket begin/end instructions are the standard wrapper for an XMP packet.
+        // The RDF sections inside the packet describe:
+        // - the PDF/A identification (part + conformance),
+        // - the common document metadata such as title, author, language, producer and timestamps,
+        // - and the Factur-X / ZUGFeRD specific invoice metadata for the embedded XML file.
+        // This metadata is written as a single XML stream and attached to the PDF catalog as /Metadata.
         string xmp = $"""
 <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
@@ -181,6 +188,49 @@ public class ToPdfA3UpgradeService : IToPdfA3UpgradeService
       <fx:DocumentFileName>{escapedXmlFileName}</fx:DocumentFileName>
       <fx:Version>{facturXVersion}</fx:Version>
       <fx:ConformanceLevel>{conformanceLevel}</fx:ConformanceLevel>
+    </rdf:Description>
+
+    <rdf:Description rdf:about=""
+      xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
+      xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#"
+      xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#">
+      <pdfaExtension:schemas>
+        <rdf:Bag>
+          <rdf:li rdf:parseType="Resource">
+            <pdfaSchema:schema>Factur-X PDFA Extension Schema</pdfaSchema:schema>
+            <pdfaSchema:namespaceURI>urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
+            <pdfaSchema:prefix>fx</pdfaSchema:prefix>
+            <pdfaSchema:property>
+              <rdf:Seq>
+                <rdf:li rdf:parseType="Resource">
+                  <pdfaProperty:name>DocumentFileName</pdfaProperty:name>
+                  <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+                  <pdfaProperty:category>external</pdfaProperty:category>
+                  <pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
+                </rdf:li>
+                <rdf:li rdf:parseType="Resource">
+                  <pdfaProperty:name>DocumentType</pdfaProperty:name>
+                  <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+                  <pdfaProperty:category>external</pdfaProperty:category>
+                  <pdfaProperty:description>INVOICE</pdfaProperty:description>
+                </rdf:li>
+                <rdf:li rdf:parseType="Resource">
+                  <pdfaProperty:name>Version</pdfaProperty:name>
+                  <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+                  <pdfaProperty:category>external</pdfaProperty:category>
+                  <pdfaProperty:description>Factur-X version</pdfaProperty:description>
+                </rdf:li>
+                <rdf:li rdf:parseType="Resource">
+                  <pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
+                  <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+                  <pdfaProperty:category>external</pdfaProperty:category>
+                  <pdfaProperty:description>Factur-X conformance level</pdfaProperty:description>
+                </rdf:li>
+              </rdf:Seq>
+            </pdfaSchema:property>
+          </rdf:li>
+        </rdf:Bag>
+      </pdfaExtension:schemas>
     </rdf:Description>
   </rdf:RDF>
 </x:xmpmeta>
