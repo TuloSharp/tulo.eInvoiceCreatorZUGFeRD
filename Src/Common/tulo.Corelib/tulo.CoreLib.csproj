@@ -35,8 +35,4 @@
 		<PackageReference Include="PDFsharp" />
 	</ItemGroup>
 
-	<!--<ItemGroup>
-	  <ProjectReference Include="..\tulo.CommonMVVM\tulo.CommonMVVM.csproj" />
-	</ItemGroup>-->
-
 </Project>
