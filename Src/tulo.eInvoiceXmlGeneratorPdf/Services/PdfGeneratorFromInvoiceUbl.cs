@@ -187,6 +187,7 @@ public class PdfGeneratorFromInvoiceUbl(ITranslatorProvider translationProvider)
                 new Dictionary<string, string>
                 {
                     { ".//cbc:ID", "InvoiceTableNr" },
+                    { ".//cbc:ParentDocumentLineReference/cbc:LineID", "ParentLineId" },
                     { ".//cac:Item/cbc:Name", "InvoiceTablePosText" },
                     { ".//cac:Item/cbc:Description", "InvoiceTablePosText" },
                     { ".//cac:Item/cac:SellersItemIdentification/cbc:ID", "InvoiceTablePosText" },

@@ -597,7 +597,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         const int startX = 40;
 
         // 9 columns: #, item description, item number/EAN, quantity, unit, net unit price, tax %, net amount, gross amount
-        int[] columnWidths = [18, 185, 76, 36, 32, 36, 40, 46, 46];
+        int[] columnWidths = [30, 185, 75, 33, 30, 36, 38, 44, 44];
         int tableWidth = columnWidths.Sum();
 
         // Header slightly higher because “item number” + “EAN” appear as 2 lines in the header
@@ -605,25 +605,134 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         const int rowItemHeight = 14;
         const int lineHeight = 12;
 
-        string[] headers =
-        {
-        translationProvider.Translate("InvoiceTableNr"),
-        translationProvider.Translate("InvoiceTablePosText"),
-        translationProvider.Translate("InvoiceTableItemNr"),
-        translationProvider.Translate("InvoiceTableQuantity"),
-        translationProvider.Translate("InvoiceTableUnit"),
-        translationProvider.Translate("InvoiceTableUnitNetPrice"),
-        translationProvider.Translate("InvoiceTableTaxPrecentage"),
-        translationProvider.Translate("InvoiceTableNetAmount"),
-        translationProvider.Translate("InvoiceTableGrossAmount")
-    };
+        string[] headers = { translationProvider.Translate("InvoiceTableNr"), translationProvider.Translate("InvoiceTablePosText"), translationProvider.Translate("InvoiceTableItemNr"), translationProvider.Translate("InvoiceTableQuantity"), translationProvider.Translate("InvoiceTableUnit"), translationProvider.Translate("InvoiceTableUnitNetPrice"), translationProvider.Translate("InvoiceTableTaxPrecentage"), translationProvider.Translate("InvoiceTableNetAmount"), translationProvider.Translate("InvoiceTableGrossAmount") };
 
         XPen gridPen = new XPen(_grayColor, 0.4);
 
         const double tableLeft = startX;
         double tableRight = startX + tableWidth;
 
-        // Header Brackground
+        string FormatDisplayLineId(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            value = value.Trim();
+
+            if (value.Contains('.'))
+            {
+                var parts = value
+                    .Split('.', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p =>
+                    {
+                        var trimmed = p.TrimStart('0');
+                        return string.IsNullOrEmpty(trimmed) ? "0" : trimmed;
+                    });
+
+                return string.Join(".", parts);
+            }
+
+            var plain = value.TrimStart('0');
+            return string.IsNullOrEmpty(plain) ? "0" : plain;
+        }
+
+        bool IsCompactSubLineNumber(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            value = value.Trim();
+
+            if (value.Contains('.'))
+                return false;
+
+            return value.Length >= 3 && value.All(char.IsDigit);
+        }
+
+        int GetCompactMainNumber(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return 0;
+
+            value = value.Trim();
+
+            if (IsCompactSubLineNumber(value))
+            {
+                // z.B. 101 -> 1, 203 -> 2, 1201 -> 12
+                var mainPart = value.Substring(0, value.Length - 2).TrimStart('0');
+                if (string.IsNullOrWhiteSpace(mainPart))
+                    mainPart = "0";
+
+                return int.TryParse(mainPart, out var n) ? n : 0;
+            }
+
+            if (value.Contains('.'))
+            {
+                var first = value.Split('.', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? "0";
+                first = first.TrimStart('0');
+                if (string.IsNullOrWhiteSpace(first))
+                    first = "0";
+
+                return int.TryParse(first, out var n) ? n : 0;
+            }
+
+            var plain = value.TrimStart('0');
+            if (string.IsNullOrWhiteSpace(plain))
+                plain = "0";
+
+            return int.TryParse(plain, out var main) ? main : 0;
+        }
+
+        int GetCompactSubNumber(string? value)
+        {
+            if (!IsCompactSubLineNumber(value))
+                return 0;
+
+            value = value!.Trim();
+
+            // z.B. 101 -> 1, 102 -> 2, 203 -> 3
+            var subPart = value.Substring(value.Length - 2).TrimStart('0');
+            if (string.IsNullOrWhiteSpace(subPart))
+                subPart = "0";
+
+            return int.TryParse(subPart, out var n) ? n : 0;
+        }
+
+        bool IsSubLine(string? lineId, string? parentLineId)
+        {
+            return !string.IsNullOrWhiteSpace(parentLineId)
+                   || (!string.IsNullOrWhiteSpace(lineId) && lineId.Contains('.'))
+                   || IsCompactSubLineNumber(lineId);
+        }
+
+        string FormatNumber(string? value, string format)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            if (double.TryParse(NormalizeDecimalValue(value), NumberStyles.Any, culture, out var number))
+                return number.ToString(format, culture);
+
+            return value.Trim();
+        }
+
+        string CalculateGross(string? netAmountValue, string? taxValue)
+        {
+            if (string.IsNullOrWhiteSpace(netAmountValue) || string.IsNullOrWhiteSpace(taxValue))
+                return string.Empty;
+
+            if (double.TryParse(NormalizeDecimalValue(netAmountValue), NumberStyles.Any, culture, out var netAmount) &&
+                double.TryParse(NormalizeDecimalValue(taxValue), NumberStyles.Any, culture, out var taxPercentage))
+            {
+                var grossAmount = netAmount + netAmount * taxPercentage / 100.0;
+                grossAmount = Math.Round(grossAmount, 2, MidpointRounding.AwayFromZero);
+                return grossAmount.ToString("N2", culture);
+            }
+
+            return string.Empty;
+        }
+
+        // Header background
         for (int i = 0; i < headers.Length; i++)
         {
             double x = startX + GetColumnOffset(columnWidths, i);
@@ -631,7 +740,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             xGraphics.DrawRectangle(_blueBrushColor, headerRect);
         }
 
-        // Header Linis
+        // Header lines
         xGraphics.DrawLine(gridPen, tableLeft, yPosition, tableRight, yPosition);
         xGraphics.DrawLine(gridPen, tableLeft, yPosition + rowHeaderHeight, tableRight, yPosition + rowHeaderHeight);
 
@@ -641,7 +750,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             xGraphics.DrawLine(gridPen, x, yPosition, x, yPosition + rowHeaderHeight);
         }
 
-        // Header Text
+        // Header text
         for (int i = 0; i < headers.Length; i++)
         {
             double x = startX + GetColumnOffset(columnWidths, i);
@@ -665,69 +774,94 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         yPosition += rowHeaderHeight;
 
         XmlNodeList? lineItems = xmlDoc?.SelectNodes(lineItemsNode, nsmgr);
-        if (lineItems == null) return;
+        if (lineItems == null || lineItems.Count == 0)
+            return;
+
+        var rawRows = new List<string[]>();
 
         foreach (XmlNode lineItem in lineItems)
         {
-            // Order comes from dictionary (insertion order). Important: Call below in the same order!
             string[] itemRow = fields.Keys
                 .Select(xpath => lineItem.SelectSingleNode(xpath, nsmgr)?.InnerText ?? string.Empty)
                 .ToArray();
 
-            if (itemRow.Length < 10) continue;
+            if (itemRow.Length >= 11)
+                rawRows.Add(itemRow);
+        }
 
-            // Format number as you did
-            if (!string.IsNullOrWhiteSpace(itemRow[0]))
+        var sortedRows = rawRows
+            .OrderBy(r => GetCompactMainNumber(!string.IsNullOrWhiteSpace(r[1]) ? r[1] : r[0]))
+            .ThenBy(r => IsSubLine(r[0], r[1]) ? 1 : 0)   // first main position
+            .ThenBy(r =>
             {
-                itemRow[0] = itemRow[0].Trim().TrimStart('0');
-                if (itemRow[0].Length == 0) itemRow[0] = "0";
+                var lineId = r[0]?.Trim() ?? string.Empty;
+
+                if (IsCompactSubLineNumber(lineId))
+                    return GetCompactSubNumber(lineId);
+
+                if (lineId.Contains('.'))
+                {
+                    var parts = lineId.Split('.', StringSplitOptions.RemoveEmptyEntries);
+                    var last = parts.LastOrDefault() ?? "0";
+                    last = last.TrimStart('0');
+                    if (string.IsNullOrWhiteSpace(last))
+                        last = "0";
+
+                    return int.TryParse(last, out var n) ? n : 0;
+                }
+
+                return 0;
+            })
+            .ToList();
+
+        foreach (var itemRow in sortedRows)
+        {
+            AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition);
+
+            string lineIdRaw = itemRow[0]?.Trim() ?? string.Empty;
+            string parentLineIdRaw = itemRow[1]?.Trim() ?? string.Empty;
+            string nameRaw = itemRow[2]?.Trim() ?? string.Empty;
+            string descRaw = itemRow[3]?.Trim() ?? string.Empty;
+            string sellerIdRaw = itemRow[4]?.Trim() ?? string.Empty;
+            string globalIdRaw = itemRow[5]?.Trim() ?? string.Empty;
+            string quantityRaw = itemRow[6]?.Trim() ?? string.Empty;
+            string unitRaw = itemRow[7]?.Trim() ?? string.Empty;
+            string netUnitPriceRaw = itemRow[8]?.Trim() ?? string.Empty;
+            string taxRaw = itemRow[9]?.Trim() ?? string.Empty;
+            string netAmountRaw = itemRow[10]?.Trim() ?? string.Empty;
+
+            bool isSubLine = IsSubLine(lineIdRaw, parentLineIdRaw);
+
+            string displayLineId = FormatDisplayLineId(lineIdRaw);
+
+            string positionBeschreibung;
+            if (isSubLine)
+            {
+                string subTop = nameRaw;
+                string subBottom = descRaw;
+                string subText = string.IsNullOrWhiteSpace(subBottom) ? subTop : string.IsNullOrWhiteSpace(subTop) ? subBottom : $"{subTop}\n{subBottom}";
+                positionBeschreibung = subText;
             }
+            else
+                positionBeschreibung = string.IsNullOrWhiteSpace(descRaw) ? nameRaw : string.IsNullOrWhiteSpace(nameRaw) ? descRaw : $"{descRaw}\n{nameRaw}";
 
-            // Position description (2 lines): Description above, name below
-            string descTop = (itemRow[2] ?? string.Empty).Trim();
-            string descBottom = (itemRow[1] ?? string.Empty).Trim();
-            string positionBeschreibung = string.IsNullOrEmpty(descTop) ? descBottom : string.IsNullOrEmpty(descBottom) ? descTop : $"{descTop}\n{descBottom}";
+            string artikelUndEan = string.IsNullOrWhiteSpace(globalIdRaw) ? sellerIdRaw : string.IsNullOrWhiteSpace(sellerIdRaw) ? globalIdRaw : $"{sellerIdRaw}\n{globalIdRaw}";
 
-            // Item number/EAN (2 lines): SellerAssignedID above, GlobalID below (if available)
-            string artikelNr = (itemRow[3] ?? string.Empty).Trim();
-            string ean = (itemRow[4] ?? string.Empty).Trim();
-            string artikelUndEan = string.IsNullOrEmpty(ean) ? artikelNr : $"{artikelNr}\n{ean}";
+            string qtyStr = FormatNumber(quantityRaw, "N2");
 
-            // Numerical values (indices after shift)
-            decimal quantity = decimal.Parse(NormalizeDecimalValue(itemRow[5]), NumberStyles.Any, culture);
-            decimal netUnitPrice = decimal.Parse(NormalizeDecimalValue(itemRow[7]), NumberStyles.Any, culture);
-            decimal taxPercentage = decimal.Parse(NormalizeDecimalValue(itemRow[8]), NumberStyles.Any, culture);
-            decimal netAmount = decimal.Parse(NormalizeDecimalValue(itemRow[9]), NumberStyles.Any, culture);
-
-            decimal grossAmount = netAmount + netAmount * taxPercentage / 100m;
-            grossAmount = Math.Round(grossAmount, 2, MidpointRounding.AwayFromZero);
-
-            string qtyStr = quantity.ToString("N2", culture);
-            string unitStr = itemRow[6] ?? string.Empty;
+            string unitStr = unitRaw;
             string unitTranslated = translationProvider.Translate(unitStr);
-            if (!string.IsNullOrEmpty(unitTranslated))
+            if (!string.IsNullOrWhiteSpace(unitTranslated))
                 unitStr = unitTranslated;
 
-            string unitPriceStr = netUnitPrice.ToString("N2", culture);
-            string taxStr = taxPercentage.ToString("N2", culture);
-            string netAmountStr = netAmount.ToString("N2", culture);
-            string grossStr = grossAmount.ToString("N2", culture);
+            string unitPriceStr = FormatNumber(netUnitPriceRaw, "N2");
+            string taxStr = FormatNumber(taxRaw, "N2");
+            string netAmountStr = FormatNumber(netAmountRaw, "N2");
+            string grossStr = CalculateGross(netAmountRaw, taxRaw);
 
-            string[] extendedRow =
-            {
-            itemRow[0],               // No.
-            positionBeschreibung,     // Item description (2 lines)
-            artikelUndEan,            // Item number/EAN (2 lines)
-            qtyStr,                   // Quantity
-            unitStr,                  // Unit
-            unitPriceStr,             // Net unit price
-            taxStr,                   // Tax %
-            netAmountStr,             // Net amount
-            grossStr                  // Gross amount
-        };
+            string[] extendedRow = { displayLineId, positionBeschreibung, artikelUndEan, qtyStr, unitStr, unitPriceStr, taxStr, netAmountStr, grossStr };
 
-            // Wrap: Description + Item/EAN wrap
-            string[] wrappedDesc = WrapMultilineCell(ref xGraphics, extendedRow[1], fontTableBody, columnWidths[1] - 8);
+            string[] wrappedDesc = WrapMultilineCell(ref xGraphics, extendedRow[1], fontTableBody, columnWidths[1] - (isSubLine ? 12 : 8));
             string[] wrappedArt = WrapMultilineCell(ref xGraphics, extendedRow[2], fontTableBody, columnWidths[2] - 8);
 
             int maxLines = Math.Max(wrappedDesc.Length, wrappedArt.Length);
@@ -745,21 +879,13 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
                 double x = startX + GetColumnOffset(columnWidths, i);
                 xGraphics.DrawLine(gridPen, x, yTop, x, yBot);
             }
+            
+            // No. | Description  | Item/EAN  | Quantity  | Unit  | Unit price  | VAT  | Net  | Gross
+            XStringFormat[] aligns = { XStringFormats.CenterRight, XStringFormats.TopLeft, XStringFormats.TopLeft, XStringFormats.Center, XStringFormats.Center, XStringFormats.CenterRight, XStringFormats.CenterRight, XStringFormats.CenterRight, XStringFormats.CenterRight };
 
-            XStringFormat[] aligns =
-            {
-            XStringFormats.Center,       // No.
-            XStringFormats.TopLeft,      // Description (entered manually)
-            XStringFormats.TopLeft,      // Item/EAN (entered manually)
-            XStringFormats.Center,       // Quantity
-            XStringFormats.Center,       // Unit
-            XStringFormats.CenterRight,  // Unit price
-            XStringFormats.CenterRight,  // VAT
-            XStringFormats.CenterRight,  // Net
-            XStringFormats.CenterRight   // Gross
-        };
+            double descIndent = isSubLine ? 4 : 0;
 
-            // Text zeichnen
+            // Draw text
             for (int i = 0; i < extendedRow.Length; i++)
             {
                 double x = startX + GetColumnOffset(columnWidths, i);
@@ -770,14 +896,19 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
                     int yOff = 0;
                     foreach (var line in wrappedDesc)
                     {
-                        var lineRect = new XRect(x + 4, yPosition + yOff + 1, columnWidths[i] - 8, lineHeight);
+                        var lineRect = new XRect(
+                            x + 4 + descIndent,
+                            yPosition + yOff + 1,
+                            columnWidths[i] - 8 - descIndent,
+                            lineHeight);
+
                         xGraphics.DrawString(line, fontTableBody, _blackBrushColor, lineRect, XStringFormats.TopLeft);
                         yOff += lineHeight;
                     }
                 }
                 else if (i == 2)
                 {
-                    // Item number/EAN (multiple lines)
+                    // Item number / EAN (multiple lines)
                     int yOff = 0;
                     foreach (var line in wrappedArt)
                     {
@@ -785,6 +916,11 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
                         xGraphics.DrawString(line, fontTableBody, _blackBrushColor, lineRect, XStringFormats.TopLeft);
                         yOff += lineHeight;
                     }
+                }
+                else if (i == 0)
+                {
+                    var textRect = new XRect(x + 2, yPosition, columnWidths[i] - 4, rowHeight);
+                    xGraphics.DrawString(extendedRow[i], fontTableBody, _blackBrushColor, textRect, XStringFormats.CenterRight);
                 }
                 else
                 {
@@ -794,7 +930,6 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             }
 
             yPosition += rowHeight;
-            AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition);
         }
     }
 
@@ -1008,7 +1143,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         const double padX = 6;
         const double rowH = 14;                   // smaller than before
         const double rowGap = 1;                  // tiny gap
-        const double rightInnerPadding = 38;      // moves amounts LEFT
+        const double rightInnerPadding = 36;      // inportant moves amounts LEFT
 
         double boxX = mainTableRight - boxWidth;
         if (boxX < startX) boxX = startX; // safety
@@ -1607,20 +1742,15 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
         if (xmlDoc == null) return;
 
-        const double qrSizePoints = 95;
+        const double qrSizePoints = 72;
         const int qrPixelSize = 320;
 
         AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition, requiredHeight: (int)qrSizePoints + 10);
 
-        static string Clean(string? s)
-            => string.IsNullOrWhiteSpace(s)
-                ? string.Empty
-                : s.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Trim();
+        static string Clean(string? s) => string.IsNullOrWhiteSpace(s) ? string.Empty : s.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Trim();
 
         // [0]=IBAN, [1]=BIC, [2]=Name, [3]=Currency, [4]=Amount, [5]=PaymentReference
-        string[] qrRow = xPaths4QrCode
-            .Select(xpath => Clean(xmlDoc.SelectSingleNode(xpath, nsmgr)?.InnerText))
-            .ToArray();
+        string[] qrRow = xPaths4QrCode.Select(xpath => Clean(xmlDoc.SelectSingleNode(xpath, nsmgr)?.InnerText)).ToArray();
 
         if (qrRow.Length < 6) return;
 
@@ -1646,13 +1776,12 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         if (a <= 0) return;
 
         string amountLine = "EUR" + a.ToString("0.00", CultureInfo.InvariantCulture);
-
         var epcPayload = string.Join("\n", new[] { "BCD", "002", "1", "SCT", bic, name, iban, amountLine, "", remittance, "" });
 
         using var generator = new QRCodeGenerator();
 
-        // Wichtig wegen Logo in der Mitte: hohe Fehlerkorrektur
-        using var data = generator.CreateQrCode(epcPayload, QRCodeGenerator.ECCLevel.H);
+        // Important because of logo in the middle: high error correction
+        using var data = generator.CreateQrCode(epcPayload, QRCodeGenerator.ECCLevel.Q);
 
         var svgQr = new SvgQRCode(data);
         var svg = svgQr.GetGraphic(pixelsPerModule: 8);
@@ -1661,7 +1790,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         byte[] pngBytes = RenderSvgToPngBytes(svg, qrPixelSize);
         if (pngBytes.Length == 0) return;
 
-        // ===== Logo in der Mitte (aus icons/TuloTeam.svg) =====
+        // ===== Logo in the center (from icons/TuloTeam.svg) =====
         SvgDocument? logoDoc = LoadSvgIconDocument("TuloTeam.svg");
         if (logoDoc != null)
         {
@@ -1697,8 +1826,8 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
     private static byte[] OverlayCenterLogoOnQrPngBytes(byte[] qrPngBytes, SvgDocument logoSvgDoc, int qrPixelSize)
     {
-        int logoSize = (int)(qrPixelSize * 0.20);
-        if (logoSize < 32) logoSize = 32;
+        int logoSize = (int)(qrPixelSize * 0.14);
+        if (logoSize < 24) logoSize = 24;
 
         using var qrMs = new MemoryStream(qrPngBytes);
         using var qrBmp = new System.Drawing.Bitmap(qrMs);
@@ -1715,8 +1844,8 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             int cx = (qrBmp.Width - logoSize) / 2;
             int cy = (qrBmp.Height - logoSize) / 2;
 
-            // Weißer Hintergrund hinter dem Logo (Scanner-stabil)
-            int pad = (int)(logoSize * 0.12);
+            // White background behind the logo (scanner-stable)
+            int pad = (int)(logoSize * 0.1);
             var bgRect = new System.Drawing.Rectangle(cx - pad, cy - pad, logoSize + 2 * pad, logoSize + 2 * pad);
 
             using var whiteBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);

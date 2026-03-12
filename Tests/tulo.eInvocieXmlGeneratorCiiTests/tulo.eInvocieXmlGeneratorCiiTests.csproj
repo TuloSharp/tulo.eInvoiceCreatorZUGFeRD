@@ -45,8 +45,14 @@
 		<None Update="Examples\EXTENDED_Fremdwaehrung.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Examples\Extended___SubInvoiceLines_Buero_Material_Bsp3__.xml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Examples\ZF_Extended__Sammelrechnung_3_Bestellungen.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Examples\ZUGFeRD_Extended__Abschlagsrechnung_SubInvoiceLine_u_LV_Nr_.xml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Schemas\FACTUR-X_EXTENDED.xsd">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

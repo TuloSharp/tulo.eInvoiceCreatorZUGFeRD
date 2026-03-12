@@ -8,7 +8,7 @@ public class CiiMapper : ICiiMapper
 {
     public CrossIndustryInvoiceType Map(Invoice inv)
     {
-        if (inv == null) throw new ArgumentNullException(nameof(inv));
+        if (inv == null) return new CrossIndustryInvoiceType();
         var currency = string.IsNullOrWhiteSpace(inv.Currency) ? "EUR" : inv.Currency;
 
         var typeCodeValue = string.IsNullOrWhiteSpace(inv.DocumentTypeCode) ? "380" : inv.DocumentTypeCode;
@@ -22,18 +22,42 @@ public class CiiMapper : ICiiMapper
                 ID = new IDType { Value = inv.InvoiceNumber },
                 Name = string.IsNullOrWhiteSpace(inv.DocumentName) ? null : new TextType { Value = inv.DocumentName },
                 TypeCode = new DocumentCodeType { Value = typeCodeValue },
-                IssueDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = inv.InvoiceDate.ToString("yyyyMMdd") } },
+                IssueDateTime = new DateTimeType
+                {
+                    Item = new DateTimeTypeDateTimeString
+                    {
+                        format = "102",
+                        Value = inv.InvoiceDate.ToString("yyyyMMdd")
+                    }
+                },
                 IncludedNote = MapNotes(inv)
             },
+
             SupplyChainTradeTransaction = new SupplyChainTradeTransactionType
             {
                 ApplicableHeaderTradeAgreement = new HeaderTradeAgreementType
                 {
+                    BuyerReference = string.IsNullOrWhiteSpace(inv.BuyerReference) ? null : new TextType { Value = inv.BuyerReference },
                     SellerTradeParty = MapParty(inv.Seller),
-                    BuyerTradeParty = MapParty(inv.Buyer)
+                    BuyerTradeParty = MapParty(inv.Buyer),
+                    SellerOrderReferencedDocument = string.IsNullOrWhiteSpace(inv.SellerOrderReferencedId) ? null : new ReferencedDocumentType
+                    {
+                        IssuerAssignedID = new IDType { Value = inv.SellerOrderReferencedId }
+                    },
+
+                    BuyerOrderReferencedDocument = string.IsNullOrWhiteSpace(inv.BuyerOrderReferencedId) ? null : new ReferencedDocumentType
+                    {
+                        IssuerAssignedID = new IDType { Value = inv.BuyerOrderReferencedId }
+                    },
+
+                    ContractReferencedDocument = string.IsNullOrWhiteSpace(inv.ContractReferencedId) ? null : new ReferencedDocumentType
+                    {
+                        IssuerAssignedID = new IDType { Value = inv.ContractReferencedId }
+                    }
                 },
+
                 ApplicableHeaderTradeDelivery = MapHeaderDelivery(inv),
-                IncludedSupplyChainTradeLineItem = [.. inv.Lines.Select((line, idx) => MapLine(inv, line, idx + 1, currency))],
+                IncludedSupplyChainTradeLineItem = inv.Lines == null ? [] : [.. inv.Lines.Select((line, idx) => MapLine(inv, line, idx + 1, currency)).Where(x => x != null)],
                 ApplicableHeaderTradeSettlement = MapHeaderSettlement(inv)
             }
         };
@@ -60,9 +84,18 @@ public class CiiMapper : ICiiMapper
                                   }
         };
 
-        //Identifier
+        // Identifier
         if (!string.IsNullOrWhiteSpace(p.ID))
             party.ID = [new IDType { Value = p.ID }];
+
+        // Legal organization
+        if (!string.IsNullOrWhiteSpace(p.FiscalId))
+        {
+            party.SpecifiedLegalOrganization = new LegalOrganizationType
+            {
+                ID = new IDType { Value = p.FiscalId }
+            };
+        }
 
         // Contact: <ram:DefinedTradeContact>...
         if (!string.IsNullOrWhiteSpace(p.ContactPersonName) || !string.IsNullOrWhiteSpace(p.ContactPhone) || !string.IsNullOrWhiteSpace(p.ContactEmail))
@@ -78,7 +111,7 @@ public class CiiMapper : ICiiMapper
         }
 
         // General email (info@...) as in the example: schemeID="0088"
-        // Attention: you only have ONE URIUniversalCommunication field – set priority:
+        // Attention: you only have ONE URIUniversalCommunication field, so set priority:
         if (!string.IsNullOrWhiteSpace(p.GeneralEmail))
         {
             party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { schemeID = "0088", Value = p.GeneralEmail } };
@@ -105,16 +138,45 @@ public class CiiMapper : ICiiMapper
 
     private SupplyChainTradeLineItemType MapLine(Invoice inv, InvoiceLine invLine, int lineNo, string currency)
     {
-        if (invLine == null) throw new ArgumentNullException(nameof(invLine));
+        if (invLine == null) return null!;
 
-        var lineNet = ComputeLineNet(invLine);
+        var lineNet = invLine.ForcedLineTotalAmount ?? ComputeLineNet(invLine);
+
+        // Unterzeilen wie 01.01, 01.02 etc. bekommen in deiner Referenz offenbar keine BasisQuantity
+        var isSubLine =
+            !string.IsNullOrWhiteSpace(invLine.LineId) &&
+            invLine.LineId.Contains('.');
+
+        var grossBasisQuantity = isSubLine
+            ? null
+            : new QuantityType
+            {
+                unitCode = invLine.UnitCode,
+                Value = 1m
+            };
+
+        var netBasisQuantity = isSubLine
+            ? null
+            : new QuantityType
+            {
+                unitCode = invLine.UnitCode,
+                Value = 1m
+            };
 
         return new SupplyChainTradeLineItemType
         {
             AssociatedDocumentLineDocument = new DocumentLineDocumentType
             {
-                LineID = new IDType { Value = lineNo.ToString(CultureInfo.InvariantCulture) }
+                LineID = new IDType
+                {
+                    Value = !string.IsNullOrWhiteSpace(invLine.LineId) ? invLine.LineId : lineNo.ToString(CultureInfo.InvariantCulture)
+                },
+                ParentLineID = string.IsNullOrWhiteSpace(invLine.ParentLineId) ? null : new IDType { Value = invLine.ParentLineId },
+                LineStatusReasonCode = string.IsNullOrWhiteSpace(invLine.LineStatusReasonCode)
+                    ? null
+                    : new CodeType { Value = invLine.LineStatusReasonCode }
             },
+
             SpecifiedTradeProduct = new TradeProductType
             {
                 GlobalID = string.IsNullOrWhiteSpace(invLine.GlobalId) ? null : new IDType
@@ -123,80 +185,119 @@ public class CiiMapper : ICiiMapper
                     Value = invLine.GlobalId
                 },
                 SellerAssignedID = string.IsNullOrWhiteSpace(invLine.SellerAssignedId) ? null : new IDType { Value = invLine.SellerAssignedId },
+                BuyerAssignedID = string.IsNullOrWhiteSpace(invLine.BuyerAssignedId) ? null : new IDType { Value = invLine.BuyerAssignedId },
                 Name = string.IsNullOrWhiteSpace(invLine.Description) ? null : new TextType { Value = invLine.Description },
                 Description = string.IsNullOrWhiteSpace(invLine.ProductDescription) ? null : new TextType { Value = invLine.ProductDescription },
-                OriginTradeCountry = string.IsNullOrWhiteSpace(invLine.OriginCountryCode) ? null : new TradeCountryType { ID = new CountryIDType { Value = invLine.OriginCountryCode } }  // z.B. "DE"
+                OriginTradeCountry = string.IsNullOrWhiteSpace(invLine.OriginCountryCode) ? null : new TradeCountryType
+                {
+                    ID = new CountryIDType { Value = invLine.OriginCountryCode }
+                }
             },
+
             SpecifiedLineTradeAgreement = new LineTradeAgreementType
             {
-                BuyerOrderReferencedDocument = string.IsNullOrWhiteSpace(invLine.BuyerOrderReferencedId) && invLine.BuyerOrderDate == null ? null : new ReferencedDocumentType
-                {
-                    IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.BuyerOrderReferencedId) ? null : new IDType { Value = invLine.BuyerOrderReferencedId },
-                    FormattedIssueDateTime = invLine.DeliveryNoteDate == null ? null : new FormattedDateTimeType
+                BuyerOrderReferencedDocument =
+                    string.IsNullOrWhiteSpace(invLine.BuyerOrderReferencedId) &&
+                    string.IsNullOrWhiteSpace(invLine.BuyerOrderLineId) &&
+                    invLine.BuyerOrderDate == null ? null : new ReferencedDocumentType
                     {
-                        DateTimeString = new FormattedDateTimeTypeDateTimeString { format = "102", Value = invLine.DeliveryNoteDate.Value.ToString("yyyyMMdd") }
-                    }
-                },
+                        IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.BuyerOrderReferencedId) ? null : new IDType { Value = invLine.BuyerOrderReferencedId },
+                        LineID = string.IsNullOrWhiteSpace(invLine.BuyerOrderLineId) ? null : new IDType { Value = invLine.BuyerOrderLineId },
+                        FormattedIssueDateTime = invLine.BuyerOrderDate == null ? null : new FormattedDateTimeType
+                        {
+                            DateTimeString = new FormattedDateTimeTypeDateTimeString
+                            {
+                                format = "102",
+                                Value = invLine.BuyerOrderDate.Value.ToString("yyyyMMdd")
+                            }
+                        }
+                    },
 
                 GrossPriceProductTradePrice = new TradePriceType
                 {
                     ChargeAmount = new AmountType { currencyID = currency, Value = invLine.UnitPrice },
-                    BasisQuantity = new QuantityType { unitCode = invLine.UnitCode, Value = 1m }
+                    BasisQuantity = grossBasisQuantity
                 },
+
                 NetPriceProductTradePrice = new TradePriceType
                 {
                     ChargeAmount = new AmountType { currencyID = currency, Value = invLine.UnitPrice },
-                    BasisQuantity = new QuantityType { unitCode = invLine.UnitCode, Value = 1m }
+                    BasisQuantity = netBasisQuantity
                 }
             },
+
             SpecifiedLineTradeDelivery = new LineTradeDeliveryType
             {
                 BilledQuantity = new QuantityType { unitCode = invLine.UnitCode, Value = invLine.Quantity },
                 ShipToTradeParty = MapParty(inv.Buyer),
-                DeliveryNoteReferencedDocument = string.IsNullOrWhiteSpace(invLine.DeliveryNoteNumber) && string.IsNullOrWhiteSpace(invLine.DeliveryNoteLineId) &&
+                DeliveryNoteReferencedDocument =
+                    string.IsNullOrWhiteSpace(invLine.DeliveryNoteNumber) &&
+                    string.IsNullOrWhiteSpace(invLine.DeliveryNoteLineId) &&
                     invLine.DeliveryNoteDate == null ? null : new ReferencedDocumentType
                     {
                         IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.DeliveryNoteNumber) ? null : new IDType { Value = invLine.DeliveryNoteNumber },
                         LineID = string.IsNullOrWhiteSpace(invLine.DeliveryNoteLineId) ? null : new IDType { Value = invLine.DeliveryNoteLineId },
                         FormattedIssueDateTime = invLine.DeliveryNoteDate == null ? null : new FormattedDateTimeType
                         {
-                            DateTimeString = new FormattedDateTimeTypeDateTimeString { format = "102", Value = invLine.DeliveryNoteDate.Value.ToString("yyyyMMdd") }
+                            DateTimeString = new FormattedDateTimeTypeDateTimeString
+                            {
+                                format = "102",
+                                Value = invLine.DeliveryNoteDate.Value.ToString("yyyyMMdd")
+                            }
                         }
                     }
             },
+
             SpecifiedLineTradeSettlement = new LineTradeSettlementType
             {
                 ApplicableTradeTax = new[]
                 {
-                        new TradeTaxType
+                new TradeTaxType
+                {
+                    TypeCode = new TaxTypeCodeType { Value = "VAT" },
+                    CategoryCode = new TaxCategoryCodeType { Value = invLine.TaxCategory },
+                    BasisAmount = new AmountType { currencyID = currency, Value = lineNet },
+                    CalculatedAmount = new AmountType
+                    {
+                        currencyID = currency,
+                        Value = Math.Round(lineNet * invLine.TaxPercent / 100m, 2, MidpointRounding.AwayFromZero)
+                    },
+                    RateApplicablePercent = new PercentType { Value = invLine.TaxPercent }
+                }
+            },
+
+                BillingSpecifiedPeriod = invLine.BillingPeriodEndDate == null
+                    ? null
+                    : new SpecifiedPeriodType
+                    {
+                        EndDateTime = new DateTimeType
                         {
-                            TypeCode = new TaxTypeCodeType { Value = "VAT" },
-                            CategoryCode = new TaxCategoryCodeType { Value = invLine.TaxCategory },
-                            BasisAmount = new AmountType { currencyID = currency, Value = lineNet },
-                            CalculatedAmount = new AmountType { currencyID = currency, Value = Math.Round(lineNet * invLine.TaxPercent / 100m,2,MidpointRounding.AwayFromZero) },
-                            RateApplicablePercent = new PercentType { Value = invLine.TaxPercent }
+                            Item = new DateTimeTypeDateTimeString
+                            {
+                                format = "102",
+                                Value = invLine.BillingPeriodEndDate.Value.ToString("yyyyMMdd")
+                            }
                         }
                     },
-                BillingSpecifiedPeriod = invLine.BillingPeriodEndDate == null ? null : new SpecifiedPeriodType
-                {
-                    EndDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = invLine.BillingPeriodEndDate.Value.ToString("yyyyMMdd") } }
-                },
+
                 SpecifiedTradeSettlementLineMonetarySummation = new TradeSettlementLineMonetarySummationType
                 {
                     LineTotalAmount = new AmountType { currencyID = currency, Value = lineNet },
                     TotalAllowanceChargeAmount = new AmountType { currencyID = currency, Value = 0m }
                 },
-                AdditionalReferencedDocument = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) && string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode)
-                                                && string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new[]
-                {
-                    new ReferencedDocumentType
-                    {
-                        IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId)  ? null : new IDType { Value = invLine.AdditionalReferencedDocumentId },
-                        TypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) ? null : new DocumentCodeType { Value = invLine.AdditionalReferencedDocumentTypeCode },
-                        ReferenceTypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new ReferenceCodeType { Value = invLine.AdditionalReferencedDocumentReferenceTypeCode }
-                    }
-                }
 
+                AdditionalReferencedDocument =
+                    string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) &&
+                    string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) &&
+                    string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new[]
+                        {
+                            new ReferencedDocumentType
+                            {
+                                IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) ? null : new IDType { Value = invLine.AdditionalReferencedDocumentId },
+                                TypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) ? null : new DocumentCodeType { Value = invLine.AdditionalReferencedDocumentTypeCode },
+                                ReferenceTypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new ReferenceCodeType { Value = invLine.AdditionalReferencedDocumentReferenceTypeCode }
+                            }
+                        }
             }
         };
     }
@@ -205,12 +306,11 @@ public class CiiMapper : ICiiMapper
     {
         var currency = string.IsNullOrWhiteSpace(inv.Currency) ? "EUR" : inv.Currency;
 
-        if (inv.Lines == null || inv.Lines.Count == 0)
-            throw new InvalidOperationException("Invoice muss mindestens eine Position haben.");
+        decimal LineNet(InvoiceLine l) => l?.ForcedLineTotalAmount ?? Math.Round((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m), 2, MidpointRounding.AwayFromZero);
+        bool CountsTowardsHeaderTotals(InvoiceLine l) => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
 
-        decimal LineNet(InvoiceLine l) => Math.Round(l.Quantity * l.UnitPrice, 2, MidpointRounding.AwayFromZero);
-
-        var netTotal = inv.Lines.Sum(LineNet);
+        var lines = (inv.Lines ?? []).Where(CountsTowardsHeaderTotals).ToArray();
+        var netTotal = lines.Sum(LineNet);
         var headerTaxes = MapHeaderTradeTax(inv, currency);
         var chargeTotal = inv.HeaderChargeTotalAmount;
         var allowanceTotal = inv.HeaderAllowanceTotalAmount;
@@ -221,7 +321,7 @@ public class CiiMapper : ICiiMapper
 
         var settlement = new HeaderTradeSettlementType
         {
-            PaymentReference = new TextType { Value = inv.Payment.PaymentReference },
+            PaymentReference = string.IsNullOrWhiteSpace(inv.Payment?.PaymentReference) ? null : new TextType { Value = inv.Payment.PaymentReference },
             InvoiceCurrencyCode = new CurrencyCodeType { Value = currency },
             ApplicableTradeTax = headerTaxes,
             SpecifiedTradeSettlementHeaderMonetarySummation =
@@ -263,7 +363,7 @@ public class CiiMapper : ICiiMapper
 
         var means = new TradeSettlementPaymentMeansType
         {
-            // 58 = SEPA Direct Debit, 31 = Bank transfer etc.
+            // 58 = SEPA direct debit, 31 = bank transfer, etc.
             TypeCode = string.IsNullOrWhiteSpace(payment.PaymentMeansTypeCode) ? null : new PaymentMeansCodeType { Value = payment.PaymentMeansTypeCode },
             Information = string.IsNullOrWhiteSpace(payment.PaymentMeansInformation) ? null : new TextType { Value = payment.PaymentMeansInformation },
             PayeePartyCreditorFinancialAccount =
@@ -331,8 +431,8 @@ public class CiiMapper : ICiiMapper
     {
         var delivery = new HeaderTradeDeliveryType
         {
-            ShipToTradeParty = MapParty(inv.Buyer),      // ShipTo = Buyer (typischer Fall)
-            ShipFromTradeParty = MapParty(inv.Seller),  // Optional: ShipFrom = Seller
+            ShipToTradeParty = MapParty(inv.Buyer),      // ShipTo = buyer (typical case)
+            ShipFromTradeParty = MapParty(inv.Seller),  // Optional: ShipFrom = seller
             // Actual delivery date (here: invoice date)
             ActualDeliverySupplyChainEvent = new SupplyChainEventType { OccurrenceDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = inv.InvoiceDate.ToString("yyyyMMdd") } } }
         };
@@ -346,9 +446,14 @@ public class CiiMapper : ICiiMapper
             return null!;
 
         // Same rounding logic as in the header
-        decimal LineNet(InvoiceLine l) => Math.Round(l.Quantity * l.UnitPrice, 2, MidpointRounding.AwayFromZero);
+        decimal LineNet(InvoiceLine l) => l?.ForcedLineTotalAmount ?? Math.Round((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m), 2, MidpointRounding.AwayFromZero);
+        bool CountsTowardsHeaderTotals(InvoiceLine l) => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
 
-        var groups = inv.Lines.GroupBy(l => new { l.TaxPercent, l.TaxCategory });
+        var relevantLines = inv.Lines.Where(CountsTowardsHeaderTotals).ToArray();
+        if (relevantLines.Length == 0)
+            return null!;
+
+        var groups = relevantLines.GroupBy(l => new { l.TaxPercent, l.TaxCategory });
 
         var result = new List<TradeTaxType>();
 

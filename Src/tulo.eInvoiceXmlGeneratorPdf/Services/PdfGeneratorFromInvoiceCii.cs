@@ -184,8 +184,9 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
             //table “#”, “Item text”, “Quantity”, ‘Unit’, “Net unit price”, “Tax %”, “Net amount”, “Gross amount”
             CreateInvoicePositionsTable(pdfDoc, ref pfdPage, ref xGraphics, invoiceDoc, nsmgr!, _translationProvider, new Dictionary<string, string>
             {
-                { ".//ram:LineID", "InvoiceTableNr" },
-                { ".//ram:SpecifiedTradeProduct/ram:Name", "InvoiceTablePosText" },  
+                { ".//ram:AssociatedDocumentLineDocument/ram:LineID", "InvoiceTableNr" },
+                { ".//ram:AssociatedDocumentLineDocument/ram:ParentLineID", "ParentLineId" },
+                { ".//ram:SpecifiedTradeProduct/ram:Name", "InvoiceTablePosText" },
                 { ".//ram:SpecifiedTradeProduct/ram:Description", "InvoiceTablePosText" },
                 { ".//ram:SpecifiedTradeProduct/ram:SellerAssignedID", "InvoiceTablePosText" },
                 { ".//ram:SpecifiedTradeProduct/ram:GlobalID", "InvoiceTablePosText" },
@@ -233,7 +234,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
                      "//ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:IBANID" ,
                      "//ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeeSpecifiedCreditorFinancialInstitution/ram:BICID" ,
                      "//ram:SellerTradeParty/ram:Name" ,
-                      "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode" ,
+                     "//ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode" ,
                      "//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount" ,
                      "//ram:ApplicableHeaderTradeSettlement/ram:PaymentReference"
                   ], ref yPosition, fontTextHeader, fontBody, out qrRect, out qrPage);

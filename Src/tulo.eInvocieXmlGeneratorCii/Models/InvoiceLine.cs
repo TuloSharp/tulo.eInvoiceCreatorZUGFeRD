@@ -23,13 +23,10 @@ public class InvoiceLine
     public string AdditionalReferencedDocumentReferenceTypeCode { get; set; } = string.Empty;
     public string OriginCountryCode { get; set; } = string.Empty;
 
+    public string BuyerOrderLineId { get; set; } = string.Empty;
     public string? LineId { get; set; }
-
     public string? ParentLineId { get; set; }
-
     public string? LineStatusReasonCode { get; set; }
-
     public string? BuyerAssignedId { get; set; }
-
     public decimal? ForcedLineTotalAmount { get; set; }
 }
