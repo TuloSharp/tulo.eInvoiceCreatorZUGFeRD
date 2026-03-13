@@ -1,5 +1,5 @@
 ﻿namespace tulo.eInvoice.eInvoiceViewer.Options;
 public interface IAppOptions
 {
-    LanguageOptions Language { get; set; }
+    LocalizationOptions Localization { get; set; }
 }

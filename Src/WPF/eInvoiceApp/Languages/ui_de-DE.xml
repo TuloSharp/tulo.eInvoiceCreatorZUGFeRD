@@ -14,9 +14,9 @@
 <entry key="UnitSecond">Sekunde</entry>
 <entry key="UnitHectare">Hektar</entry>
 <entry key="UnitKilometre">km</entry>
-<entry key="UnitFlatRate">pauschal</entry>
-<entry key="UnitCount">Anzahl</entry>
-<entry key="UnitPair">Anzahl Paare</entry>
+<entry key="UnitFlatRate">pschl</entry>
+<entry key="UnitCount">Anz</entry>
+<entry key="UnitPair">Anz. P</entry>
 <entry key="UnitSet">Set</entry>
 <entry key="UnitTonne">Tonne</entry>
 <entry key="UnitWeek">Woche</entry>

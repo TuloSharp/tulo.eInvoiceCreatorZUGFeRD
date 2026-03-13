@@ -20,7 +20,7 @@ public class GeneratePdfFromUblIngetrationTests
     {
         _tempDir = Path.Combine(Path.GetTempPath(), "InvoicePdfIntegrationTests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempDir);
-        _translationPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Languages", "de.xml");
+        _translationPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Languages", "de-DE.xml");
 
         if (GlobalFontSettings.FontResolver == null)
             GlobalFontSettings.FontResolver = new EmbeddedFontResolver();

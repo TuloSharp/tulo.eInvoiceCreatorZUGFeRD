@@ -5,43 +5,64 @@ using System.Windows.Data;
 
 namespace tulo.ResourcesWpfLib.Converters;
 
-public class DateFormatConverter : IValueConverter
+public sealed class DateFormatConverter : IValueConverter
 {
+    private static readonly DateTime _emptyDate = new(1, 1, 1);
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is DateTime date)
-        {
-            if (date == new DateTime(1, 1, 1))
-                return null;
-            return date;
-        }
+        if (value is not DateTime date || date == _emptyDate)
+            return null;
 
-        return null;
+        var format = GetDisplayFormat(culture);
+        return date.ToString(format, culture);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is string input)
+        if (value is null)
+            return _emptyDate;
+
+        if (value is not string input || string.IsNullOrWhiteSpace(input))
+            return _emptyDate;
+
+        input = input.Trim();
+
+        var format = GetInputFormat(culture);
+
+        if (culture.Name.Equals("en-US", StringComparison.OrdinalIgnoreCase))
         {
-            string digitsOnly = Regex.Replace(input, @"\D", "");
+            var digitsOnly = Regex.Replace(input, @"\D", "");
 
-            if (digitsOnly.Length == 8)
-            {
-                try
-                {
-                    string formattedDate = $"{digitsOnly.Substring(0, 2)}.{digitsOnly.Substring(2, 2)}.{digitsOnly.Substring(4, 4)}";
-                    var parsedDate = DateTime.ParseExact(formattedDate, "dd.MM.yyyy", culture);
+            if (DateTime.TryParseExact(digitsOnly, format, culture, DateTimeStyles.None, out var usDate))
+                return usDate;
 
-                    return parsedDate;
-                }
-                catch { return null; }
-            }
+            return null;
         }
 
-        // fallback 01.01.0001
-        if (value == null)
-            return new DateTime(1, 1, 1);
+        if (DateTime.TryParseExact(input, format, culture, DateTimeStyles.None, out var parsedDate))
+            return parsedDate;
 
-        return value;
+        return null;
+    }
+
+    private static string GetDisplayFormat(CultureInfo culture)
+    {
+        return culture.Name switch
+        {
+            "en-US" => "MMddyyyy",
+            "es-ES" => "dd/MM/yyyy",
+            _ => "dd.MM.yyyy"
+        };
+    }
+
+    private static string GetInputFormat(CultureInfo culture)
+    {
+        return culture.Name switch
+        {
+            "en-US" => "MMddyyyy",
+            "es-ES" => "dd/MM/yyyy",
+            _ => "dd.MM.yyyy"
+        };
     }
 }

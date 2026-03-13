@@ -28,7 +28,6 @@
 	  <None Remove="Fonts\CASCADIACODE.TTF" />
 	  <None Remove="Fonts\ROBOTO.TTF" />
 	  <None Remove="Fonts\VERDANA.TTF" />
-	  <None Remove="Languages\de.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,10 +35,10 @@
 	  <EmbeddedResource Include="Fonts\CASCADIACODE.TTF" />
 	  <EmbeddedResource Include="Fonts\ROBOTO.TTF" />
 	  <EmbeddedResource Include="Fonts\VERDANA.TTF" />
-	  <EmbeddedResource Include="Languages\en.xml">
+	  <EmbeddedResource Include="Languages\en-US.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
-	  <EmbeddedResource Include="Languages\de.xml">
+	  <EmbeddedResource Include="Languages\de-DE.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	</ItemGroup>

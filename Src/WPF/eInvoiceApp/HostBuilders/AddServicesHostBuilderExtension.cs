@@ -10,6 +10,7 @@ using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Services;
 using tulo.CoreLib.Translators;
+using tulo.CreateZugferdPdfA3.ConverterToPdfA3;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
@@ -101,42 +102,34 @@ public static class AddServicesHostBuilderExtension
 
         #region Create Invoice
         services.AddSingleton<IInvoiceBuilderService, InvoiceBuilderService>();
-       
-        //translator for invoice creation (e.g. for error messages) - optional, can be overridden by external file later
-        services.AddSingleton<ITranslatorProvider>(sp =>
-        {
-            var opt = sp.GetRequiredService<IAppOptions>();
-
-            var culture = opt?.Language?.Culture;
-            culture = string.IsNullOrWhiteSpace(culture) ? "en" : culture.Trim();
-
-            // optional: "de-DE" -> "de"
-            var dash = culture.IndexOf('-');
-            if (dash > 0) culture = culture.Substring(0, dash);
-
-            var asm = typeof(TranslatorProvider).Assembly;
-
-            var resourceName = $"tulo.XMLeInvoiceToPdf.Languages.{culture}.xml";
-            return new TranslatorProvider(asm, resourceName);
-
-        });
         services.AddSingleton<IPdfGeneratorFromInvoice, PdfGeneratorFromInvoiceCii>();
         services.AddSingleton<IXmlCiiExporter, XmlCiiExporter>();
         services.AddSingleton<ICiiMapper, CiiMapper>();
         services.AddSingleton<IXmlObjectCleaner, XmlObjectCleaner>();
         services.AddSingleton<IPdfWatermarkService, PdfWatermarkService>();
+        services.AddSingleton<IZugferdPdfA3ConverterService, ZugferdPdfA3ConverterService>();
+        #endregion
 
-        //translator for ui
+        #region Localization
+        services.AddSingleton<ICultureService, CultureService>();
+        #endregion
+
+        #region Translation
+        services.AddSingleton<ITranslatorProvider>(sp =>
+        {
+            var cultureService = sp.GetRequiredService<ICultureService>();
+            var culture = cultureService.CurrentCulture.Name;
+
+            var asm = typeof(TranslatorProvider).Assembly;
+            var resourceName = $"tulo.XMLeInvoiceToPdf.Languages.{culture}.xml";
+
+            return new TranslatorProvider(asm, resourceName);
+        });
+
         services.AddSingleton<ITranslatorUiProvider>(sp =>
         {
-            var opt = sp.GetRequiredService<IAppOptions>();
-
-            var culture = opt?.Language?.Culture;
-            culture = string.IsNullOrWhiteSpace(culture) ? "en" : culture.Trim();
-
-            // optional: "de-DE" -> "de"
-            var dash = culture.IndexOf('-');
-            if (dash > 0) culture = culture.Substring(0, dash);
+            var cultureService = sp.GetRequiredService<ICultureService>();
+            var culture = cultureService.CurrentCulture.Name;
 
             var file = Path.Combine(AppContext.BaseDirectory, "Languages", $"Ui_{culture}.xml");
             return new TranslatorUiProvider(file);

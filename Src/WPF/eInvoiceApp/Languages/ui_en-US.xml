@@ -16,7 +16,7 @@
   <entry key="UnitKilometre">km</entry>
   <entry key="UnitFlatRate">flat rate</entry>
   <entry key="UnitCount">quantity</entry>
-  <entry key="UnitPair">number of pairs</entry>
+  <entry key="UnitPair">no pairs</entry>
   <entry key="UnitSet">set</entry>
   <entry key="UnitTonne">tonne</entry>
   <entry key="UnitWeek">week</entry>

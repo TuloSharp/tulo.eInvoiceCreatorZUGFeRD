@@ -76,7 +76,6 @@ public static class AddServicesHostBuilderExtension
         services.AddSingleton<IGlobalPropsUiManage, GlobalPropsUiManage>();
         #endregion
 
-
         #region Options
         services.AddOptions<AppOptions>()
             .Bind(configuration, o => o.BindNonPublicProperties = true)
@@ -90,19 +89,14 @@ public static class AddServicesHostBuilderExtension
         #region Translation
         services.AddSingleton<ITranslatorProvider>(sp =>
         {
-            // Optional: external override via Config/Env/Registry later
-            // e.g. config["Translation:Path"] or environment variable
-            var cfg = sp.GetRequiredService<IConfiguration>();
-            var externalPath = cfg["Translation:Path"]; // may be empty
+            var opt = sp.GetRequiredService<IAppOptions>();
 
-            if (!string.IsNullOrWhiteSpace(externalPath) && File.Exists(externalPath))
-            {
-                return new TranslatorProvider(externalPath);
-            }
+            var culture = opt?.Localization?.DefaultCulture;
+            culture = string.IsNullOrWhiteSpace(culture) ? "de-DE" : culture.Trim();
 
-            // Fallback: Embedded
             var asm = typeof(TranslatorProvider).Assembly;
-            var resourceName = "tulo.XMLeInvoiceToPdf.Languages.de.xml";
+
+            var resourceName = $"tulo.XMLeInvoiceToPdf.Languages.{culture}.xml";
             return new TranslatorProvider(asm, resourceName);
         });
         //translator for ui
@@ -110,12 +104,8 @@ public static class AddServicesHostBuilderExtension
         {
             var opt = sp.GetRequiredService<IAppOptions>();
 
-            var culture = opt?.Language?.Culture;
-            culture = string.IsNullOrWhiteSpace(culture) ? "en" : culture.Trim();
-
-            // optional: "de-DE" -> "de"
-            var dash = culture.IndexOf('-');
-            if (dash > 0) culture = culture.Substring(0, dash);
+            var culture = opt?.Localization?.DefaultCulture;
+            culture = string.IsNullOrWhiteSpace(culture) ? "de-DE" : culture.Trim();
 
             var file = Path.Combine(AppContext.BaseDirectory, "Languages", $"Ui_{culture}.xml");
             return new TranslatorUiProvider(file);

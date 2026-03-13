@@ -159,37 +159,26 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 var invoiceFileName = invoiceViewModel.InvoiceNumber ?? "NotInvoiceNrPresent";
                 CancellationToken ct = default;
 
-                var tempDir = Path.Combine(Path.GetTempPath(), "Invoices");
-                Directory.CreateDirectory(tempDir);
+                var configuredPath = _appOptions?.Value?.Archive?.OutputPath ?? string.Empty;
+                var archiveRootPath = !string.IsNullOrWhiteSpace(configuredPath) && Path.IsPathFullyQualified(configuredPath) ? configuredPath : Path.GetTempPath();
 
                 string? inputPdfPath = null;
                 string? inputXmlPath = null;
-                string? outputPdfPath = null; //_appOptions.Value;
-
-                bool conversionSucceeded = false;
+                string? outputPdfPath = null;
 
                 var safeInvoiceFileName = MakeSafeFileName(invoiceFileName);
 
-                inputPdfPath = Path.Combine(tempDir, $"{safeInvoiceFileName}.pdf");
-                inputXmlPath = Path.Combine(tempDir, $"{safeInvoiceFileName}.xml");
-                outputPdfPath = Path.Combine(tempDir, $"{safeInvoiceFileName}.pdf");
+                inputPdfPath = Path.Combine(archiveRootPath, $"{safeInvoiceFileName}.pdf");
+                inputXmlPath = Path.Combine(archiveRootPath, $"{safeInvoiceFileName}.xml");
+                outputPdfPath = Path.Combine(archiveRootPath, $"{safeInvoiceFileName}_PdfA3.pdf");
 
-                // write ORIGINAL (non-watermarked) pdf
                 await File.WriteAllBytesAsync(inputPdfPath, pdfMemoryStream.ToArray(), ct);
                 await File.WriteAllTextAsync(inputXmlPath, xmlInvoiceContent, ct);
 
-                // Convert to ZUGFeRD PDF/A-3 (this will read the input PDF, so it must be the original non-watermarked one)
                 var result = await _zugferdPdfA3ConverterService.ConvertAsync(inputPdfPath: inputPdfPath, inputXmlPath: inputXmlPath, outputPdfPath: outputPdfPath, zugferdVersion: ZUGFeRDVersion.Version23, profile: Profile.Extended, format: ZUGFeRDFormats.CII);
 
-                conversionSucceeded = true;
+                invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton; // reset to default state (in case it was set to true for preview)
 
-                if (conversionSucceeded)
-                {
-                    SafeDelete(inputPdfPath);
-                    SafeDelete(inputXmlPath);
-                }
-
-                // Create-only: DO NOT render anything
                 if (!isPreview)
                 {
                     pdfMemoryStream.Dispose();
@@ -225,15 +214,5 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         foreach (var c in Path.GetInvalidFileNameChars())
             value = value.Replace(c, '_');
         return value.Trim();
-    }
-
-    static void SafeDelete(string? path)
-    {
-        try
-        {
-            if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
-                File.Delete(path);
-        }
-        catch { /* ignore */ }
     }
 }

@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace tulo.eInvoice.eInvoiceViewer.Options;
+﻿namespace tulo.eInvoice.eInvoiceViewer.Options;
 internal class AppOptions : IAppOptions
 {
-    public LanguageOptions Language { get; set; } = new();
+    public LocalizationOptions Localization { get; set; } = new();
 }
 
-public sealed class LanguageOptions
+public sealed class LocalizationOptions
 {
-    public string Culture { get; set; } = string.Empty;
+    public string DefaultCulture { get; set; } = "de-DE";
+    public string[] SupportedCultures { get; set; } = Array.Empty<string>();
 }

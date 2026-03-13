@@ -7,16 +7,17 @@ namespace tulo.ResourcesWpfLib.Converters;
 
 public class DecimalToStringConverter : IValueConverter
 {
-    private static readonly CultureInfo _de = new CultureInfo("de-DE");
     // decimal -> string
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value == null) return string.Empty;
 
+        var currentCulture = culture ?? CultureInfo.CurrentCulture;
+
         if (value is decimal d)
         {
             if (d == 0m) return string.Empty;
-            return d.ToString("N2", _de);
+            return d.ToString("N2", currentCulture);
         }
 
         return value.ToString()!;
@@ -31,7 +32,9 @@ public class DecimalToStringConverter : IValueConverter
             return 0m;
         }
 
-        if (decimal.TryParse(s, NumberStyles.Number, _de, out decimal parsed))
+        var currentCulture = culture ?? CultureInfo.CurrentCulture;
+
+        if (decimal.TryParse(s, NumberStyles.Number, currentCulture, out decimal parsed))
         {
             return Math.Round(parsed, 2, MidpointRounding.AwayFromZero);
         }

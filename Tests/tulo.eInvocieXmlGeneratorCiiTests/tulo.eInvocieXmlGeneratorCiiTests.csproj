@@ -8,15 +8,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Language\de.xml" />
-	  <None Remove="Language\en.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="Language\de.xml">
+	  <EmbeddedResource Include="Language\de-DE.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
-	  <EmbeddedResource Include="Language\en.xml">
+	  <EmbeddedResource Include="Language\en-US.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	</ItemGroup>

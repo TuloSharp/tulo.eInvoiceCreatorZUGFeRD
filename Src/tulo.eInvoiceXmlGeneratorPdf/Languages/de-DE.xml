@@ -119,10 +119,10 @@
 	<entry key="HAR">Hektar</entry>	
 	<entry key="KTM">km</entry>	
 	<entry key="KMT">km</entry>	
-	<entry key="LS">pauschal</entry>	
-	<entry key="XPP">pauschal</entry>	
-	<entry key="NAR">Anzahl</entry>	
-	<entry key="NPR">Anzahl Paare</entry>	
+	<entry key="LS">pschl</entry>	
+	<entry key="XPP">pschl</entry>	
+	<entry key="NAR">Anz</entry>	
+	<entry key="NPR">Anz. P</entry>	
 	<entry key="SET">Set</entry>	
 	<entry key="TNE">Tonne</entry>	
 	<entry key="WEE">Woche</entry>	

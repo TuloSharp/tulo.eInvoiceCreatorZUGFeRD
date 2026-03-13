@@ -65,10 +65,10 @@
 	  <None Update="appsettings.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Languages\ui_en.xml">
+	  <None Update="Languages\ui_en-US.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Languages\ui_de.xml">
+	  <None Update="Languages\ui_de-DE.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Properties\Settings.settings">

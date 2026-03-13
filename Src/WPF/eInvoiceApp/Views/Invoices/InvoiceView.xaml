@@ -148,10 +148,6 @@
                         </ToggleButton.CommandParameter>
                     </ToggleButton>
 
-
-
-                    <!--  CommandParameter="{StaticResource TrueFlag}"> IsChecked="{Binding DataContext.IsPreviewEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}" Margin="0,5,0,5" />  -->
-
                     <slidecontrol:SlideToConfirm Grid.Column="10"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
@@ -159,7 +155,6 @@
                                                  ToolTip="{Binding ToolTipCreateElectronicInvoice}"
                                                  ConfirmedText="{Binding ContentSlideConfirmedText}"
                                                  ConfirmCommand="{Binding CreateElectronicInvoiceComponentsCommand}"
-                                                 ConfirmCommandParameter="{StaticResource FalseFlag}"
                                                  ResetSignal="{Binding ResetSlideButton}"
                                                  Width="100"
                                                  Height="34"
@@ -170,7 +165,15 @@
                                                  ThumbHoverBrush ="{StaticResource ButtonIconPrimaryColorBrush}"
                                                  TrackHoverBrush ="{StaticResource BackgroundTextBoxDisableBrushColor}"
                                                  TextBrush="White"
-                                                 TextHoverBrush="{StaticResource ButtonIconPrimaryColorBrush}" />
+                                                 TextHoverBrush="{StaticResource ButtonIconPrimaryColorBrush}" >
+                        <slidecontrol:SlideToConfirm.ConfirmCommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                                <Binding Source="{StaticResource FalseFlag}" />
+                                <Binding Source="{StaticResource TrueFlag}" />
+                            </MultiBinding>
+                        </slidecontrol:SlideToConfirm.ConfirmCommandParameter>
+                    </slidecontrol:SlideToConfirm>
 
                 </Grid>
             </Grid>

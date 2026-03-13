@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 
 namespace tulo.eInvoice.eInvoiceApp.Options;
-internal class AppOptions : IAppOptions
+public class AppOptions : IAppOptions
 {
-    public LanguageOptions Language { get; set; } = new();
+    public LocalizationOptions Localization { get; set; } = new();
 
     public InvoiceOptions Invoice { get; set; } = new();
 
@@ -59,10 +59,11 @@ public sealed class VatsOptions
 }
 public sealed class ArchiveOptions
 {
-    public string OutputPathPdfA3 { get; set; } = string.Empty;
+    public string OutputPath { get; set; } = string.Empty;
 }
 
-public sealed class LanguageOptions
+public sealed class LocalizationOptions
 {
-    public string Culture { get; set; } = string.Empty;
+    public string DefaultCulture { get; set; } = "de-DE";
+    public string[] SupportedCultures { get; set; } = Array.Empty<string>();
 }
