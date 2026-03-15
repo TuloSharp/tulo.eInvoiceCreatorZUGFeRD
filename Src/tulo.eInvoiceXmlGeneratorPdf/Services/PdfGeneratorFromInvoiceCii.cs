@@ -1,7 +1,7 @@
-﻿using tulo.XMLeInvoiceToPdf.Languages;
-using PdfSharp;
+﻿using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using tulo.XMLeInvoiceToPdf.Languages;
 
 namespace tulo.XMLeInvoiceToPdf.Services;
 
@@ -22,12 +22,18 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
     public string GeneratePdfFile(string pdfPath, string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader)
     {
         LoadXmlInvoiceContent(xmlInvoiceContent);
+
+        EnsurePdfSharpInitialized();
+
         using (PdfDocument pdfDoc = new PdfDocument())
         {
+            ApplyDocumentMetadata(pdfDoc);
+
             CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
             ApplyFooterToAllPages(pdfDoc);
             pdfDoc.Save(pdfPath);
         }
+
         return pdfPath;
     }
     #endregion
@@ -36,13 +42,19 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
     public MemoryStream GeneratePdfStream(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader)
     {
         LoadXmlInvoiceContent(xmlInvoiceContent);
+
+        EnsurePdfSharpInitialized();
+
         MemoryStream pdfStream = new MemoryStream();
         using (PdfDocument pdfDoc = new PdfDocument())
         {
+            ApplyDocumentMetadata(pdfDoc);
+
             CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
             ApplyFooterToAllPages(pdfDoc);
             pdfDoc.Save(pdfStream, false);
         }
+
         pdfStream.Position = 0;
         return pdfStream;
     }

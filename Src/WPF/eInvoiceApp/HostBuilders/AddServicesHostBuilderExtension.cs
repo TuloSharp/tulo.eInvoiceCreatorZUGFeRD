@@ -10,13 +10,14 @@ using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Services;
 using tulo.CoreLib.Translators;
-using tulo.CreateZugferdPdfA3.ConverterToPdfA3;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoice.eInvoiceApp.Utilities;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
+using tulo.UpgradeToPdfA3.Interfaces;
+using tulo.UpgradeToPdfA3.Services;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
 
@@ -107,7 +108,18 @@ public static class AddServicesHostBuilderExtension
         services.AddSingleton<ICiiMapper, CiiMapper>();
         services.AddSingleton<IXmlObjectCleaner, XmlObjectCleaner>();
         services.AddSingleton<IPdfWatermarkService, PdfWatermarkService>();
-        services.AddSingleton<IZugferdPdfA3ConverterService, ZugferdPdfA3ConverterService>();
+        #endregion
+
+        #region PDF/A and PDF/A-3
+        services.AddSingleton<IPdfAConverterValidator, PdfAConverterValidator>();
+        services.AddSingleton<IPdfADocumentInfoWriter, PdfADocumentInfoWriter>();
+        services.AddSingleton<IPdfALanguageWriter, PdfALanguageWriter>();
+        services.AddSingleton<IPdfAMetadataWriter, PdfAMetadataWriter>();
+        services.AddSingleton<IPdfAOutputIntentWriter, PdfAOutputIntentWriter>();
+        services.AddSingleton<IToPdfAConverterService, ToPdfAConverterService>();
+        services.AddSingleton<IPdfA3UpgradeValidator, PdfA3UpgradeValidator>();
+        services.AddSingleton<IPdfA3AttachmentWriter, PdfA3AttachmentWriter>();
+        services.AddSingleton<IToPdfA3UpgradeService, ToPdfA3UpgradeService>();
         #endregion
 
         #region Localization

@@ -32,7 +32,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
-		<PackageReference Include="PDFsharp" />
+    <PackageReference Include="PDFsharp-extended" />
 	</ItemGroup>
 
 </Project>

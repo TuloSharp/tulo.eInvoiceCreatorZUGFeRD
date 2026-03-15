@@ -1,17 +1,19 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using s2industries.ZUGFeRD;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using System.IO;
 using System.Windows;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CoreLib.PDFs;
-using tulo.CreateZugferdPdfA3.ConverterToPdfA3;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
+using tulo.UpgradeToPdfA3.Interfaces;
+using tulo.UpgradeToPdfA3.ResultPattern;
 using tulo.XMLeInvoiceToPdf.Services;
 
 namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
@@ -25,8 +27,9 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     private readonly ILogger<CreateElectronicInvoiceComponentsCommand> _logger = collectorCollection.GetService<ILoggerFactory>().CreateLogger<CreateElectronicInvoiceComponentsCommand>();
     private readonly IPdfGeneratorFromInvoice _pdfGeneratorFromInvoice = collectorCollection.GetService<IPdfGeneratorFromInvoice>();
     private readonly IPdfWatermarkService _watermarckService = collectorCollection.GetService<IPdfWatermarkService>();
-    private readonly IZugferdPdfA3ConverterService _zugferdPdfA3ConverterService = collectorCollection.GetService<IZugferdPdfA3ConverterService>();
     private readonly IOptions<AppOptions> _appOptions = collectorCollection.GetService<IOptions<AppOptions>>();
+    private readonly IToPdfAConverterService _toPdfAConverterService = collectorCollection.GetService<IToPdfAConverterService>();
+    private readonly IToPdfA3UpgradeService _toPdfA3UpgradeService = collectorCollection.GetService<IToPdfA3UpgradeService>();
     #endregion
 
     protected override async Task ExecuteAsync(object parameter)
@@ -175,7 +178,26 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 await File.WriteAllBytesAsync(inputPdfPath, pdfMemoryStream.ToArray(), ct);
                 await File.WriteAllTextAsync(inputXmlPath, xmlInvoiceContent, ct);
 
-                var result = await _zugferdPdfA3ConverterService.ConvertAsync(inputPdfPath: inputPdfPath, inputXmlPath: inputXmlPath, outputPdfPath: outputPdfPath, zugferdVersion: ZUGFeRDVersion.Version23, profile: Profile.Extended, format: ZUGFeRDFormats.CII);
+                // Step 1: Convert the generated PDF to PDF/A
+                string intermediatePdfAPath = Path.Combine(archiveRootPath, $"{safeInvoiceFileName}_PdfA.pdf");
+
+                using (PdfDocument pdfDocument = PdfReader.Open(inputPdfPath, PdfDocumentOpenMode.Modify))
+                {
+                    OperationResult pdfAResult = _toPdfAConverterService.ApplyPdfA(pdfDocument, _appOptions.Value);
+
+                    if (!pdfAResult.Success)
+                        //throw new InvalidOperationException($"ApplyPdfA failed: {pdfAResult.Message}");
+
+                    pdfDocument.Save(intermediatePdfAPath);
+                }
+
+                // Step 2: Upgrade PDF/A to PDF/A-3 with embedded XML
+                byte[] xmlBytes = await File.ReadAllBytesAsync(inputXmlPath, ct);
+
+                OperationResult pdfA3Result = _toPdfA3UpgradeService.UpgradeToPdfA3(inputPdfAPath: intermediatePdfAPath, outputPdfA3Path: outputPdfPath, xmlFileName: Path.GetFileName(inputXmlPath), xmlBytes: xmlBytes, appOptions: _appOptions.Value);
+
+                if (!pdfA3Result.Success)
+                    //throw new InvalidOperationException($"UpgradeToPdfA3 failed: {pdfA3Result.Message}");
 
                 invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton; // reset to default state (in case it was set to true for preview)
 

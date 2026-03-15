@@ -20,27 +20,39 @@ public class PdfGeneratorFromInvoiceUbl(ITranslatorProvider translationProvider)
     public string GeneratePdfFile(string pdfPath, string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader)
     {
         LoadXmlInvoiceContent(xmlInvoiceContent);
+
+        EnsurePdfSharpInitialized();
+
         using (PdfDocument pdfDoc = new PdfDocument())
         {
+            ApplyDocumentMetadata(pdfDoc);
+
             CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
             ApplyFooterToAllPages(pdfDoc);
             pdfDoc.Save(pdfPath);
         }
+
         return pdfPath;
     }
     #endregion
 
     #region UBL Invoice Stream
-    public MemoryStream GeneratePdfStream(string xmlFileName, string xmlInvoiceContent, bool hasToRenderHeader)
+    public MemoryStream GeneratePdfStream(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader)
     {
-        LoadXmlInvoiceContent(xmlFileName);
+        LoadXmlInvoiceContent(xmlInvoiceContent);
+
+        EnsurePdfSharpInitialized();
+
         MemoryStream pdfStream = new MemoryStream();
         using (PdfDocument pdfDoc = new PdfDocument())
         {
-            CreatePdfContent(xmlInvoiceFileName: xmlFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
+            ApplyDocumentMetadata(pdfDoc);
+
+            CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
             ApplyFooterToAllPages(pdfDoc);
             pdfDoc.Save(pdfStream, false);
         }
+
         pdfStream.Position = 0;
         return pdfStream;
     }

@@ -44,12 +44,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PDFsharp" />
-		<PackageReference Include="QRCoder" />
-		<PackageReference Include="Svg" />
-		<PackageReference Include="System.Xml.XmlDocument" />
-		<PackageReference Include="System.Text.RegularExpressions" />
+	  <PackageReference Include="PDFsharp-extended" />
+	  <PackageReference Include="QRCoder"/>
+	  <PackageReference Include="Svg" />
 	</ItemGroup>
+
 
 	<ItemGroup>
 		<None Update="icons\EmailAddress.svg">

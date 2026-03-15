@@ -14,7 +14,6 @@ using tulo.CoreLib.Exceptions;
 using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Translators;
-using tulo.CreateZugferdPdfA3.ConverterToPdfA3;
 using tulo.eInvoice.eInvoiceApp;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Properties;
@@ -25,6 +24,7 @@ using tulo.eInvoiceApp;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.SerilogLib.Common;
+using tulo.UpgradeToPdfA3.Interfaces;
 using tulo.XMLeInvoiceToPdf.Services;
 using tulo.XMLeInvoiceToPdf.Utilities;
 using WpfApplication = System.Windows.Application;
@@ -134,11 +134,21 @@ public partial class App : WpfApplication
         AddToCollectorRequired<IInvoiceBuilderService>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IInvoicePositionService>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IInvoicePositionLookupService>(scope.ServiceProvider, collector);
-        AddToCollectorRequired<IZugferdPdfA3ConverterService>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IPdfGeneratorFromInvoice>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IXmlCiiExporter>(scope.ServiceProvider, collector);
         AddToCollectorRequired<ICiiMapper>(scope.ServiceProvider, collector);
         AddToCollectorRequired<ISnapShotService>(scope.ServiceProvider, collector);
+
+        // --------------- PDF! / PDFA3 ----------------
+        AddToCollectorRequired<IPdfAConverterValidator>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IToPdfA3UpgradeService>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IPdfADocumentInfoWriter>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IPdfALanguageWriter>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IPdfAMetadataWriter>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IPdfAOutputIntentWriter>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IToPdfAConverterService>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IPdfA3UpgradeValidator>(scope.ServiceProvider, collector);
+        //AddToCollectorRequired<IPdfA3AttachmentWriter>(scope.ServiceProvider, collector);
         #endregion
 
         #region App Process Name

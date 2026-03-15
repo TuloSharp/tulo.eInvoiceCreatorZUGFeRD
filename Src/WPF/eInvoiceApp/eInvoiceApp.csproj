@@ -42,9 +42,9 @@
 		<ProjectReference Include="..\..\Common\tulo.LoadingSpinnerControl\tulo.LoadingSpinnerControl.csproj" />
 		<ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
 		<ProjectReference Include="..\..\Common\tulo.SerilogLib\tulo.SerilogLib.csproj" />
-		<ProjectReference Include="..\..\tulo.CreateZugferdPdfA3\tulo.CreateZugferdPdfA3.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvocieXmlGeneratorCii\tulo.eInvoiceXmlGeneratorCii.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
+		<ProjectReference Include="..\..\tulo.UpgradeToPdfA3\tulo.UpgradeToPdfA3.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

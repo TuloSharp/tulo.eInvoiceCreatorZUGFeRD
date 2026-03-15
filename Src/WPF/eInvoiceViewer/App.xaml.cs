@@ -18,6 +18,7 @@ using tulo.eInvoice.eInvoiceViewer.Options;
 using tulo.eInvoice.eInvoiceViewer.Properties;
 using tulo.eInvoice.eInvoiceViewer.Utilities;
 using tulo.SerilogLib.Common;
+using tulo.XMLeInvoiceToPdf.Utilities;
 using WpfApplication = System.Windows.Application;
 
 namespace tulo.eInvoiceViewer;

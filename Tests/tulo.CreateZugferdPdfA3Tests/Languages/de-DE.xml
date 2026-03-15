@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+	<entry key="PdfDisclamerText">Dieses Dokument visualisiert die elektronische Rechnung im XML-Format. Es stellt die im XML enthaltenen Daten dar; eine Prüfung auf Richtigkeit, Vollständigkeit oder Gültigkeit erfolgt nicht:</entry>
+	<entry key="LabelInvoiceTable">Folgende Leistungen werden in Rechnung gestellt</entry>
+	<entry key="InvoiceTypeCode">Rechnungsart</entry>
+	<entry key="PaymentCurrencyCode">Währung:</entry>
+	<entry key="SalesOrderReference">Auftragsnummer</entry>
+	<entry key="InvoiceTotalAmountWithoutVat">Gesamtbetrag Netto</entry>
+	<entry key="InvoiceTotalVatAmount">Gesamtbetrag Steuer</entry>
+	<entry key="InvoiceChargeTotalAmount">Aufschlag/Zuschlag</entry>
+	<entry key="InvoiceAllowanceTotalAmount">Rabatt</entry>
+	<entry key="InvoiceLineAllowanceReason">Nachlassgrund</entry>
+	<entry key="PaidAmount">Gezahlter Betrag</entry>
+	<entry key="AmountDueForPayment">Fälliger Betrag</entry>
+	<entry key="VatCategoryCode">Umsatzsteuerkategorie:</entry>
+	<entry key="VatCategoryRate">Umsatzsteuersatz</entry>
+	<entry key="PaymentTerms">Skonto;|weitere Zahlungsbedingungen</entry>
+	<entry key="PaymentDueDate">Fälligkeitsdatum</entry>
+	<entry key="PaymentTypeCode">Zahlungsmittel-Code</entry>
+	<entry key="RemittanceInfo">Verwendungszweck</entry>
+	<entry key="PaymentCardPrimaryAccountNr">Kartennummer</entry>
+	<entry key="PaymentCardHolderName">Karteninhaber</entry>
+	<entry key="InvoiceNote">Bemerkung</entry>
+	<entry key="BusinessProcessTypeId">Prozesskennung</entry>
+	<entry key="SpecificationId">Spezifikationskennung</entry>
+	<entry key="ItemPriceDiscount" id="BT-147">Rabatt(netto)</entry>
+	<entry key="OverviewCreditNote">Gutschrift</entry>
+	<entry key="OverviewSalesTax">Aufschlüsselung der Umsatzsteuer auf Rechnungsebene</entry>
+	<entry key="OverviewPaymentsData">Zahlungskonditionen &amp; Bankverbindung</entry>
+	<entry key="OverviewDiscount">Nachlass auf Rechnungsebene</entry>
+	<entry key="OverviewHandyFlatRate">Aufschlag/Zuschlag auf Rechnungsebene</entry>
+	<entry key="OverviewInvoiceDescription">Beschreibung der Rechnungspositionen auf Rechnungsebene</entry>
+	<entry key="OverviewRemarks">Bemerkungen zur Rechnung</entry>
+	<entry key="OverviewVarios">Sonstiges</entry>
+	<entry key="OverviewInvoiceInfo">Rechnung</entry>
+	<entry key="OverviewCreditInfo">Gutschrift</entry>
+	<entry key="OverviewDirectDebit">Lastschrift</entry>
+	<entry key="OverviewSelfBilledInvoiceInfo">Selbstfakturierte Rechnung</entry>
+	<entry key="OverviewSelfBilledCreditNoteInfo">Selbstfakturierte Gutschrift</entry>
+	<entry key="OverviewConsolidatedInvoice">Konsolidierte Rechnung</entry>
+	<entry key="OverviewInvoiceCorrection">Rechnungskorrektur</entry>
+	<entry key="OverviewAdvancePaymentInvoiceInfo">Vorauszahlungsrechnung</entry>
+	<entry key="OverviewProformaInvoiceInfo">Proformarechnung</entry>
+
+	<entry key="NoLiabilityInfo">Wir übernehmen keine Haftung für die Richtigkeit der Daten.</entry>
+	<entry key="Details">Details</entry>
+	<entry key="Disclaimer">Wir übernehmen keine Haftung für die Richtigkeit der Daten.</entry>
+	<entry key="NoDdata">Keine Daten vorhanden</entry>
+	<entry key="Net">netto</entry>
+	<entry key="Gross">brutto</entry>
+	<entry key="NoContent">Bereiche ohne Inhalte werden nicht dargestellt!</entry>
+	<entry key="Description">Beschreibung</entry>
+	<entry key="Price">Preis</entry>
+	<entry key="PriceUnit">Preiseinheit</entry>
+	<entry key="Vat">USt. Satz</entry>
+	<entry key="VatID">USt.-Id</entry>
+	<entry key="TaxNumber">StNr.</entry>
+	<entry key="TaxCcode">St. Code</entry>
+	<entry key="Total">Gesamt</entry>
+	<entry key="Page">Seite</entry>
+	<entry key="SubjectCode">Betreff</entry>
+	
+	<entry key="ChargeIndicatorFee">Gebühr</entry>
+	<entry key="ChargeIndicatorDiscount">Rabatt</entry>
+
+	<entry key="SubtotalTaxTableTypeCode">Steuertyp</entry>
+	<entry key="SubtotalTaxTableCategoryCode">Steuerkennzeichen</entry>
+	<entry key="SubtotalTaxTableReason">Grund</entry>
+	<entry key="SubtotalTaxTablePercent">Steuer[%]</entry>
+	<entry key="SubtotalTaxTableBaseAmount">Nettobetrag</entry>
+	<entry key="SubtotalTaxTableAmount">Steuerbetrag</entry>
+	<entry key="ProjectId">Projektnummer:</entry>
+	<entry key="ProjectName">Projektname:</entry>
+	<entry key="ContractIissuerAssignedId">Vertragsnummer:</entry>
+	<entry key="BuyerIssuerAssignedId">Bestellnummer:</entry>
+	
+	<entry key="DirectDebitMandantRef">Lastschrift|Mandatsreferenz:</entry>
+	<entry key="DirectDebitIBAN">Lastschrift IBAN:</entry>
+	<entry key="DirectDebitCreditorId">Lastschrift|Gläubiger-ID:</entry>
+	<entry key="OccurrenceDateTime">Leistungsdatum: </entry>
+	<entry key="BillingDateTimeFromTo">Abrechnung vom StartDate bis EndDate</entry>
+
+	<entry key="InvoiceNr">Rechnungsnummer</entry>
+	<entry key="InvoiceIssueDate">Rechnungsdatum</entry>
+	<entry key="BuyerRefId">Geschäftspartner Nr</entry>
+	
+	<entry key="Overview">Übersicht</entry>
+	<entry key="OverviewBuyer">Kundenname / Firma</entry>
+	<entry key="OverviewSeller">Firma</entry>
+	
+	<entry key="PaymentAccountId">IBAN</entry>
+	<entry key="PaymentServiceProviderId">BIC</entry>
+	<entry key="PaymentMeansMsg">Zahlungsmittel:</entry>
+	<entry key="PaymentAccountName">Kontoinhaber</entry>
+	<entry key="PaymentMeansInfo">Zahlungsmittel Info</entry>
+	
+	<entry key="PdfFooterTitle">Zahlungsinformation des Rechnungsstellers:</entry>
+	
+	<!--#regiom currency-->
+	<entry key="EUR">€</entry>
+	<!--#endregion -->
+
+	<entry key="InfoFormatXML">XML Format</entry>
+
+	<!--#region unite code -->
+	<entry key="C62">Stk</entry>		
+	<entry key="HUR">Std</entry>		
+	<entry key="KGM">kg</entry>		
+	<entry key="LTR">Liter</entry>		
+	<entry key="MTR">m</entry>	
+	<entry key="LM">lfm</entry>	
+	<entry key="M2">m²</entry>		
+	<entry key="MTK">m²</entry>		
+	<entry key="MTQ">m³</entry>		
+	<entry key="M3">m³</entry>		
+	<entry key="DAY">Tag</entry>		
+	<entry key="MIN">Minute</entry>	
+	<entry key="SEC">Sekunde</entry>	
+	<entry key="HAR">Hektar</entry>	
+	<entry key="KTM">km</entry>	
+	<entry key="KMT">km</entry>	
+	<entry key="LS">pschl</entry>	
+	<entry key="XPP">pschl</entry>	
+	<entry key="NAR">Anz</entry>	
+	<entry key="NPR">Anz. P</entry>	
+	<entry key="SET">Set</entry>	
+	<entry key="TNE">Tonne</entry>	
+	<entry key="WEE">Woche</entry>	
+	<entry key="H87">Stk</entry>	
+	<entry key="P1">%</entry>	
+	<!--#endregion -->
+	
+	<!-- Payment means typecode -->
+	<entry key="58">(SEPA credit transfer)</entry>
+	<entry key="59">(SEPA direct debit)</entry>
+	<entry key="57">(Standing agreement)</entry>
+	<entry key="30">(Credit transfer (non-SEPA))</entry>
+	<entry key="49">(Direct debit (non-SEPA))</entry>
+	<entry key="48">(Bank card)</entry>
+
+	<!--Umsatzsteuerkategorie-->
+	<entry key="AE">Umsatzsteuer-Umkehrverfahren (VAT Reverse Charge)</entry>
+	<entry key="E">Steuerbefreit (Exempt from tax)</entry>
+	<entry key="G">Kostenlose Ausfuhrsendung, ohne Steuer (Free export item, tax not charged)</entry>
+	<entry key="K">Mehrwertsteuerbefreiung  für EEA(VAT exempt for EEA intra-community supply of goods and services)</entry>
+	<entry key="L">Ermäßigter Steuersatz (Canary Islands general indirect tax)</entry>
+	<entry key="M">Gemischte Steuersätze (Tax for production, services and importation in Ceuta and Melilla)</entry>
+	<entry key="O">Nicht im Steuerbereich (Services outside scope of tax)</entry>
+	<entry key="S">Regelsteuersatz (Standard rate)</entry>
+	<entry key="Z">Nullsteuersatz (Zero rated goods)</entry>
+	<entry key="NS">Nicht steuerpflichtig (Not Subject to Tax)</entry>
+
+	<!--#region Invoice Table-->
+ <entry key="InvoiceTableNr">#</entry>
+  <entry key="InvoiceTablePosDescription">Positionsbeschreibung</entry>
+  <entry key="InvoiceTablePosText">Positionsbeschreibung</entry>
+  <entry key="InvoiceTableItemNr">Artikelnummer \ EAN</entry>
+  <entry key="InvoiceTableQuantity">Menge</entry>
+  <entry key="InvoiceTableUnit">Einheit</entry>
+  <entry key="InvoiceTableUnitNetPrice">St.-Pr.</entry>
+  <entry key="InvoiceTableTaxPrecentage">MwSt. [%]</entry>
+  <entry key="InvoiceTableNetAmount">Netto</entry>
+  <entry key="InvoiceTableGrossAmount">Brutto</entry>
+  <entry key="InvoiceTableTotalNetAmount">Gesamtbetrag Netto</entry>
+  <entry key="InvoiceTableTotalTaxes">Gesamtbetrag Steuern</entry>
+  <entry key="InvoiceTableTotalGrossAmount">Gesamtbetrag Brutto</entry>
+  <entry key="SumInvoiceLineNetAmount">Gesamtbetrag Brutto</entry>
+	<!--#endregion -->
+</properties>

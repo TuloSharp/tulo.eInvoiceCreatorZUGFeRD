@@ -1,6 +1,7 @@
 ﻿using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
+using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 using QRCoder;
 using Svg;
@@ -14,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 using tulo.XMLeInvoiceToPdf.Languages;
+using tulo.XMLeInvoiceToPdf.Utilities;
 
 namespace tulo.XMLeInvoiceToPdf.Services;
 
@@ -43,33 +45,165 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
     protected CultureInfo culture = CultureInfo.GetCultureInfo("de-DE");
 
+    private static bool _pdfSharpInitialized;
+    private static readonly object _pdfSharpInitLock = new();
+
+
+    protected static void EnsurePdfSharpInitialized()
+    {
+        if (_pdfSharpInitialized)
+            return;
+
+        lock (_pdfSharpInitLock)
+        {
+            if (_pdfSharpInitialized)
+                return;
+
+            GlobalFontSettings.FontResolver ??= new EmbeddedFontResolver();
+
+            _pdfSharpInitialized = true;
+        }
+    }
+
+    protected virtual void ApplyDocumentMetadata(PdfDocument pdfDocument)
+    {
+        if (pdfDocument == null)
+            return;
+
+        string invoiceNumber = SafeMetadataValue(TryGetInvoiceNumber());
+        string invoiceDate = SafeMetadataValue(TryGetInvoiceDate());
+        string sellerName = SafeMetadataValue(TryGetSellerName());
+        string buyerName = SafeMetadataValue(TryGetBuyerName());
+        string invoiceType = SafeMetadataValue(TryGetInvoiceTypeTitle());
+
+        pdfDocument.Info.Title = $"E-Rechnung {invoiceNumber}";
+        pdfDocument.Info.Author = sellerName;
+        pdfDocument.Info.Subject = $"{invoiceType} vom {invoiceDate}";
+        pdfDocument.Info.Keywords = $"E-Rechnung, XML, PDF, {invoiceNumber}, {sellerName}, {buyerName}";
+        pdfDocument.Info.Creator = "tulo.XMLeInvoiceToPdf";
+        //pdfDocument.Info.Producer = "PdfSharp Extended";
+        pdfDocument.Info.CreationDate = DateTime.Now;
+        pdfDocument.Info.ModificationDate = DateTime.Now;
+    }
+
+    protected virtual string TryGetInvoiceNumber()
+    {
+        try
+        {
+            return GetFirstExistingValue("/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:ID", "/*[local-name()='Invoice']/*[local-name()='ID']", "/*[local-name()='CreditNote']/*[local-name()='ID']");
+        }
+        catch
+        {
+            return ContentNotFound;
+        }
+    }
+
+    protected virtual string TryGetInvoiceDate()
+    {
+        try
+        {
+            return GetFirstExistingValue("/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString", "/*[local-name()='Invoice']/*[local-name()='IssueDate']", "/*[local-name()='CreditNote']/*[local-name()='IssueDate']");
+        }
+        catch
+        {
+            return ContentNotFound;
+        }
+    }
+
+    protected virtual string TryGetSellerName()
+    {
+        try
+        {
+            return GetFirstExistingValue("/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:Name", "/*[local-name()='Invoice']//*[local-name()='AccountingSupplierParty']//*[local-name()='Party']//*[local-name()='Name']", "/*[local-name()='CreditNote']//*[local-name()='AccountingSupplierParty']//*[local-name()='Party']//*[local-name()='Name']");
+        }
+        catch
+        {
+            return ContentNotFound;
+        }
+    }
+
+    protected virtual string TryGetBuyerName()
+    {
+        try
+        {
+            return GetFirstExistingValue("/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:Name", "/*[local-name()='Invoice']//*[local-name()='AccountingCustomerParty']//*[local-name()='Party']//*[local-name()='Name']", "/*[local-name()='CreditNote']//*[local-name()='AccountingCustomerParty']//*[local-name()='Party']//*[local-name()='Name']");
+        }
+        catch
+        {
+            return ContentNotFound;
+        }
+    }
+
+    protected virtual string TryGetInvoiceTypeTitle()
+    {
+        try
+        {
+            return GetTitleInvoiceTypeCode("/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:TypeCode");
+        }
+        catch
+        {
+            return "E-Rechnung";
+        }
+    }
+
+    protected virtual string GetFirstExistingValue(params string[] xpaths)
+    {
+        if (InvoiceDoc == null || Nsmgr == null || xpaths == null || xpaths.Length == 0)
+            return ContentNotFound;
+
+        foreach (var xpath in xpaths)
+        {
+            try
+            {
+                var node = InvoiceDoc.SelectSingleNode(xpath, Nsmgr);
+                var value = node?.InnerText?.Trim();
+
+                if (!string.IsNullOrWhiteSpace(value))
+                    return value;
+            }
+            catch
+            {
+            }
+        }
+
+        return ContentNotFound;
+    }
+
+    protected static string SafeMetadataValue(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value) || value == ContentNotFound)
+            return "N/A";
+
+        return value.Trim();
+    }
+
     #region Fonts
     protected static string familyFontName = "Roboto";
     protected XFont fontTitle = new(familyFontName, 12);
-    protected XFont fontTableTitle = new (familyFontName, 10, XFontStyleEx.Bold);
-    protected XFont fontBody = new (familyFontName, 8);
-    protected XFont fontDisclamerHeader = new (familyFontName, 10);
-    protected XFont fontTextHeader = new (familyFontName, 8);
-    protected XFont fontTitleFooter = new (familyFontName, 8, XFontStyleEx.Bold);
-    protected XFont fontFooter = new (familyFontName, 7);
-    protected XFont fontTitleInfo = new (familyFontName, 12, XFontStyleEx.Bold);
-    protected XFont fontColumnHeader = new (familyFontName, 8, XFontStyleEx.Bold);
-    protected XFont fontTotalAmount = new (familyFontName, 10, XFontStyleEx.Bold);
-    protected XFont fontTableBody = new (familyFontName, 8);
+    protected XFont fontTableTitle = new(familyFontName, 10, XFontStyleEx.Bold);
+    protected XFont fontBody = new(familyFontName, 8);
+    protected XFont fontDisclamerHeader = new(familyFontName, 10);
+    protected XFont fontTextHeader = new(familyFontName, 8);
+    protected XFont fontTitleFooter = new(familyFontName, 8, XFontStyleEx.Bold);
+    protected XFont fontFooter = new(familyFontName, 7);
+    protected XFont fontTitleInfo = new(familyFontName, 12, XFontStyleEx.Bold);
+    protected XFont fontColumnHeader = new(familyFontName, 8, XFontStyleEx.Bold);
+    protected XFont fontTotalAmount = new(familyFontName, 10, XFontStyleEx.Bold);
+    protected XFont fontTableBody = new(familyFontName, 8);
     #endregion
 
     #region Colors
     protected XColor _darkBlueColor = XColor.FromArgb(0, 102, 255);
-    protected XSolidBrush _darkBlueBrushColor = new (XColor.FromArgb(0, 102, 255));
-    protected XSolidBrush _blueBrushColor = new (XColor.FromArgb(230, 238, 246));
-    protected XSolidBrush _lightBlueBrushColor = new (XColor.FromArgb(230, 247, 255));
+    protected XSolidBrush _darkBlueBrushColor = new(XColor.FromArgb(0, 102, 255));
+    protected XSolidBrush _blueBrushColor = new(XColor.FromArgb(230, 238, 246));
+    protected XSolidBrush _lightBlueBrushColor = new(XColor.FromArgb(230, 247, 255));
     protected XColor _blueColor = XColor.FromArgb(230, 238, 246);
-    protected XPen _bluePen = new (XColor.FromArgb(230, 238, 246), 0.5);
-    protected XSolidBrush _grayBrushColor = new (XColor.FromArgb(230, 232, 235));
+    protected XPen _bluePen = new(XColor.FromArgb(230, 238, 246), 0.5);
+    protected XSolidBrush _grayBrushColor = new(XColor.FromArgb(230, 232, 235));
     protected XColor _grayColor = XColor.FromArgb(230, 232, 235);
-    protected XPen _grayPen = new (XColor.FromArgb(230, 232, 235), 0.5);
-    protected XSolidBrush _blackBrushColor = new (XColor.FromArgb(0, 0, 0));
-    protected XSolidBrush _orangeBrushColor = new (XColor.FromArgb(245, 124, 0));
+    protected XPen _grayPen = new(XColor.FromArgb(230, 232, 235), 0.5);
+    protected XSolidBrush _blackBrushColor = new(XColor.FromArgb(0, 0, 0));
+    protected XSolidBrush _orangeBrushColor = new(XColor.FromArgb(245, 124, 0));
     protected XBrush _invoiceBoxBrush = new XSolidBrush(XColor.FromArgb(240, 243, 247));
     #endregion
 
@@ -307,7 +441,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
         yPosition += (int)Math.Ceiling(titleH + afterTitleGap);
 
-    
+
         foreach (var item in visibleItems)
         {
             AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition);
@@ -496,7 +630,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
                 y += lineH;
 
                 if (f == nameBold && k == lines.Length - 1)
-                    y += 4;  
+                    y += 4;
             }
         }
 
@@ -879,7 +1013,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
                 double x = startX + GetColumnOffset(columnWidths, i);
                 xGraphics.DrawLine(gridPen, x, yTop, x, yBot);
             }
-            
+
             // No. | Description  | Item/EAN  | Quantity  | Unit  | Unit price  | VAT  | Net  | Gross
             XStringFormat[] aligns = { XStringFormats.CenterRight, XStringFormats.TopLeft, XStringFormats.TopLeft, XStringFormats.Center, XStringFormats.Center, XStringFormats.CenterRight, XStringFormats.CenterRight, XStringFormats.CenterRight, XStringFormats.CenterRight };
 
@@ -1122,7 +1256,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             }
         }
 
-        int required = titleH + tableH + 6; 
+        int required = titleH + tableH + 6;
 
         AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition, requiredHeight: required);
 
@@ -1205,7 +1339,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             // Label (immer schwarz)
             xGraphics.DrawString(fieldLabel + ":", font, XBrushes.Black, new XRect(boxX + padX, y, labelW, rowH), XStringFormats.CenterLeft);
 
-            
+
             XBrush valueBrush = isTotal ? _darkBlueBrushColor : _blackBrushColor;
 
             xGraphics.DrawString(fieldValue + " " + currency, font, valueBrush, new XRect(boxX + padX + labelW, y, valueW - rightInnerPadding, rowH), XStringFormats.CenterRight);

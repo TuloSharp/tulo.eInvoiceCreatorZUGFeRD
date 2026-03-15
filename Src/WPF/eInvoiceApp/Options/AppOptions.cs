@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
+using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
 
 namespace tulo.eInvoice.eInvoiceApp.Options;
-public class AppOptions : IAppOptions
+public class AppOptions : MainAppOptions, PdfAAppOptions
 {
     public LocalizationOptions Localization { get; set; } = new();
 
@@ -10,6 +12,8 @@ public class AppOptions : IAppOptions
     public ArchiveOptions Archive { get; set; } = new();
 
     public VatsOptions Vats { get; set; } = new();
+
+    public tulo.UpgradeToPdfA3.Options.PdfAOptions PdfA { get; set; } = new();
 }
 
 public class InvoiceOptions
