@@ -28,6 +28,8 @@ using tulo.UpgradeToPdfA3.Interfaces;
 using tulo.XMLeInvoiceToPdf.Services;
 using tulo.XMLeInvoiceToPdf.Utilities;
 using WpfApplication = System.Windows.Application;
+using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
+using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
 
 namespace tulo.eInvoiceManager;
 
@@ -116,7 +118,9 @@ public partial class App : WpfApplication
         var collector = scope.ServiceProvider.GetRequiredService<ICollectorCollection>();
 
         //---------------- AppOptions ----------------
-        AddToCollectorRequired<IAppOptions>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<AppOptions>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<MainAppOptions>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<PdfAAppOptions>(scope.ServiceProvider, collector);
 
         //---------------- LiveLogs in UI ----------------
         AddToCollectorRequired<IObservableLogSink>(scope.ServiceProvider, collector);

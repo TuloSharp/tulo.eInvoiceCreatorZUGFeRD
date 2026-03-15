@@ -20,6 +20,8 @@ using tulo.UpgradeToPdfA3.Interfaces;
 using tulo.UpgradeToPdfA3.Services;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
+using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
+using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
 
 namespace tulo.eInvoice.eInvoiceApp.HostBuilders;
 public static class AddServicesHostBuilderExtension
@@ -98,7 +100,12 @@ public static class AddServicesHostBuilderExtension
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+        services.AddSingleton(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+        //services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+
+        // optional, falls andere Services weiterhin die Interfaces brauchen
+        services.AddSingleton<MainAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+        services.AddSingleton<PdfAAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
         #endregion
 
         #region Create Invoice

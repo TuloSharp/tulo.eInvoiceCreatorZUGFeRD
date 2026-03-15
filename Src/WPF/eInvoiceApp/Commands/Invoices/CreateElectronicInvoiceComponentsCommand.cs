@@ -15,6 +15,8 @@ using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.UpgradeToPdfA3.Interfaces;
 using tulo.UpgradeToPdfA3.ResultPattern;
 using tulo.XMLeInvoiceToPdf.Services;
+using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
+using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
 
 namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 
@@ -162,7 +164,8 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 var invoiceFileName = invoiceViewModel.InvoiceNumber ?? "NotInvoiceNrPresent";
                 CancellationToken ct = default;
 
-                var configuredPath = _appOptions?.Value?.Archive?.OutputPath ?? string.Empty;
+                //var configuredPath = _appOptions?.Value?.Archive?.OutputPath ?? string.Empty;
+                var configuredPath = string.Empty;
                 var archiveRootPath = !string.IsNullOrWhiteSpace(configuredPath) && Path.IsPathFullyQualified(configuredPath) ? configuredPath : Path.GetTempPath();
 
                 string? inputPdfPath = null;
