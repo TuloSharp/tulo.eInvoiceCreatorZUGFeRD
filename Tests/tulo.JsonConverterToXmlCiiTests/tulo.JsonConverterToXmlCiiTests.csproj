@@ -31,6 +31,9 @@
 		<None Update="JsonExamples\EXTENDED_Kostenrechnung.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="JsonExamples\ZF_Extended__Abschlagsrechnung_SubInvoiceLine_u_LV_Nr_.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="JsonExamples\ZF_Extended__Sammelrechnung_3_Bestellungen.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
