@@ -146,13 +146,13 @@ public partial class App : WpfApplication
         // --------------- PDF! / PDFA3 ----------------
         AddToCollectorRequired<IPdfAConverterValidator>(scope.ServiceProvider, collector);
         AddToCollectorRequired<IToPdfA3UpgradeService>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IPdfADocumentInfoWriter>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IPdfALanguageWriter>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IPdfAMetadataWriter>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IPdfAOutputIntentWriter>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IToPdfAConverterService>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IPdfA3UpgradeValidator>(scope.ServiceProvider, collector);
-        //AddToCollectorRequired<IPdfA3AttachmentWriter>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IPdfADocumentInfoWriter>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IPdfALanguageWriter>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IPdfAMetadataWriter>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IPdfAOutputIntentWriter>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IToPdfAConverterService>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IPdfA3UpgradeValidator>(scope.ServiceProvider, collector);
+        AddToCollectorRequired<IPdfA3AttachmentWriter>(scope.ServiceProvider, collector);
         #endregion
 
         #region App Process Name

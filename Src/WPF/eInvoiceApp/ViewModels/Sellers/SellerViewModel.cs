@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.Extensions.Options;
+using System.Collections.ObjectModel;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.ViewModels;
 using tulo.CoreLib.Translators;
@@ -9,7 +10,7 @@ namespace tulo.eInvoice.eInvoiceApp.ViewModels.Sellers;
 public class SellerViewModel : BaseViewModel
 {
     #region Get Services / Stores from CollectorCollection
-    private readonly IAppOptions _appOptions;
+    private readonly IOptions<AppOptions> _appOptions;
     private readonly ITranslatorUiProvider _translatorUiProvider;
     #endregion
 
@@ -129,7 +130,7 @@ public class SellerViewModel : BaseViewModel
     public SellerViewModel(ICollectorCollection collectorCollection)
     {
         #region Get Services / Stores from CollectorCollection
-        _appOptions = collectorCollection.GetService<IAppOptions>();
+        _appOptions = collectorCollection.GetService<IOptions<AppOptions>>();
         _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
@@ -137,9 +138,9 @@ public class SellerViewModel : BaseViewModel
         FillAllSellerPlaceholders();
         FillAllSellerContents();
 
-        MapperInvoiceSellerOptions(_appOptions);
-        MapperInvoicePaymentOptions(_appOptions);
-        MapperInvoiceNotesOptions(_appOptions);
+        MapperInvoiceSellerOptions(_appOptions.Value);
+        MapperInvoicePaymentOptions(_appOptions.Value);
+        MapperInvoiceNotesOptions(_appOptions.Value);
     }
 
     private void MapperInvoiceSellerOptions(IAppOptions appOptions)

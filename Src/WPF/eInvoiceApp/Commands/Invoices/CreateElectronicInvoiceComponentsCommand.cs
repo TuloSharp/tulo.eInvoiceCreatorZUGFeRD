@@ -190,7 +190,15 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                     OperationResult pdfAResult = _toPdfAConverterService.ApplyPdfA(pdfDocument, _upgradeToPdfA3Options.Value);
 
                     if (!pdfAResult.Success)
-                        //throw new InvalidOperationException($"ApplyPdfA failed: {pdfAResult.Message}");
+                    {
+                        invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
+
+                        if (!isPreview)
+                            pdfMemoryStream.Dispose();
+
+                        invoiceViewModel.StatusMessage = $"ApplyPdfA failed: {pdfAResult.Message}";
+                        return;
+                    }
 
                     pdfDocument.Save(intermediatePdfAPath);
                 }
@@ -201,9 +209,17 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 OperationResult pdfA3Result = _toPdfA3UpgradeService.UpgradeToPdfA3(inputPdfAPath: intermediatePdfAPath, outputPdfA3Path: outputPdfPath, xmlFileName: Path.GetFileName(inputXmlPath), xmlBytes: xmlBytes, appOptions: _upgradeToPdfA3Options.Value);
 
                 if (!pdfA3Result.Success)
-                    //throw new InvalidOperationException($"UpgradeToPdfA3 failed: {pdfA3Result.Message}");
+                {
+                    invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
 
-                invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton; // reset to default state (in case it was set to true for preview)
+                    if (!isPreview)
+                        pdfMemoryStream.Dispose();
+
+                    invoiceViewModel.StatusMessage = $"UpgradeToPdfA3 failed: {pdfA3Result.Message}";
+                    return;
+                }
+
+                invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
 
                 if (!isPreview)
                 {

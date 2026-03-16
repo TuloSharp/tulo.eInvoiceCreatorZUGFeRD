@@ -1,4 +1,5 @@
-﻿using tulo.CommonMVVM.Collector;
+﻿using Microsoft.Extensions.Options;
+using tulo.CommonMVVM.Collector;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
@@ -8,8 +9,10 @@ namespace tulo.eInvoice.eInvoiceApp.Services;
 
 public sealed class InvoiceBuilderService(ICollectorCollection collectorCollection) : IInvoiceBuilderService
 {
+    #region Get filled via CollectorCollection
     private readonly IInvoicePositionStore _invoicePositionStore = collectorCollection.GetService<IInvoicePositionStore>();
-    private readonly IAppOptions _appOptions = collectorCollection.GetService<IAppOptions>();
+    private readonly IOptions<AppOptions> _appOptions = collectorCollection.GetService<IOptions<AppOptions>>();
+    #endregion
 
     public async Task<Invoice> BuildAsync(InvoiceViewModel invoiceViewModel, CancellationToken ct = default)
     {
@@ -190,7 +193,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
     // Applies seller data from appsettings Invoice.Seller.
     private void ApplySellerFromAppOptions(Invoice invoice)
     {
-        var s = _appOptions.Invoice?.Seller;
+        var s = _appOptions.Value.Invoice?.Seller;
         if (s == null) return;
 
         invoice.Seller ??= new eInvoiceXmlGeneratorCii.Models.Party();
@@ -217,7 +220,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
     // Applies payment account data from appsettings Invoice.Payment.
     private void ApplyPaymentAccountFromAppOptions(Invoice invoice)
     {
-        var p = _appOptions.Invoice?.Payment;
+        var p = _appOptions.Value.Invoice?.Payment;
         if (p == null) return;
 
         invoice.Payment ??= new PaymentDetails();
@@ -229,7 +232,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
     // Adds invoice notes from appsettings Invoice.Notes.
     private void ApplyNotesFromAppOptions(Invoice invoice)
     {
-        var notes = _appOptions.Invoice?.Notes;
+        var notes = _appOptions.Value.Invoice?.Notes;
         if (notes == null) return;
 
         foreach (var n in notes)

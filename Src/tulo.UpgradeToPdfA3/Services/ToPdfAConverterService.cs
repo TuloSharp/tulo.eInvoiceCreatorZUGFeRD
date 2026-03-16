@@ -13,12 +13,7 @@ public sealed class ToPdfAConverterService : IToPdfAConverterService
     private readonly IPdfAMetadataWriter _metadataWriter;
     private readonly IPdfAOutputIntentWriter _outputIntentWriter;
 
-    public ToPdfAConverterService(
-        IPdfAConverterValidator validator,
-        IPdfADocumentInfoWriter documentInfoWriter,
-        IPdfALanguageWriter languageWriter,
-        IPdfAMetadataWriter metadataWriter,
-        IPdfAOutputIntentWriter outputIntentWriter)
+    public ToPdfAConverterService(IPdfAConverterValidator validator, IPdfADocumentInfoWriter documentInfoWriter, IPdfALanguageWriter languageWriter, IPdfAMetadataWriter metadataWriter, IPdfAOutputIntentWriter outputIntentWriter)
     {
         _validator = validator;
         _documentInfoWriter = documentInfoWriter;
