@@ -6,5 +6,5 @@ namespace tulo.UpgradeToPdfA3.Interfaces;
 
 public interface IPdfAConverterValidator
 {
-    OperationResult Validate(PdfDocument pdfDocument, IAppOptions appOptions);
+    OperationResult Validate(PdfDocument pdfDocument, IUpgradeToPdfA3Options appOptions);
 }

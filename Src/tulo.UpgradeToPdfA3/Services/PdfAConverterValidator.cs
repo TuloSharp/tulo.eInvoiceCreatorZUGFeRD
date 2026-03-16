@@ -7,7 +7,7 @@ namespace tulo.UpgradeToPdfA3.Services;
 
 public sealed class PdfAConverterValidator : IPdfAConverterValidator
 {
-    public OperationResult Validate(PdfDocument pdfDocument, IAppOptions appOptions)
+    public OperationResult Validate(PdfDocument pdfDocument, IUpgradeToPdfA3Options appOptions)
     {
         if (appOptions is null)
             return OperationResult.Fail("App options are missing.");
@@ -15,19 +15,19 @@ public sealed class PdfAConverterValidator : IPdfAConverterValidator
         if (pdfDocument is null)
             return OperationResult.Fail("PDF document is missing.");
 
-        if (appOptions.PdfA is null)
+        if (appOptions.PdfA3 is null)
             return OperationResult.Fail("PdfA options are missing.");
 
-        if (string.IsNullOrWhiteSpace(appOptions.PdfA.IccProfilePath))
+        if (string.IsNullOrWhiteSpace(appOptions.PdfA3.IccProfilePath))
             return OperationResult.Fail("ICC profile path is missing.");
 
-        if (!File.Exists(appOptions.PdfA.IccProfilePath))
-            return OperationResult.Fail($"ICC profile not found: {appOptions.PdfA.IccProfilePath}");
+        if (!File.Exists(appOptions.PdfA3.IccProfilePath))
+            return OperationResult.Fail($"ICC profile not found: {appOptions.PdfA3.IccProfilePath}");
 
-        if (appOptions.PdfA.Part < 1 || appOptions.PdfA.Part > 3)
+        if (appOptions.PdfA3.Part < 1 || appOptions.PdfA3.Part > 3)
             return OperationResult.Fail("PDF/A part must be 1, 2, or 3.");
 
-        if (string.IsNullOrWhiteSpace(appOptions.PdfA.Conformance))
+        if (string.IsNullOrWhiteSpace(appOptions.PdfA3.Conformance))
             return OperationResult.Fail("PDF/A conformance is missing.");
 
         return OperationResult.Ok();

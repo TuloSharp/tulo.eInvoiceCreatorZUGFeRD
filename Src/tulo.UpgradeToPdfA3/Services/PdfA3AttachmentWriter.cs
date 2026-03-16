@@ -9,7 +9,7 @@ namespace tulo.UpgradeToPdfA3.Services;
 
 public sealed class PdfA3AttachmentWriter : IPdfA3AttachmentWriter
 {
-    public OperationResult AddXmlAttachment(PdfDocument document, string xmlFileName, byte[] xmlBytes, IAppOptions appOptions)
+    public OperationResult AddXmlAttachment(PdfDocument document, string xmlFileName, byte[] xmlBytes, IUpgradeToPdfA3Options appOptions)
     {
         try
         {
@@ -26,8 +26,8 @@ public sealed class PdfA3AttachmentWriter : IPdfA3AttachmentWriter
             fileSpecification.Elements["/Type"] = new PdfName("/Filespec");
             fileSpecification.Elements["/F"] = new PdfString(xmlFileName);
             fileSpecification.Elements["/UF"] = new PdfString(xmlFileName, PdfStringEncoding.Unicode);
-            fileSpecification.Elements["/Desc"] = new PdfString(appOptions.PdfA.AttachmentDescription);
-            fileSpecification.Elements["/AFRelationship"] = new PdfName("/" + appOptions.PdfA.AfRelationship);
+            fileSpecification.Elements["/Desc"] = new PdfString(appOptions.PdfA3.AttachmentDescription);
+            fileSpecification.Elements["/AFRelationship"] = new PdfName("/" + appOptions.PdfA3.AfRelationship);
 
             PdfDictionary embeddedFileDictionary = new PdfDictionary(document);
             embeddedFileDictionary.Elements["/F"] = embeddedFileReference;

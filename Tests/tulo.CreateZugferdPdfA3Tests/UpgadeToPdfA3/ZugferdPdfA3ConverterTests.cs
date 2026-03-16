@@ -21,7 +21,7 @@ public class ZugferdPdfA3PdfSharpIntegrationTests
     private IPdfGeneratorFromInvoice _pdfGeneratorFromInvoice = null!;
     private IToPdfAConverterService _toPdfAConverterService = null!;
     private IToPdfA3UpgradeService _toPdfA3UpgradeService = null!;
-    private IAppOptions _appOptions = null!;
+    private IUpgradeToPdfA3Options _appOptions = null!;
 
     [TestInitialize]
     public void Setup()
@@ -129,13 +129,13 @@ public class ZugferdPdfA3PdfSharpIntegrationTests
         OpenWithDefaultPdfViewer(outputPdfA3Path);
     }
 
-    private IAppOptions CreateTestAppOptions()
+    private IUpgradeToPdfA3Options CreateTestAppOptions()
     {
         string iccProfilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ColorProfiles", "sRGB.icc");
 
-        return new AppOptions
+        return new UpgradeToPdfA3Options
         {
-            PdfA = new PdfAOptions
+            PdfA3 = new PdfA3Options
             {
                 Part = 3,
                 Conformance = "B",

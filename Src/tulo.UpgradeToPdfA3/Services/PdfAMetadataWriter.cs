@@ -8,7 +8,7 @@ namespace tulo.UpgradeToPdfA3.Services;
 
 public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
 {
-    public OperationResult WritePdfA(PdfDocument pdfDocument, IAppOptions appOptions)
+    public OperationResult WritePdfA(PdfDocument pdfDocument, IUpgradeToPdfA3Options appOptions)
     {
         try
         {
@@ -18,7 +18,7 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
             string creator = EscapeXml(pdfDocument.Info.Creator);
             string producer = EscapeXml(pdfDocument.Info.Producer);
             string keywords = EscapeXml(pdfDocument.Info.Keywords);
-            string language = EscapeXml(appOptions.PdfA.Language);
+            string language = EscapeXml(appOptions.PdfA3.Language);
             string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
             string template = LoadTemplate("PdfAMetadataTemplate.xml");
@@ -28,8 +28,8 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
                 : $"<pdf:Keywords>{keywords}</pdf:Keywords>";
 
             string xmp = template
-                .Replace("{{PdfAPart}}", appOptions.PdfA.Part.ToString())
-                .Replace("{{PdfAConformance}}", EscapeXml(appOptions.PdfA.Conformance))
+                .Replace("{{PdfAPart}}", appOptions.PdfA3.Part.ToString())
+                .Replace("{{PdfAConformance}}", EscapeXml(appOptions.PdfA3.Conformance))
                 .Replace("{{DocumentTitle}}", title)
                 .Replace("{{DocumentDescription}}", subject)
                 .Replace("{{DocumentAuthor}}", author)
@@ -50,7 +50,7 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
         }
     }
 
-    public OperationResult WritePdfA3(PdfDocument pdfDocument, string xmlFileName, IAppOptions appOptions)
+    public OperationResult WritePdfA3(PdfDocument pdfDocument, string xmlFileName, IUpgradeToPdfA3Options appOptions)
     {
         try
         {
@@ -60,10 +60,10 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
             string creator = EscapeXml(pdfDocument.Info.Creator);
             string producer = EscapeXml(pdfDocument.Info.Producer);
             string keywords = EscapeXml(pdfDocument.Info.Keywords);
-            string language = EscapeXml(appOptions.PdfA.Language);
-            string documentType = EscapeXml(appOptions.PdfA.DocumentType);
-            string facturXVersion = EscapeXml(appOptions.PdfA.FacturXVersion);
-            string conformanceLevel = EscapeXml(appOptions.PdfA.ConformanceLevel);
+            string language = EscapeXml(appOptions.PdfA3.Language);
+            string documentType = EscapeXml(appOptions.PdfA3.DocumentType);
+            string facturXVersion = EscapeXml(appOptions.PdfA3.FacturXVersion);
+            string conformanceLevel = EscapeXml(appOptions.PdfA3.ConformanceLevel);
             string escapedXmlFileName = EscapeXml(xmlFileName);
             string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
@@ -74,7 +74,7 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
                 : $"<pdf:Keywords>{keywords}</pdf:Keywords>";
 
             string xmp = template
-                .Replace("{{PdfAConformance}}", EscapeXml(appOptions.PdfA.Conformance))
+                .Replace("{{PdfAConformance}}", EscapeXml(appOptions.PdfA3.Conformance))
                 .Replace("{{DocumentTitle}}", title)
                 .Replace("{{DocumentDescription}}", subject)
                 .Replace("{{DocumentAuthor}}", author)

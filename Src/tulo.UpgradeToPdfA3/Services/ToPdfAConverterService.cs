@@ -27,7 +27,7 @@ public sealed class ToPdfAConverterService : IToPdfAConverterService
         _outputIntentWriter = outputIntentWriter;
     }
 
-    public OperationResult ApplyPdfA(PdfDocument pdfDocument, IAppOptions appOptions)
+    public OperationResult ApplyPdfA(PdfDocument pdfDocument, IUpgradeToPdfA3Options appOptions)
     {
         OperationResult validationResult = _validator.Validate(pdfDocument, appOptions);
         if (!validationResult.Success)
@@ -39,7 +39,7 @@ public sealed class ToPdfAConverterService : IToPdfAConverterService
             if (!infoResult.Success)
                 return infoResult;
 
-            OperationResult languageResult = _languageWriter.Write(pdfDocument, appOptions.PdfA.Language);
+            OperationResult languageResult = _languageWriter.Write(pdfDocument, appOptions.PdfA3.Language);
             if (!languageResult.Success)
                 return languageResult;
 

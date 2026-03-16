@@ -17,13 +17,13 @@ using tulo.eInvoice.eInvoiceApp.Utilities;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.UpgradeToPdfA3.Interfaces;
+using tulo.UpgradeToPdfA3.Options;
 using tulo.UpgradeToPdfA3.Services;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
-using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
-using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
 
 namespace tulo.eInvoice.eInvoiceApp.HostBuilders;
+
 public static class AddServicesHostBuilderExtension
 {
     /// <summary>
@@ -93,19 +93,27 @@ public static class AddServicesHostBuilderExtension
         #endregion
 
         #region Options
+
         services.AddOptions<AppOptions>()
-            .Bind(configuration, o => o.BindNonPublicProperties = true)
-              //.Validate(o => !string.IsNullOrWhiteSpace(o.Archive.Path), "Archive:Path is required.")
-            .Validate(o => o.Vats.VatList.Count > 0,"Vats:VatList must not be empty.")
-            .ValidateDataAnnotations()
+            .Bind(configuration)
+            .Validate(o => o.Vats != null && o.Vats.VatList != null && o.Vats.VatList.Count > 0,
+                "Vats:VatList must not be empty.")
             .ValidateOnStart();
 
-        services.AddSingleton(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
-        //services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+        services.AddSingleton<AppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
 
-        // optional, falls andere Services weiterhin die Interfaces brauchen
-        services.AddSingleton<MainAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
-        services.AddSingleton<PdfAAppOptions>(sp => sp.GetRequiredService<IOptions<AppOptions>>().Value);
+        services.AddSingleton<IAppOptions>(sp => sp.GetRequiredService<AppOptions>());
+
+        services.AddOptions<UpgradeToPdfA3Options>()
+            .Bind(configuration.GetSection("PdfA3"))
+            .Validate(o => o.PdfA3 != null, "PdfA3:PdfA3 section is missing.")
+            .Validate(o => !string.IsNullOrWhiteSpace(o.PdfA3.IccProfilePath), "PdfA3:PdfA3:IccProfilePath must not be empty.")
+            .ValidateOnStart();
+
+        services.AddSingleton<UpgradeToPdfA3Options>(sp => sp.GetRequiredService<IOptions<UpgradeToPdfA3Options>>().Value);
+
+        services.AddSingleton<IUpgradeToPdfA3Options>(sp => sp.GetRequiredService<UpgradeToPdfA3Options>());
+
         #endregion
 
         #region Create Invoice

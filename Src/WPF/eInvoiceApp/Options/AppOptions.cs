@@ -1,9 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
-using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
-
-namespace tulo.eInvoice.eInvoiceApp.Options;
-public class AppOptions : MainAppOptions, PdfAAppOptions
+﻿namespace tulo.eInvoice.eInvoiceApp.Options;
+public class AppOptions : IAppOptions
 {
     public LocalizationOptions Localization { get; set; } = new();
 
@@ -12,8 +8,6 @@ public class AppOptions : MainAppOptions, PdfAAppOptions
     public ArchiveOptions Archive { get; set; } = new();
 
     public VatsOptions Vats { get; set; } = new();
-
-    public tulo.UpgradeToPdfA3.Options.PdfAOptions PdfA { get; set; } = new();
 }
 
 public class InvoiceOptions
@@ -55,11 +49,7 @@ public class InvoiceNoteOptions
 
 public sealed class VatsOptions
 {
-    [ConfigurationKeyName("VatList")]
-    private List<int> VatListListMutable { get; } = [];
-    private IReadOnlyList<int>? _vatListRo;
-
-    public IReadOnlyList<int> VatList => _vatListRo ??= VatListListMutable.AsReadOnly();
+    public List<int> VatList { get; set; } = new();
 }
 public sealed class ArchiveOptions
 {

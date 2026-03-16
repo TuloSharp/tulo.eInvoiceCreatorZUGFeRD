@@ -8,14 +8,14 @@ namespace tulo.UpgradeToPdfA3.Services;
 
 public sealed class PdfAOutputIntentWriter : IPdfAOutputIntentWriter
 {
-    public OperationResult Write(PdfDocument pdfDocument, IAppOptions appOptions)
+    public OperationResult Write(PdfDocument pdfDocument, IUpgradeToPdfA3Options appOptions)
     {
         try
         {
             if (pdfDocument == null)
                 return OperationResult.Fail("PDF document is required.");
 
-            string iccProfilePath = appOptions.PdfA.IccProfilePath;
+            string iccProfilePath = appOptions.PdfA3.IccProfilePath;
             if (string.IsNullOrWhiteSpace(iccProfilePath) || !File.Exists(iccProfilePath))
                 return OperationResult.Fail($"ICC profile was not found: {iccProfilePath}");
 

@@ -29,7 +29,7 @@ public sealed class ToPdfA3UpgradeService : IToPdfA3UpgradeService
         string outputPdfA3Path,
         string xmlFileName,
         byte[] xmlBytes,
-        IAppOptions appOptions)
+        IUpgradeToPdfA3Options appOptions)
     {
         OperationResult validationResult = _validator.Validate(
             inputPdfAPath,
@@ -55,10 +55,10 @@ public sealed class ToPdfA3UpgradeService : IToPdfA3UpgradeService
 
             CopyDocumentInfo(sourceDocument, outputDocument);
             CopyViewerPreferences(sourceDocument, outputDocument);
-            SetLanguage(outputDocument, appOptions.PdfA.Language);
+            SetLanguage(outputDocument, appOptions.PdfA3.Language);
             AddMarkInfo(outputDocument);
             AddStructTreeRoot(outputDocument);
-            AddOutputIntent(outputDocument, appOptions.PdfA.IccProfilePath);
+            AddOutputIntent(outputDocument, appOptions.PdfA3.IccProfilePath);
 
             string embeddedXmlFileName = EmbeddedInvoiceXmlFileName;
 

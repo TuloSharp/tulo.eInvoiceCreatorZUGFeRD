@@ -6,5 +6,5 @@ namespace tulo.UpgradeToPdfA3.Interfaces;
 
 public interface IPdfAOutputIntentWriter
 {
-    OperationResult Write(PdfDocument pdfDocument, IAppOptions appOptions);
+    OperationResult Write(PdfDocument pdfDocument, IUpgradeToPdfA3Options appOptions);
 }

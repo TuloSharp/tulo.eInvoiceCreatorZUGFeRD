@@ -6,7 +6,7 @@ namespace tulo.UpgradeToPdfA3.Services;
 
 public sealed class PdfA3UpgradeValidator : IPdfA3UpgradeValidator
 {
-    public OperationResult Validate(string inputPdfAPath, string outputPdfA3Path, string xmlFileName, byte[] xmlBytes, IAppOptions appOptions)
+    public OperationResult Validate(string inputPdfAPath, string outputPdfA3Path, string xmlFileName, byte[] xmlBytes, IUpgradeToPdfA3Options appOptions)
     {
         if (string.IsNullOrWhiteSpace(inputPdfAPath))
             return OperationResult.Fail("Input PDF/A path is required.");
@@ -26,7 +26,7 @@ public sealed class PdfA3UpgradeValidator : IPdfA3UpgradeValidator
         if (appOptions is null)
             return OperationResult.Fail("PDF/A options are required.");
 
-        if (appOptions.PdfA is null)
+        if (appOptions.PdfA3 is null)
             return OperationResult.Fail("PdfA options are missing.");
 
         return OperationResult.Ok();

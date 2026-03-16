@@ -13,10 +13,10 @@ using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.UpgradeToPdfA3.Interfaces;
+using tulo.UpgradeToPdfA3.Options;
 using tulo.UpgradeToPdfA3.ResultPattern;
 using tulo.XMLeInvoiceToPdf.Services;
-using MainAppOptions = tulo.eInvoice.eInvoiceApp.Options.IAppOptions;
-using PdfAAppOptions = tulo.UpgradeToPdfA3.Options.IAppOptions;
+
 
 namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 
@@ -30,6 +30,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     private readonly IPdfGeneratorFromInvoice _pdfGeneratorFromInvoice = collectorCollection.GetService<IPdfGeneratorFromInvoice>();
     private readonly IPdfWatermarkService _watermarckService = collectorCollection.GetService<IPdfWatermarkService>();
     private readonly IOptions<AppOptions> _appOptions = collectorCollection.GetService<IOptions<AppOptions>>();
+    private readonly IOptions<UpgradeToPdfA3Options> _upgradeToPdfA3Options = collectorCollection.GetService<IOptions<UpgradeToPdfA3Options>>();
     private readonly IToPdfAConverterService _toPdfAConverterService = collectorCollection.GetService<IToPdfAConverterService>();
     private readonly IToPdfA3UpgradeService _toPdfA3UpgradeService = collectorCollection.GetService<IToPdfA3UpgradeService>();
     #endregion
@@ -186,7 +187,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
                 using (PdfDocument pdfDocument = PdfReader.Open(inputPdfPath, PdfDocumentOpenMode.Modify))
                 {
-                    OperationResult pdfAResult = _toPdfAConverterService.ApplyPdfA(pdfDocument, _appOptions.Value);
+                    OperationResult pdfAResult = _toPdfAConverterService.ApplyPdfA(pdfDocument, _upgradeToPdfA3Options.Value);
 
                     if (!pdfAResult.Success)
                         //throw new InvalidOperationException($"ApplyPdfA failed: {pdfAResult.Message}");
@@ -197,7 +198,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 // Step 2: Upgrade PDF/A to PDF/A-3 with embedded XML
                 byte[] xmlBytes = await File.ReadAllBytesAsync(inputXmlPath, ct);
 
-                OperationResult pdfA3Result = _toPdfA3UpgradeService.UpgradeToPdfA3(inputPdfAPath: intermediatePdfAPath, outputPdfA3Path: outputPdfPath, xmlFileName: Path.GetFileName(inputXmlPath), xmlBytes: xmlBytes, appOptions: _appOptions.Value);
+                OperationResult pdfA3Result = _toPdfA3UpgradeService.UpgradeToPdfA3(inputPdfAPath: intermediatePdfAPath, outputPdfA3Path: outputPdfPath, xmlFileName: Path.GetFileName(inputXmlPath), xmlBytes: xmlBytes, appOptions: _upgradeToPdfA3Options.Value);
 
                 if (!pdfA3Result.Success)
                     //throw new InvalidOperationException($"UpgradeToPdfA3 failed: {pdfA3Result.Message}");

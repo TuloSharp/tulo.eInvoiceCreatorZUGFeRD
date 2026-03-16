@@ -6,5 +6,5 @@ namespace tulo.UpgradeToPdfA3.Interfaces;
 
 public interface IPdfA3AttachmentWriter
 {
-    OperationResult AddXmlAttachment(PdfDocument pdfDocument, string xmlFileName, byte[] xmlBytes, IAppOptions appOptions);
+    OperationResult AddXmlAttachment(PdfDocument pdfDocument, string xmlFileName, byte[] xmlBytes, IUpgradeToPdfA3Options appOptions);
 }
