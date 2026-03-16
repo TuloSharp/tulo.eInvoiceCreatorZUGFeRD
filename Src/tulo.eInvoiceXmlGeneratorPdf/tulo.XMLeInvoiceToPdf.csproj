@@ -28,6 +28,9 @@
 	  <None Remove="Fonts\CASCADIACODE.TTF" />
 	  <None Remove="Fonts\ROBOTO.TTF" />
 	  <None Remove="Fonts\VERDANA.TTF" />
+	  <None Remove="icons\EmailAddress.svg" />
+	  <None Remove="icons\Phone.svg" />
+	  <None Remove="icons\TuloTeam.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,6 +38,15 @@
 	  <EmbeddedResource Include="Fonts\CASCADIACODE.TTF" />
 	  <EmbeddedResource Include="Fonts\ROBOTO.TTF" />
 	  <EmbeddedResource Include="Fonts\VERDANA.TTF" />
+	  <EmbeddedResource Include="icons\EmailAddress.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="icons\Phone.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="icons\TuloTeam.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	  <EmbeddedResource Include="Languages\en-US.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
@@ -45,20 +57,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="PDFsharp-extended" />
-	  <PackageReference Include="QRCoder"/>
+	  <PackageReference Include="QRCoder" />
 	  <PackageReference Include="Svg" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<None Update="icons\EmailAddress.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="icons\Phone.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="icons\TuloTeam.svg">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 </Project>

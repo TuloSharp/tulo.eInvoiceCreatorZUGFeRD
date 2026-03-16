@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ColorProfiles\sRGB.icc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ColorProfiles\sRGB.icc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PDFsharp-extended" />
   </ItemGroup>
 
