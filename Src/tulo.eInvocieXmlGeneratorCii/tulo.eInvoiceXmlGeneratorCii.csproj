@@ -11,25 +11,28 @@
 
 	<PropertyGroup>
 		<PackageId>tulo.eInvoiceXmlGeneratorCii</PackageId>
-		<Version>0.0.1</Version>
-		<Authors>Tulo's Team</Authors>
-		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
-		<Description>
-			create a xml cii file for
-		</Description>
-		<RepositoryType>GitHub</RepositoryType>
-		<RepositoryUrl></RepositoryUrl>
-		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Copyright>Copyright (c) 2025 Tulo's Company. All rights reserved.</Copyright>
-	</PropertyGroup>
+    <Version>1.0.0</Version>
+    <Authors>Tulo's Team</Authors>
+    <Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+    <Description>
+      Generate Xml eInvocie. Free to use. No modification or redistribution without permission.
+    </Description>
+    <RepositoryType>GitHub</RepositoryType>
+    <RepositoryUrl>https://github.com/TuloSharp/tulo.eInvoiceApp.git</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright (c) 2025–2026 Tulo Entrepreneurial Company (limited liability) [UG]. All rights reserved.</Copyright>
 
-	<PropertyGroup>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<Deterministic>true</Deterministic>
-	</PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="">
+    </None>
+  </ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Codes\" />

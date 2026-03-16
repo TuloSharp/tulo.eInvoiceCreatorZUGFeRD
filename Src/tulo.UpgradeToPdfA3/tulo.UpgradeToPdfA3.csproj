@@ -8,6 +8,31 @@
     <AssemblyName>tulo.UpgradeToPdfA3</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>tulo.UpgradeToPdfA3</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Tulo's Team</Authors>
+    <Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+    <Description>
+      Pdf and Xml eInvocie To PdfA3. Free to use. No modification or redistribution without permission.
+    </Description>
+    <RepositoryType>GitHub</RepositoryType>
+    <RepositoryUrl>https://github.com/TuloSharp/tulo.eInvoiceApp.git</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright (c) 2025–2026 Tulo Entrepreneurial Company (limited liability) [UG]. All rights reserved.</Copyright>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="">
+    </None>
+  </ItemGroup>
+  
   <ItemGroup>
     <None Remove="ColorProfiles\sRGB.icc" />
   </ItemGroup>
