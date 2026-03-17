@@ -21,7 +21,8 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
             string language = EscapeXml(appOptions.PdfA3.Language);
             string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
-            string template = LoadTemplate("PdfAMetadataTemplate.xml");
+            if (!TryLoadTemplate("PdfAMetadataTemplate.xml", out string template, out string errorMessage))
+                return OperationResult.Fail($"Failed to write PDF/A metadata: {errorMessage}");
 
             string pdfKeywordsElement = string.IsNullOrWhiteSpace(pdfDocument.Info.Keywords)
                 ? string.Empty
@@ -67,7 +68,8 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
             string escapedXmlFileName = EscapeXml(xmlFileName);
             string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
-            string template = LoadTemplate("PdfA3MetadataTemplate.xml");
+            if (!TryLoadTemplate("PdfA3MetadataTemplate.xml", out string template, out string errorMessage))
+                return OperationResult.Fail($"Failed to write PDF/A-3 metadata: {errorMessage}");
 
             string pdfKeywordsElement = string.IsNullOrWhiteSpace(pdfDocument.Info.Keywords)
                 ? string.Empty
@@ -99,17 +101,33 @@ public sealed class PdfAMetadataWriter : IPdfAMetadataWriter
         }
     }
 
-    private static string LoadTemplate(string fileName)
+    private static bool TryLoadTemplate(string fileName, out string template, out string errorMessage)
     {
-        string templatePath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory,
-            "Templates",
-            fileName);
+        var assembly = typeof(PdfAMetadataWriter).Assembly;
+        var resourceName = $"tulo.UpgradeToPdfA3.Templates.{fileName}";
 
-        if (!File.Exists(templatePath))
-            throw new FileNotFoundException("Metadata template file was not found.", templatePath);
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream is not null)
+        {
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            template = reader.ReadToEnd();
+            errorMessage = string.Empty;
+            return true;
+        }
 
-        return File.ReadAllText(templatePath, Encoding.UTF8);
+        string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", fileName);
+
+        if (File.Exists(templatePath))
+        {
+            template = File.ReadAllText(templatePath, Encoding.UTF8);
+            errorMessage = string.Empty;
+            return true;
+        }
+
+        template = string.Empty;
+        errorMessage =
+            $"Metadata template file was not found as embedded resource or file. Resource='{resourceName}' File='{templatePath}'";
+        return false;
     }
 
     private static void WriteMetadataStream(PdfDocument pdfDocument, string xmp)
