@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
@@ -665,13 +666,14 @@ public class GenerateSubInvoiceLinesXmlCiiIntegrationTests
         return (value ?? string.Empty).Trim();
     }
 
-    private static void SaveXmlFile(Invoice invoice, string xml)
+    private static string SaveXmlFile(Invoice invoice, string xml)
     {
         string tempDir = Path.GetTempPath();
-        string fileName = $"XmlCii_{invoice.InvoiceNumber}_{DateTime.Now:yyyyMMddHHmmssfff}.xml";
+        string fileName = $"XmlCii_{invoice.InvoiceNumber}_{Guid.NewGuid():N}.xml";
         string filePath = Path.Combine(tempDir, fileName);
 
-        File.WriteAllText(filePath, xml);
+        File.WriteAllText(filePath, xml, Encoding.UTF8);
+        return filePath;
     }
     #endregion
 }
