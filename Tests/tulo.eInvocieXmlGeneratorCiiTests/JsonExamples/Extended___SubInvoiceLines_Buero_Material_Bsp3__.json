@@ -1,0 +1,215 @@
+{
+  "InvoiceNumber": "99877",
+  "InvoiceDate": "2026-05-30",
+  "Currency": "EUR",
+  "DocumentTypeCode": "380",
+  "BuyerReference": "Kundenref. BT-10",
+  "SellerOrderReferencedId": "G12042-1-01",
+  "BuyerOrderReferencedId": "BT-13",
+  "ContractReferencedId": "Vertragsnr. BT-12",
+  "HeaderChargeTotalAmount": 0.0,
+  "HeaderAllowanceTotalAmount": 0.0,
+  "HeaderTotalPrepaidAmount": 0.0,
+  "HeaderDuePayableAmount": 1671.95,
+  "Seller": {
+    "ID": "998877",
+    "Name": "Musterbetrieb Systemhaus AG ",
+    "Street": "August-Müller-Strasse 222",
+    "Zip": "37079",
+    "City": "Göttingen",
+    "CountryCode": "DE",
+    "VatId": "DE09687654321",
+    "FiscalId": "HRA 45678",
+    "ContactPersonName": "Kontaktperson",
+    "ContactPhone": "5578",
+    "ContactEmail": "absender@musterberieb.de"
+  },
+  "Buyer": {
+    "ID": "330145",
+    "Name": "Auftraggeber Firmenkunde GmbH",
+    "Street": "Musterstraße 1212",
+    "Zip": "37073",
+    "City": "Göttingen",
+    "CountryCode": "DE",
+    "VatId": "DE1234567890",
+    "ContactPersonName": "Herr Thomas Auftraggeber",
+    "ContactPhone": "+49 321 456789",
+    "ContactEmail": "thomas.auftraggeber@Firmenkunde.de"
+  },
+  "Payment": {
+    "PaymentMeansTypeCode": "58",
+    "Iban": "DE75512108001245126199",
+    "Bic": "PBNKDEFF",
+    "AccountName": "Musterbetrieb Kontoname",
+    "Terms": [
+      {
+        "Description": "Bei Zahlung bis zum 06.06.2026 zahlen Sie mit 2,00 % Skonto € 1638,51 €",
+        "DueDate": "2026-06-06",
+        "DiscountTerms": {
+          "BasisAmount": 1671.95,
+          "CalculationPercent": 2.0
+        }
+      },
+      {
+        "Description": "Bis zum zum 13.06.2026 ohne Abzug",
+        "DueDate": "2026-06-13"
+      }
+    ]
+  },
+  "Notes": [
+    {
+      "Content": "Geschäftsführer: Herr Geschäftsführer , Muster Bau GmbH etc.",
+      "SubjectCode": "REG"
+    },
+    {
+      "Content": "Es bestehen Vereinbarungen, aus denen sich Minderungen des Entgelts ergeben können.",
+      "SubjectCode": "AAI"
+    },
+    {
+      "Content": "ZUGFeRD vers 2.4.0 Extended",
+      "SubjectCode": "ACB"
+    },
+    {
+      "Content": "Dies ist eine Beispiel-Rechnung zur empfohlenen Darstellung von Unterpositionen",
+      "SubjectCode": "ACB"
+    }
+  ],
+  "Lines": [
+    {
+      "LineId": "0101",
+      "ParentLineId": "01",
+      "LineStatusReasonCode": "DETAIL",
+      "Description": "Laser printer B/W",
+      "ProductDescription": "Schwarzweiß Laserdrucker",
+      "GlobalId": "88888886349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "123456789",
+      "BuyerAssignedId": "987654321",
+      "Quantity": 2.0,
+      "UnitCode": "H87",
+      "UnitPrice": 300.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": 600.0
+    },
+    {
+      "LineId": "0102",
+      "ParentLineId": "01",
+      "LineStatusReasonCode": "DETAIL",
+      "Description": "Ink printer color",
+      "ProductDescription": "Farbdrucker",
+      "GlobalId": "77777776349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "2345678910",
+      "BuyerAssignedId": "876543219",
+      "Quantity": 3.0,
+      "UnitCode": "H87",
+      "UnitPrice": 150.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": 450.0
+    },
+    {
+      "LineId": "0103",
+      "ParentLineId": "01",
+      "LineStatusReasonCode": "DETAIL",
+      "Description": "Allowance",
+      "ProductDescription": "Abschlagsposition",
+      "GlobalId": "0000006349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "99992345678910",
+      "BuyerAssignedId": "88888876543219",
+      "Quantity": -1.0,
+      "UnitCode": "H87",
+      "UnitPrice": 50.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": -50.0
+    },
+    {
+      "LineId": "01",
+      "LineStatusReasonCode": "GROUP",
+      "Description": "Subtotal hardware",
+      "ProductDescription": "Hardware Gesamt",
+      "GlobalId": "6666656349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "345678912",
+      "BuyerAssignedId": "765432198",
+      "Quantity": 1.0,
+      "UnitCode": "H87",
+      "UnitPrice": 1000.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": 1000.0,
+      "OmitNetPriceBasisQuantity": true
+    },
+    {
+      "LineId": "0201",
+      "ParentLineId": "02",
+      "LineStatusReasonCode": "DETAIL",
+      "Description": "Toner",
+      "ProductDescription": "Toner",
+      "GlobalId": "55555556349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "456789123",
+      "BuyerAssignedId": "654321987",
+      "Quantity": 3.0,
+      "UnitCode": "H87",
+      "UnitPrice": 120.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": 360.0
+    },
+    {
+      "LineId": "0202",
+      "ParentLineId": "02",
+      "LineStatusReasonCode": "DETAIL",
+      "Description": "PAPER",
+      "ProductDescription": "Kopierpapier",
+      "GlobalId": "5555556349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "567891234",
+      "BuyerAssignedId": "543219876",
+      "Quantity": 10.0,
+      "UnitCode": "H87",
+      "UnitPrice": 9.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": 90.0
+    },
+    {
+      "LineId": "0203",
+      "ParentLineId": "02",
+      "LineStatusReasonCode": "DETAIL",
+      "Description": "Allowance",
+      "ProductDescription": "Abschlagsposition 10% von 450,- ",
+      "GlobalId": "0000006349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "99992345678910",
+      "BuyerAssignedId": "88888876543219",
+      "Quantity": -1.0,
+      "UnitCode": "H87",
+      "UnitPrice": 45.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": -45.0
+    },
+    {
+      "LineId": "02",
+      "LineStatusReasonCode": "GROUP",
+      "Description": "Subtotal Accessories",
+      "ProductDescription": "Zubehör Gesamt",
+      "GlobalId": "2222256349852",
+      "GlobalIdSchemeId": "0160",
+      "SellerAssignedId": "9345678912",
+      "BuyerAssignedId": "9765432198",
+      "Quantity": 1.0,
+      "UnitCode": "H87",
+      "UnitPrice": 405.0,
+      "TaxPercent": 19.0,
+      "TaxCategory": "S",
+      "ForcedLineTotalAmount": 405.0,
+      "OmitNetPriceBasisQuantity": true
+    }
+  ]
+}

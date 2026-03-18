@@ -1,0 +1,115 @@
+{
+  "InvoiceNumber": "123",
+  "InvoiceDate": "2025-11-15",
+  "Currency": "EUR",
+  "DocumentName": null,
+  "DocumentTypeCode": "380",
+  "Seller": {
+    "ID": "22 00 0 001 00001",
+    "Name": "Test Company",
+    "Street": "Teststr",
+    "Zip": "55232",
+    "City": "Teststadt",
+    "CountryCode": "DE",
+    "VatId": "",
+    "LeitwegId": "",
+    "FiscalId": null,
+    "GeneralEmail": "sender@example.com",
+    "ContactPersonName": "Hans Test",
+    "ContactPhone": "+49123456789",
+    "ContactEmail": "test@example.org"
+  },
+  "Buyer": {
+    "ID": "",
+    "Name": "Franz Müller",
+    "Street": "Musterstr.12",
+    "Zip": "55232",
+    "City": "Musterstadt",
+    "CountryCode": "DE",
+    "VatId": "",
+    "LeitwegId": "",
+    "FiscalId": null,
+    "GeneralEmail": "recipient@sample.org",
+    "ContactPersonName": null,
+    "ContactPhone": null,
+    "ContactEmail": null
+  },
+  "Payment": {
+    "Iban": "DE12500105170648489890",
+    "Bic": "COBADEFXXX",
+    "AccountName": "KontoInhaber",
+    "PaymentTermsText": null,
+    "DueDate": "2025-11-15",
+    "DirectDebitMandateID": null,
+    "PaymentMeansTypeCode": "58",
+    "PaymentMeansInformation": "SEPA credit transfer",
+    "PaymentReference": null,
+    "Terms": [
+      {
+        "Description": null,
+        "DueDate": "2025-11-15",
+        "DiscountTerms": null
+      }
+    ]
+  },
+  "Notes": [
+    {
+      "ContentCode": "",
+      "Content": "Inhaber: Herr/Frau Inhaber(in)",
+      "SubjectCode": "REG"
+    },
+    {
+      "ContentCode": "",
+      "Content": "Dies ist eine Beispiel-Rechnung einer Kleinunternehmer-Rechnung § 19 UStG",
+      "SubjectCode": "ACB"
+    },
+    {
+      "ContentCode": "",
+      "Content": "ZUGFeRD vers 2.4.0 (Extended)",
+      "SubjectCode": "ACB"
+    }
+  ],
+  "Lines": [
+    {
+      "DeliveryNoteLineId": "",
+      "TaxCategory": "E",
+      "UnitCode": "H87",
+      "UnitPrice": 1.0,
+      "LineStatusReasonCode": null,
+      "TaxPercent": 0.0,
+      "GlobalIdSchemeId": "",
+      "DeliveryNoteDate": null,
+      "AdditionalReferencedDocumentId": "",
+      "AdditionalReferencedDocumentReferenceTypeCode": "",
+      "BuyerAssignedId": null,
+      "SellerAssignedId": "",
+      "GlobalId": "",
+      "ParentLineId": null,
+      "BuyerOrderLineId": "",
+      "Quantity": 1.0,
+      "BuyerOrderReferencedId": "",
+      "ForcedLineTotalAmount": 1.0,
+      "LineId": "1",
+      "Description": "Testprodukt",
+      "PriceBasisQuantity": 1.0,
+      "BillingPeriodEndDate": null,
+      "BuyerOrderDate": null,
+      "OriginCountryCode": "",
+      "AdditionalReferencedDocumentTypeCode": "",
+      "DeliveryNoteNumber": "",
+      "ProductDescription": ""
+    }
+  ],
+  "HeaderChargeTotalAmount": 0.0,
+  "HeaderAllowanceTotalAmount": 0.0,
+  "HeaderTotalPrepaidAmount": 0.0,
+  "HeaderDuePayableAmount": 1.0,
+  "BuyerReference": "991-01484-64",
+  "SellerOrderReferencedId": null,
+  "BuyerOrderReferencedId": null,
+  "ContractReferencedId": null,
+  "AdditionalReferencedDocumentId": null,
+  "AdditionalReferencedDocumentTypeCode": null,
+  "ProcuringProjectId": null,
+  "ProcuringProjectName": null
+}

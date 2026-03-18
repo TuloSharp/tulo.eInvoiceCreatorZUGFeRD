@@ -24,9 +24,14 @@ public class InvoiceLine
     public string OriginCountryCode { get; set; } = string.Empty;
 
     public string BuyerOrderLineId { get; set; } = string.Empty;
-    public string? LineId { get; set; }
-    public string? ParentLineId { get; set; }
-    public string? LineStatusReasonCode { get; set; }
-    public string? BuyerAssignedId { get; set; }
+    public string LineId { get; set; } = string.Empty;
+    public string ParentLineId { get; set; } = string.Empty;
+    public string LineStatusReasonCode { get; set; } = string.Empty;
+    public string BuyerAssignedId { get; set; } = string.Empty;
     public decimal? ForcedLineTotalAmount { get; set; }
+    
+    public decimal? PriceBasisQuantity { get; set; }
+    public bool? OmitNetPriceBasisQuantity { get; set; }
+
+    public List<InvoiceNote> Notes { get; set; } = new();
 }
