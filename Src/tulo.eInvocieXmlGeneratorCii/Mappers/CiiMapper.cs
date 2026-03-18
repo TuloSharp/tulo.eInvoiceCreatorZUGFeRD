@@ -97,7 +97,7 @@ public class CiiMapper : ICiiMapper
             };
         }
 
-        // Contact: <ram:DefinedTradeContact>...
+        // Contact
         if (!string.IsNullOrWhiteSpace(p.ContactPersonName) || !string.IsNullOrWhiteSpace(p.ContactPhone) || !string.IsNullOrWhiteSpace(p.ContactEmail))
         {
             party.DefinedTradeContact = [
@@ -110,8 +110,7 @@ public class CiiMapper : ICiiMapper
             ];
         }
 
-        // General email (info@...) as in the example: schemeID="0088"
-        // Attention: you only have ONE URIUniversalCommunication field, so set priority:
+        // General email or Leitweg-ID
         if (!string.IsNullOrWhiteSpace(p.GeneralEmail))
         {
             party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { schemeID = "0088", Value = p.GeneralEmail } };
@@ -201,8 +200,8 @@ public class CiiMapper : ICiiMapper
                             LineID = string.IsNullOrWhiteSpace(invLine.BuyerOrderLineId) ? null : new IDType { Value = invLine.BuyerOrderLineId },
                             FormattedIssueDateTime = invLine.BuyerOrderDate == null ? null : new FormattedDateTimeType { DateTimeString = new FormattedDateTimeTypeDateTimeString { format = "102", Value = invLine.BuyerOrderDate.Value.ToString("yyyyMMdd") } }
                         },
-                GrossPriceProductTradePrice = omitGrossPrice ? null : new TradePriceType { ChargeAmount = new AmountType { currencyID = currency, Value = chargeAmount }, BasisQuantity = grossBasisQuantity },
-                NetPriceProductTradePrice = new TradePriceType { ChargeAmount = new AmountType { currencyID = currency, Value = chargeAmount }, BasisQuantity = netBasisQuantity }
+                GrossPriceProductTradePrice = omitGrossPrice ? null : new TradePriceType { ChargeAmount = new AmountType { Value = chargeAmount }, BasisQuantity = grossBasisQuantity },
+                NetPriceProductTradePrice = new TradePriceType { ChargeAmount = new AmountType { Value = chargeAmount }, BasisQuantity = netBasisQuantity }
             },
 
             SpecifiedLineTradeDelivery = new LineTradeDeliveryType
@@ -224,20 +223,20 @@ public class CiiMapper : ICiiMapper
             {
                 ApplicableTradeTax = new[]
                 {
-                new TradeTaxType
-                {
-                    TypeCode = new TaxTypeCodeType { Value = "VAT" },
-                    CategoryCode = new TaxCategoryCodeType { Value = invLine.TaxCategory },
-                    BasisAmount = omitLineTaxAmounts ? null : new AmountType { currencyID = currency, Value = lineNet },
-                    CalculatedAmount = omitLineTaxAmounts ? null : new AmountType { currencyID = currency, Value = Math.Round(lineNet * invLine.TaxPercent / 100m, 2, MidpointRounding.AwayFromZero) },
-                    RateApplicablePercent = new PercentType { Value = invLine.TaxPercent }
-                }
-            },
+                    new TradeTaxType
+                    {
+                        TypeCode = new TaxTypeCodeType { Value = "VAT" },
+                        CategoryCode = new TaxCategoryCodeType { Value = invLine.TaxCategory },
+                        BasisAmount = omitLineTaxAmounts ? null : null,
+                        CalculatedAmount = omitLineTaxAmounts ? null : null,
+                        RateApplicablePercent = new PercentType { Value = invLine.TaxPercent }
+                    }
+                },
                 BillingSpecifiedPeriod = invLine.BillingPeriodEndDate == null ? null : new SpecifiedPeriodType { EndDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = invLine.BillingPeriodEndDate.Value.ToString("yyyyMMdd") } } },
                 SpecifiedTradeSettlementLineMonetarySummation = new TradeSettlementLineMonetarySummationType
                 {
-                    LineTotalAmount = new AmountType { currencyID = currency, Value = lineNet },
-                    TotalAllowanceChargeAmount = new AmountType { currencyID = currency, Value = 0m }
+                    LineTotalAmount = new AmountType { Value = lineNet },
+                    TotalAllowanceChargeAmount = new AmountType { Value = 0m }
                 },
                 AdditionalReferencedDocument =
                     string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) &&
@@ -246,12 +245,12 @@ public class CiiMapper : ICiiMapper
                         ? null
                         : new[]
                         {
-                        new ReferencedDocumentType
-                        {
-                            IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) ? null : new IDType { Value = invLine.AdditionalReferencedDocumentId },
-                            TypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) ? null : new DocumentCodeType { Value = invLine.AdditionalReferencedDocumentTypeCode },
-                            ReferenceTypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new ReferenceCodeType { Value = invLine.AdditionalReferencedDocumentReferenceTypeCode }
-                        }
+                            new ReferencedDocumentType
+                            {
+                                IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) ? null : new IDType { Value = invLine.AdditionalReferencedDocumentId },
+                                TypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) ? null : new DocumentCodeType { Value = invLine.AdditionalReferencedDocumentTypeCode },
+                                ReferenceTypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new ReferenceCodeType { Value = invLine.AdditionalReferencedDocumentReferenceTypeCode }
+                            }
                         }
             }
         };
@@ -282,18 +281,18 @@ public class CiiMapper : ICiiMapper
             SpecifiedTradeSettlementHeaderMonetarySummation =
                 new TradeSettlementHeaderMonetarySummationType
                 {
-                    LineTotalAmount = new AmountType { currencyID = currency, Value = netTotal },
-                    ChargeTotalAmount = new AmountType { currencyID = currency, Value = chargeTotal },
-                    AllowanceTotalAmount = new AmountType { currencyID = currency, Value = allowanceTotal },
-                    TaxBasisTotalAmount = new AmountType { currencyID = currency, Value = netTotal },  // 554,55
-                    TaxTotalAmount = new[] { new AmountType { currencyID = currency, Value = taxTotal } },  // 100,83
-                    GrandTotalAmount = new AmountType { currencyID = currency, Value = grandTotal },  // 655,38
-                    TotalPrepaidAmount = new AmountType { currencyID = currency, Value = prepaidTotal },
-                    DuePayableAmount = new AmountType { currencyID = currency, Value = duePayable }  // 655,38
+                    LineTotalAmount = new AmountType { Value = netTotal },
+                    ChargeTotalAmount = new AmountType { Value = chargeTotal },
+                    AllowanceTotalAmount = new AmountType { Value = allowanceTotal },
+                    TaxBasisTotalAmount = new AmountType { Value = netTotal },
+                    TaxTotalAmount = new[] { new AmountType { currencyID = currency, Value = taxTotal } },
+                    GrandTotalAmount = new AmountType { Value = grandTotal },
+                    TotalPrepaidAmount = new AmountType { Value = prepaidTotal },
+                    DuePayableAmount = new AmountType { Value = duePayable }
                 }
         };
 
-        // Payment method / IBAN / BIC / Conditions from PaymentDetails
+        // Payment data
         if (inv.Payment != null)
         {
             settlement.SpecifiedTradeSettlementPaymentMeans = MapPaymentMeans(inv.Payment, currency);
@@ -318,7 +317,7 @@ public class CiiMapper : ICiiMapper
 
         var means = new TradeSettlementPaymentMeansType
         {
-            // 58 = SEPA direct debit, 31 = bank transfer, etc.
+            // 58 = SEPA direct debit, 31 = bank transfer
             TypeCode = string.IsNullOrWhiteSpace(payment.PaymentMeansTypeCode) ? null : new PaymentMeansCodeType { Value = payment.PaymentMeansTypeCode },
             Information = string.IsNullOrWhiteSpace(payment.PaymentMeansInformation) ? null : new TextType { Value = payment.PaymentMeansInformation },
             PayeePartyCreditorFinancialAccount =
@@ -362,15 +361,15 @@ public class CiiMapper : ICiiMapper
             }).ToArray();
         }
 
-        // Fallback: single field
+        // Fallback
         return
         [
             new TradePaymentTermsType
-        {
-            Description = string.IsNullOrWhiteSpace(payment.PaymentTermsText) ? null : new TextType { Value = payment.PaymentTermsText },
-            DueDateDateTime = payment.DueDate == null ? null : MakeDate(payment.DueDate.Value),
-            DirectDebitMandateID = string.IsNullOrWhiteSpace(payment.DirectDebitMandateId) ? null : new IDType { Value = payment.DirectDebitMandateId }
-        }
+            {
+                Description = string.IsNullOrWhiteSpace(payment.PaymentTermsText) ? null : new TextType { Value = payment.PaymentTermsText },
+                DueDateDateTime = payment.DueDate == null ? null : MakeDate(payment.DueDate.Value),
+                DirectDebitMandateID = string.IsNullOrWhiteSpace(payment.DirectDebitMandateId) ? null : new IDType { Value = payment.DirectDebitMandateId }
+            }
         ];
     }
 
@@ -378,7 +377,7 @@ public class CiiMapper : ICiiMapper
     {
         return new ExchangedDocumentContextType
         {
-            GuidelineSpecifiedDocumentContextParameter = new DocumentContextParameterType { ID = new IDType { Value = "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended" } }  // Official value for EN16931-compliant Factur-X/ZUGFeRD Extended
+            GuidelineSpecifiedDocumentContextParameter = new DocumentContextParameterType { ID = new IDType { Value = "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended" } }
         };
     }
 
@@ -386,9 +385,8 @@ public class CiiMapper : ICiiMapper
     {
         var delivery = new HeaderTradeDeliveryType
         {
-            ShipToTradeParty = MapParty(inv.Buyer),      // ShipTo = buyer (typical case)
-            ShipFromTradeParty = MapParty(inv.Seller),  // Optional: ShipFrom = seller
-            // Actual delivery date (here: invoice date)
+            ShipToTradeParty = MapParty(inv.Buyer),
+            ShipFromTradeParty = MapParty(inv.Seller),
             ActualDeliverySupplyChainEvent = new SupplyChainEventType { OccurrenceDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = inv.InvoiceDate.ToString("yyyyMMdd") } } }
         };
 
@@ -400,7 +398,7 @@ public class CiiMapper : ICiiMapper
         if (inv.Lines == null || inv.Lines.Count == 0)
             return null!;
 
-        // Same rounding logic as in the header
+        // Same rounding logic as header totals
         decimal LineNet(InvoiceLine l) => l?.ForcedLineTotalAmount ?? Math.Round((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m), 2, MidpointRounding.AwayFromZero);
         bool CountsTowardsHeaderTotals(InvoiceLine l) => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
 
@@ -420,9 +418,9 @@ public class CiiMapper : ICiiMapper
             result.Add(new TradeTaxType
             {
                 TypeCode = new TaxTypeCodeType { Value = "VAT" },
-                CategoryCode = new TaxCategoryCodeType { Value = g.Key.TaxCategory }, // "S"
-                BasisAmount = new AmountType { currencyID = currency, Value = basisAmount },
-                CalculatedAmount = new AmountType { currencyID = currency, Value = taxAmount },
+                CategoryCode = new TaxCategoryCodeType { Value = g.Key.TaxCategory },
+                BasisAmount = new AmountType { Value = basisAmount },
+                CalculatedAmount = new AmountType { Value = taxAmount },
                 RateApplicablePercent = new PercentType { Value = g.Key.TaxPercent }
             });
         }
