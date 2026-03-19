@@ -12,8 +12,8 @@
 	<PropertyGroup>
 		<PackageId>tulo.SerilogLib</PackageId>
 		<Version>0.0.1</Version>
-		<Authors>Tulo's Team</Authors>
-		<Company>Tulo Entrepreneurial Company (limited liability)  [UG]</Company>
+		<Authors>Tulo Team</Authors>
+		<Company>Tulo Team</Company>
 		<Description>
 			This package is for private use within our organisation only.
 			Generate an framework project
