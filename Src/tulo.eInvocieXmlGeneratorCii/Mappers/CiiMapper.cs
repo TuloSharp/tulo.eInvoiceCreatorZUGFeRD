@@ -72,80 +72,57 @@ public class CiiMapper : ICiiMapper
         var party = new TradePartyType
         {
             Name = string.IsNullOrWhiteSpace(p.Name) ? null : new TextType { Value = p.Name },
-            PostalTradeAddress = string.IsNullOrWhiteSpace(p.Street) &&
-                                  string.IsNullOrWhiteSpace(p.Zip) &&
-                                  string.IsNullOrWhiteSpace(p.City) &&
-                                  string.IsNullOrWhiteSpace(p.CountryCode) ? null : new TradeAddressType
-                                  {
-                                      LineOne = string.IsNullOrWhiteSpace(p.Street) ? null : new TextType { Value = p.Street },
-                                      PostcodeCode = string.IsNullOrWhiteSpace(p.Zip) ? null : new CodeType { Value = p.Zip },
-                                      CityName = string.IsNullOrWhiteSpace(p.City) ? null : new TextType { Value = p.City },
-                                      CountryID = string.IsNullOrWhiteSpace(p.CountryCode) ? null : new CountryIDType { Value = p.CountryCode }
-                                  }
+            PostalTradeAddress =
+                string.IsNullOrWhiteSpace(p.Street) &&
+                string.IsNullOrWhiteSpace(p.Zip) &&
+                string.IsNullOrWhiteSpace(p.City) &&
+                string.IsNullOrWhiteSpace(p.CountryCode)
+                    ? null
+                    : new TradeAddressType
+                    {
+                        LineOne = string.IsNullOrWhiteSpace(p.Street) ? null : new TextType { Value = p.Street },
+                        PostcodeCode = string.IsNullOrWhiteSpace(p.Zip) ? null : new CodeType { Value = p.Zip },
+                        CityName = string.IsNullOrWhiteSpace(p.City) ? null : new TextType { Value = p.City },
+                        CountryID = string.IsNullOrWhiteSpace(p.CountryCode) ? null : new CountryIDType { Value = p.CountryCode }
+                    }
         };
 
-        // Identifier
         if (!string.IsNullOrWhiteSpace(p.ID))
             party.ID = [new IDType { Value = p.ID }];
 
-        // Legal organization
-        if (!string.IsNullOrWhiteSpace(p.FiscalId))
-        {
-            party.SpecifiedLegalOrganization = new LegalOrganizationType
-            {
-                ID = new IDType { Value = p.FiscalId }
-            };
-        }
-
-        // Contact
         if (!string.IsNullOrWhiteSpace(p.ContactPersonName) || !string.IsNullOrWhiteSpace(p.ContactPhone) || !string.IsNullOrWhiteSpace(p.ContactEmail))
-        {
-            party.DefinedTradeContact = [
-                 new TradeContactType
-                    {
-                        PersonName = string.IsNullOrWhiteSpace(p.ContactPersonName) ? null : new TextType { Value = p.ContactPersonName },
-                        TelephoneUniversalCommunication = string.IsNullOrWhiteSpace(p.ContactPhone) ? null : new UniversalCommunicationType { CompleteNumber = new TextType { Value = p.ContactPhone } },
-                        EmailURIUniversalCommunication = string.IsNullOrWhiteSpace(p.ContactEmail) ? null :  new UniversalCommunicationType { URIID = new IDType { Value = p.ContactEmail } }
-                     }
+            party.DefinedTradeContact =
+            [
+                new TradeContactType
+            {
+                PersonName = string.IsNullOrWhiteSpace(p.ContactPersonName) ? null : new TextType { Value = p.ContactPersonName },
+                TelephoneUniversalCommunication = string.IsNullOrWhiteSpace(p.ContactPhone) ? null : new UniversalCommunicationType { CompleteNumber = new TextType { Value = p.ContactPhone } },
+                EmailURIUniversalCommunication = string.IsNullOrWhiteSpace(p.ContactEmail) ? null : new UniversalCommunicationType { URIID = new IDType { Value = p.ContactEmail } }
+            }
             ];
-        }
 
-        // General email or Leitweg-ID
         if (!string.IsNullOrWhiteSpace(p.GeneralEmail))
-        {
-            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { schemeID = "0088", Value = p.GeneralEmail } };
-        }
+            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { Value = p.GeneralEmail, schemeID = "EM" } };
         else if (!string.IsNullOrWhiteSpace(p.LeitwegId))
-        {
-            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { schemeID = "0204", Value = p.LeitwegId } };
-        }
+            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { Value = p.LeitwegId, schemeID = string.IsNullOrWhiteSpace(p.LeitwegIdSchemeId) ? "0204" : p.LeitwegIdSchemeId } };
 
-        // Legal organization
-        if (!string.IsNullOrWhiteSpace(p.FiscalId))
-        {
+        var legalId = !string.IsNullOrWhiteSpace(p.LegalOrganizationId) ? p.LegalOrganizationId : p.FiscalId;
+        if (!string.IsNullOrWhiteSpace(legalId))
             party.SpecifiedLegalOrganization = new LegalOrganizationType
             {
-                ID = new IDType { Value = p.FiscalId }
+                ID = new IDType { Value = legalId, schemeID = string.IsNullOrWhiteSpace(p.IdSchemeId) ? null : p.IdSchemeId }
             };
-        }
 
-        // Tax registrations
-        var regs = new List<TaxRegistrationType>();
-
-        if (!string.IsNullOrWhiteSpace(p.TaxRegistrationFcId))
-            regs.Add(new TaxRegistrationType { ID = new IDType { schemeID = "FC", Value = p.TaxRegistrationFcId } });
-
+        var taxes = new List<TaxRegistrationType>();
         if (!string.IsNullOrWhiteSpace(p.VatId))
-            regs.Add(new TaxRegistrationType { ID = new IDType { schemeID = "VA", Value = p.VatId } });
-
-        if (regs.Count > 0)
-            party.SpecifiedTaxRegistration = regs.ToArray();
-
-        if (!string.IsNullOrWhiteSpace(p.ID))
-            party.ID = [new IDType { Value = p.ID }];
+            taxes.Add(new TaxRegistrationType { ID = new IDType { Value = p.VatId, schemeID = "VA" } });
+        if (!string.IsNullOrWhiteSpace(p.TaxRegistrationFcId))
+            taxes.Add(new TaxRegistrationType { ID = new IDType { Value = p.TaxRegistrationFcId, schemeID = "FC" } });
+        if (taxes.Count > 0)
+            party.SpecifiedTaxRegistration = [.. taxes];
 
         if (!string.IsNullOrWhiteSpace(p.GlobalId))
-            party.GlobalID = [new IDType { schemeID = string.IsNullOrWhiteSpace(p.GlobalIdSchemeId) ? null : p.GlobalIdSchemeId, Value = p.GlobalId }];
+            party.GlobalID = [new IDType { Value = p.GlobalId, schemeID = string.IsNullOrWhiteSpace(p.GlobalIdSchemeId) ? null : p.GlobalIdSchemeId }];
 
         return party;
     }
@@ -259,40 +236,42 @@ public class CiiMapper : ICiiMapper
     private HeaderTradeSettlementType MapHeaderSettlement(Invoice inv)
     {
         var currency = string.IsNullOrWhiteSpace(inv.Currency) ? "EUR" : inv.Currency;
+        static decimal R2(decimal v) => Math.Round(v, 2, MidpointRounding.AwayFromZero);
 
-        decimal LineNet(InvoiceLine l) => l?.ForcedLineTotalAmount ?? Math.Round((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m), 2, MidpointRounding.AwayFromZero);
-        bool CountsTowardsHeaderTotals(InvoiceLine l) => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
+        var lines = (inv.Lines ?? [])
+            .Where(l => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase))
+            .ToArray();
 
-        var lines = (inv.Lines ?? []).Where(CountsTowardsHeaderTotals).ToArray();
-        var netTotal = lines.Sum(LineNet);
+        var netTotal = R2(lines.Sum(l => l?.ForcedLineTotalAmount ?? R2((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m))));
+        var chargeTotal = R2(inv.HeaderChargeTotalAmount);
+        var allowanceTotal = R2(inv.HeaderAllowanceTotalAmount);
+        var prepaidTotal = R2(inv.HeaderTotalPrepaidAmount);
+
         var headerTaxes = MapHeaderTradeTax(inv, currency);
-        var chargeTotal = inv.HeaderChargeTotalAmount;
-        var allowanceTotal = inv.HeaderAllowanceTotalAmount;
-        var taxTotal = headerTaxes?.Sum(t => t.CalculatedAmount.Value) ?? 0m;
-        var grandTotal = netTotal + taxTotal;
-        var prepaidTotal = inv.HeaderTotalPrepaidAmount;
-        var duePayable = inv.HeaderDuePayableAmount;
+        var taxTotal = R2(headerTaxes?.Sum(t => t?.CalculatedAmount?.Value ?? 0m) ?? 0m);
+
+        var taxBasisTotal = R2(netTotal + chargeTotal - allowanceTotal);
+        var grandTotal = R2(taxBasisTotal + taxTotal);
+        var duePayable = R2(grandTotal - prepaidTotal);
 
         var settlement = new HeaderTradeSettlementType
         {
             PaymentReference = string.IsNullOrWhiteSpace(inv.Payment?.PaymentReference) ? null : new TextType { Value = inv.Payment.PaymentReference },
             InvoiceCurrencyCode = new CurrencyCodeType { Value = currency },
             ApplicableTradeTax = headerTaxes,
-            SpecifiedTradeSettlementHeaderMonetarySummation =
-                new TradeSettlementHeaderMonetarySummationType
-                {
-                    LineTotalAmount = new AmountType { Value = netTotal },
-                    ChargeTotalAmount = new AmountType { Value = chargeTotal },
-                    AllowanceTotalAmount = new AmountType { Value = allowanceTotal },
-                    TaxBasisTotalAmount = new AmountType { Value = netTotal },
-                    TaxTotalAmount = new[] { new AmountType { currencyID = currency, Value = taxTotal } },
-                    GrandTotalAmount = new AmountType { Value = grandTotal },
-                    TotalPrepaidAmount = new AmountType { Value = prepaidTotal },
-                    DuePayableAmount = new AmountType { Value = duePayable }
-                }
+            SpecifiedTradeSettlementHeaderMonetarySummation = new TradeSettlementHeaderMonetarySummationType
+            {
+                LineTotalAmount = new AmountType { Value = netTotal },
+                ChargeTotalAmount = new AmountType { Value = chargeTotal },
+                AllowanceTotalAmount = new AmountType { Value = allowanceTotal },
+                TaxBasisTotalAmount = new AmountType { Value = taxBasisTotal },
+                TaxTotalAmount = [new AmountType { currencyID = currency, Value = taxTotal }],
+                GrandTotalAmount = new AmountType { Value = grandTotal },
+                TotalPrepaidAmount = new AmountType { Value = prepaidTotal },
+                DuePayableAmount = new AmountType { Value = duePayable }
+            }
         };
 
-        // Payment data
         if (inv.Payment != null)
         {
             settlement.SpecifiedTradeSettlementPaymentMeans = MapPaymentMeans(inv.Payment, currency);

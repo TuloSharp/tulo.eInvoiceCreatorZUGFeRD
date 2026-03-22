@@ -54,7 +54,9 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
 
         // Buyer
         invoice.Buyer.Name = invoiceViewModel.CompanyBuyerParty?.Trim() ?? string.Empty;
-        invoice.Buyer.FiscalId = string.IsNullOrWhiteSpace(invoiceViewModel.FiscalIdBuyerParty) ? null : invoiceViewModel.FiscalIdBuyerParty.Trim();
+        invoice.Buyer.FiscalId = string.IsNullOrWhiteSpace(invoiceViewModel.FiscalIdBuyerParty) ? string.Empty : invoiceViewModel.FiscalIdBuyerParty.Trim();
+        invoice.Buyer.LegalOrganizationId = invoice.Buyer.FiscalId!;
+        invoice.Buyer.IdSchemeId = "0002"; //ToDo
         invoice.Buyer.VatId = invoiceViewModel.VatIdBuyerParty?.Trim() ?? string.Empty;
 
         // Use ERP customer number as buyer ID (your template used this as Buyer.ID).
@@ -71,9 +73,9 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
         invoice.Buyer.City = invoiceViewModel.CityBuyerParty?.Trim() ?? string.Empty;
         invoice.Buyer.CountryCode = invoiceViewModel.CountryCodeBuyerParty?.Trim() ?? string.Empty;
 
-        invoice.Buyer.ContactPersonName = string.IsNullOrWhiteSpace(invoiceViewModel.PersonBuyerParty) ? null : invoiceViewModel.PersonBuyerParty.Trim();
-        invoice.Buyer.ContactPhone = string.IsNullOrWhiteSpace(invoiceViewModel.PhoneBuyerParty) ? null : invoiceViewModel.PhoneBuyerParty.Trim();
-        invoice.Buyer.ContactEmail = string.IsNullOrWhiteSpace(invoiceViewModel.EmailAddressBuyerParty) ? null : invoiceViewModel.EmailAddressBuyerParty.Trim();
+        invoice.Buyer.ContactPersonName = string.IsNullOrWhiteSpace(invoiceViewModel.PersonBuyerParty) ? string.Empty : invoiceViewModel.PersonBuyerParty.Trim();
+        invoice.Buyer.ContactPhone = string.IsNullOrWhiteSpace(invoiceViewModel.PhoneBuyerParty) ? string.Empty : invoiceViewModel.PhoneBuyerParty.Trim();
+        invoice.Buyer.ContactEmail = string.IsNullOrWhiteSpace(invoiceViewModel.EmailAddressBuyerParty) ? string.Empty : invoiceViewModel.EmailAddressBuyerParty.Trim();
 
         // Payment (no parsing/validation; due date stays untouched unless you have a real DateTime property)
         invoice.Payment.PaymentMeansTypeCode = invoiceViewModel.PaymentMeansCode?.Trim() ?? string.Empty;
@@ -254,22 +256,27 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
 
         foreach (var l in invoice.Lines)
         {
-            var net = l.ForcedLineTotalAmount.HasValue ? Round2(l.ForcedLineTotalAmount.Value) : Round2(l.Quantity * l.UnitPrice);
-            var tax = Round2(net * (l.TaxPercent / 100m));
+            var lineNet = l.ForcedLineTotalAmount.HasValue
+                ? Round2(l.ForcedLineTotalAmount.Value)
+                : Round2(l.Quantity * l.UnitPrice);
 
-            sumNet += net;
-            sumTax += tax;
+            var lineTax = Round2(lineNet * (l.TaxPercent / 100m));
+
+            sumNet += lineNet;
+            sumTax += lineTax;
         }
 
         sumNet = Round2(sumNet);
         sumTax = Round2(sumTax);
-        var gross = Round2(sumNet + sumTax);
 
         var charge = Round2(invoice.HeaderChargeTotalAmount);
         var allowance = Round2(invoice.HeaderAllowanceTotalAmount);
         var prepaid = Round2(invoice.HeaderTotalPrepaidAmount);
 
-        invoice.HeaderDuePayableAmount = Round2(gross + charge - allowance - prepaid);
+        var taxBasis = Round2(sumNet + charge - allowance);
+        var grandTotal = Round2(taxBasis + sumTax);
+
+        invoice.HeaderDuePayableAmount = Round2(grandTotal - prepaid);
     }
 
     private static decimal Round2(decimal v) => Math.Round(v, 2, MidpointRounding.AwayFromZero);

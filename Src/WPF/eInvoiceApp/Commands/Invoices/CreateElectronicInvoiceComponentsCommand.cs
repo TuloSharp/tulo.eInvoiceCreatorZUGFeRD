@@ -165,8 +165,8 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 var invoiceFileName = invoiceViewModel.InvoiceNumber ?? "NotInvoiceNrPresent";
                 CancellationToken ct = default;
 
-                //var configuredPath = _appOptions?.Value?.Archive?.OutputPath ?? string.Empty;
-                var configuredPath = string.Empty;
+                var configuredPath = _appOptions?.Value?.Archive?.OutputPath ?? string.Empty;
+                //var configuredPath = string.Empty;
                 var archiveRootPath = !string.IsNullOrWhiteSpace(configuredPath) && Path.IsPathFullyQualified(configuredPath) ? configuredPath : Path.GetTempPath();
 
                 string? inputPdfPath = null;

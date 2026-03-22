@@ -3,6 +3,7 @@
 public class Party
 {
     public string ID { get; set; } = string.Empty;
+    public string IdSchemeId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Street { get; set; } = string.Empty;
     public string Zip { get; set; } = string.Empty;
@@ -10,6 +11,7 @@ public class Party
     public string CountryCode { get; set; } = string.Empty;
     public string VatId { get; set; } = string.Empty;
     public string LeitwegId { get; set; } = string.Empty;
+    public string LeitwegIdSchemeId { get; set; } = string.Empty;
     public string FiscalId { get; set; } = string.Empty;
     public string TaxRegistrationFcId { get; set; } = string.Empty;
     public string GeneralEmail { get; set; } = string.Empty;
