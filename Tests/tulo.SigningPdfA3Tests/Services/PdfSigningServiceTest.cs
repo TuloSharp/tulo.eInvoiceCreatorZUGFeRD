@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using tulo.SigningPdfA3.Services;
+﻿using tulo.SigningPdfA3.Services;
 
 namespace tulo.SigningPdfA3Tests.Services;
 
