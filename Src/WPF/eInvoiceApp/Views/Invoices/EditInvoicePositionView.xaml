@@ -141,7 +141,7 @@
                             <Path Style="{StaticResource ContentButtonPathStyle}"
                                   Data="{StaticResource ArrowBackIconSVG}"
                                   Fill="{StaticResource ButtonBrushIconColor}" />
-                            <TextBlock Text="Z"
+                            <TextBlock Text="R"
                                        Width="12"
                                        TextAlignment="Center"
                                        VerticalAlignment="Bottom"
@@ -149,7 +149,7 @@
                                        Visibility="{Binding IsAltShortcutKeyPressed, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Background="{StaticResource MainBrushColor}"
                                        Foreground="{StaticResource ButtonBrushIconColor}" />
-                            <AccessText Text="_Zurueck"
+                            <AccessText Text="_Return"
                                         FontSize="8"
                                         Foreground="Transparent"
                                         Background="Transparent" />

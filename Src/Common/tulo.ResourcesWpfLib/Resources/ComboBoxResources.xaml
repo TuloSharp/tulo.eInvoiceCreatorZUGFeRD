@@ -11,7 +11,7 @@
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="True" />
-        <Setter Property="ClickMode" Value="Press" />
+        <Setter Property="ClickMode" Value="Release" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -19,7 +19,7 @@
                             Background="White"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="true">
+                            SnapsToDevicePixels="True">
                         <Border x:Name="splitBorder"
                                 Width="{StaticResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"
                                 HorizontalAlignment="Right"
@@ -51,11 +51,7 @@
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
                     <Grid>
                         <Border x:Name="Border" Background="Transparent">
-                            <TextBlock FontSize="12" Margin="7,0,0,0">
-                                <InlineUIContainer>
-                                    <ContentPresenter />
-                                </InlineUIContainer>
-                            </TextBlock>
+                            <ContentPresenter Margin="7,0,0,0" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -72,7 +68,9 @@
     <ControlTemplate x:Key="ComboBoxCustomized" TargetType="{x:Type ComboBox}">
         <Border Name="comboBoxBorder"
                 CornerRadius="0"
-                BorderThickness="1">
+                BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                Background="{TemplateBinding Background}">
             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -149,7 +147,7 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="BorderBrush" TargetName="comboBoxBorder" Value="#B0B2B8" />
                 <Setter Property="Opacity" TargetName="comboBoxBorder" Value="1" />
-                <Setter Property="BorderThickness" TargetName="comboBoxBorder" Value="0"/>
+                <Setter Property="BorderThickness" TargetName="comboBoxBorder" Value="0" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>

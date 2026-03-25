@@ -5,4 +5,5 @@ public interface IAppOptions
     InvoiceOptions Invoice { get; set; }
     ArchiveOptions Archive { get; set; }
     VatsOptions Vats { get; set; }
+    SignatureOptions Signature { get; set; }
 }

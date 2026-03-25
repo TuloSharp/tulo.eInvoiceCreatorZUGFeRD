@@ -17,7 +17,6 @@ using tulo.UpgradeToPdfA3.Options;
 using tulo.UpgradeToPdfA3.ResultPattern;
 using tulo.XMLeInvoiceToPdf.Services;
 
-
 namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 
 public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceViewModel, ICollectorCollection collectorCollection) : AsyncBaseCommand
@@ -39,7 +38,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     {
         _logger.LogInformation($"{nameof(CreateElectronicInvoiceComponentsCommand)} start execution");
 
-        #region Command parameters
+        #region Parse Command parameters
         Window? window = null;
         bool isPreview = false;
         bool hasToCreate = false;
@@ -108,6 +107,8 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             }
         }, System.Windows.Threading.DispatcherPriority.Render);
         #endregion
+
+        #region Create Invocie Pdf-A3
         try
         {
             var invoice = await _invoiceBuilderService.BuildAsync(invoiceViewModel, default);
@@ -146,9 +147,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             // Apply watermark ONLY in preview mode (result is also a MemoryStream)
             MemoryStream streamToRender = pdfMemoryStream;
 
-            // =========================================================
             // PREVIEW MODE: Watermark + Render ONLY (no create)
-            // =========================================================
             if (isPreview)
             {
                 var previewInput = new MemoryStream(pdfMemoryStream.ToArray());
@@ -243,8 +242,10 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         {
             invoiceViewModel.DocumentSource = BuildErrorHtml($"Failed to generate or render PDF: {ex.Message}", encode: true);
         }
+        #endregion
     }
 
+    #region Utilities
     static string BuildErrorHtml(string message, bool encode = true)
     {
         var safe = encode ? System.Net.WebUtility.HtmlEncode(message) : message;
@@ -257,4 +258,5 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             value = value.Replace(c, '_');
         return value.Trim();
     }
+    #endregion
 }

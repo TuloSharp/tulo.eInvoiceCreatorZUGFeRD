@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="tulo.eInvoice.eInvoiceApp.Views.Invoices.AddInvoicePositionView"
+﻿<UserControl x:Class="tulo.eInvoice.eInvoiceApp.Views.Common.InsertPublicKeyView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Invoices"
+             xmlns:local="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Common"
              xmlns:flag="clr-namespace:System;assembly=mscorlib"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:commoncontrols="clr-namespace:tulo.ResourcesWpfLib.Controls.Common;assembly=tulo.ResourcesWpfLib"
@@ -49,8 +49,8 @@
     <UserControl.InputBindings>
         <KeyBinding Modifiers="Alt"
                     Key="F4"
-                    Command="{Binding CloseAddInvoicePositionDetailsCommand}" />
-        <KeyBinding Key="Esc" Command="{Binding CloseAddInvoicePositionDetailsCommand}" />
+                    Command="{Binding CloseInsertPublicKeyViewCommand}" />
+        <KeyBinding Key="Esc" Command="{Binding CloseInsertPublicKeyViewCommand}" />
     </UserControl.InputBindings>
 
     <Grid ToolTipService.ShowOnDisabled="True">
@@ -95,20 +95,19 @@
                                MaxWidth="2000"
                                Padding="4,3,0,0"
                                Foreground="White"
-                               Text="{Binding LabelCreateInvoicePosition}" />
+                               Text="{Binding LabelInsertPublicKey}" />
 
                     <Button x:Name="btnClose"
                             Grid.Column="2"
                             Focusable="False"
                             Style="{StaticResource CloseWinButton}"
-                            IsEnabled="{Binding IsSaveRequestMessageVisible, Converter={StaticResource InverseBoolConverter}}"
                             Width="22"
                             Height="22"
                             Cursor="Hand"
                             Background="{StaticResource MainBrushColor}"
                             BorderBrush="Transparent"
                             Foreground="Transparent"
-                            Command="{Binding CloseAddInvoicePositionDetailsCommand}"
+                            Command="{Binding CloseInsertPublicKeyViewCommand}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
                         <Grid Width="14" Height="14">
@@ -119,7 +118,7 @@
                         </Grid>
                         <behaviors:Interaction.Triggers>
                             <behaviors:KeyTrigger Key="Esc">
-                                <behaviors:InvokeCommandAction Command="{Binding CloseAddInvoicePositionDetailsCommand}" />
+                                <behaviors:InvokeCommandAction Command="{Binding CloseInsertPublicKeyViewCommand}" />
                             </behaviors:KeyTrigger>
                         </behaviors:Interaction.Triggers>
                     </Button>
@@ -219,16 +218,44 @@
                     <RowDefinition Height="6" />
                 </Grid.RowDefinitions>
 
-                <local:InvoicePositionDetailsFormView DataContext="{Binding InvoicePositionDetailsFormViewModel}" Grid.Row="1" />
+                <Grid Grid.Row="1">
 
-                <commoncontrols:StatusMessageControl Grid.Row="2"
-                                                     Margin="0,8,0,0"
-                                                     Grid.Column="1"
-                                                     Grid.ColumnSpan="1"
-                                                     DataContext="{Binding StatusMessageViewModel}" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                <commoncontrols:SaveRequestMessageControl DataContext="{Binding InvoicePositionDetailsFormViewModel}" Grid.Row="3" />
+                    <GroupBox Grid.Row="0"
+                              Margin="10,0,10,0"
+                              Padding="0"
+                              BorderBrush="{StaticResource GroupBoxBrushColor}"
+                              BorderThickness="1">
+                        <GroupBox.Header>
+                            <TextBlock Margin="6,2,6,2"
+                                       FontStyle="Oblique"
+                                       Text="{Binding LabelHeaderGroupBox}" />
+                        </GroupBox.Header>
+
+                        <!--<Grid Margin="0,5,0,5">
+                            <passwordbox:UncoverPasswordBox x:Name="PasswordBox"
+                                        TabIndex="0"
+                                        Width="250"
+                                        HorizontalAlignment="Left"
+                                        extended:TextBoxProperties.AllowedCharactersRegex="[^~]"
+                                        extendedfocus:NewFocus.ExtendedByEnterKey="True"
+                                        Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>-->
+                    </GroupBox>
+
+                    <commoncontrols:StatusMessageControl Grid.Row="2"
+                                                         Margin="0,8,0,0"
+                                                         Grid.Column="1"
+                                                         Grid.ColumnSpan="1"
+                                                         DataContext="{Binding StatusMessageViewModel}" />
+
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
 </UserControl>
+

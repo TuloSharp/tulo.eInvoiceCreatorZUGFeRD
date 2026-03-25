@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -20,7 +21,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
 {
     #region Services / Stores filled via CollectorCollection
     private readonly ILogger<InvoicePositionDetailsFormViewModel> _logger;
-    private readonly IAppOptions _appOptions;
+    private readonly IOptions<AppOptions> _appOptions;
     private readonly ISnapShotService _snapShot;
     private readonly IGlobalPropsUiManage _globalPropsUiManage;
     private readonly ITranslatorUiProvider _translatorUiProvider;
@@ -534,7 +535,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
     {
         #region Get Services / Stores from CollectorCollection
         _logger = collectorCollection.GetService<ILoggerFactory>().CreateLogger<InvoicePositionDetailsFormViewModel>();
-        _appOptions = collectorCollection.GetService<IAppOptions>();
+        _appOptions = collectorCollection.GetService<IOptions<AppOptions>>();
         _snapShot = collectorCollection.GetService<ISnapShotService>();
         _globalPropsUiManage = collectorCollection.GetService<IGlobalPropsUiManage>();
         _selectedInvoicePositionStore = collectorCollection.GetService<ISelectedInvoicePositionStore>();
@@ -583,7 +584,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         FillAllInvoicePositionDetailsFormPlaceholders();
         FillAllInvoicePositionDetailsFormTags();
 
-        VatList = _appOptions.Vats.VatList.ToList();
+        VatList = _appOptions.Value.Vats.VatList.ToList();
         VatListItemCollectionView = CollectionViewSource.GetDefaultView(VatList);
         VatListItemCollectionView.MoveCurrentToFirst();
 

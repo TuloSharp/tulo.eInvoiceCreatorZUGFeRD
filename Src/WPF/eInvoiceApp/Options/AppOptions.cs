@@ -8,6 +8,8 @@ public class AppOptions : IAppOptions
     public ArchiveOptions Archive { get; set; } = new();
 
     public VatsOptions Vats { get; set; } = new();
+
+    public SignatureOptions Signature { get; set; } = new();
 }
 
 public class InvoiceOptions
@@ -60,4 +62,13 @@ public sealed class LocalizationOptions
 {
     public string DefaultCulture { get; set; } = "de-DE";
     public string[] SupportedCultures { get; set; } = Array.Empty<string>();
+}
+
+public sealed class SignatureOptions
+{
+    public string? SignaturePath { get; set; }
+    public string? PublicKey { get; set; }
+    public string? Reason { get; set; }
+    public string? Location { get; set; }
+    public string? ContactInfo { get; set; }
 }
