@@ -29,19 +29,20 @@
 	<ItemGroup>
 		<PackageReference Include="Markdig.Wpf" />
 		<PackageReference Include="tulo.CommonMVVM.WPF" />
+		<PackageReference Include="tulo.DropdownMenuControl" />
 		<PackageReference Include="tulo.FontSizePicker" />
 		<PackageReference Include="tulo.LeaderLabeledTextBlock" />
+		<PackageReference Include="tulo.LoadingSpinnerControl" />
 		<PackageReference Include="tulo.ModalViewControl" />
 		<PackageReference Include="tulo.PlaceholderTextBoxControl" />
+		<PackageReference Include="tulo.RevealPasswordBox" />
+		<PackageReference Include="tulo.SerilogLib" />
 		<PackageReference Include="tulo.SlideToComfirmControl" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
-		<ProjectReference Include="..\..\Common\tulo.DropdownMenuControl\tulo.DropdownMenuControl.csproj" />
-		<ProjectReference Include="..\..\Common\tulo.LoadingSpinnerControl\tulo.LoadingSpinnerControl.csproj" />
 		<ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
-		<ProjectReference Include="..\..\Common\tulo.SerilogLib\tulo.SerilogLib.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvocieXmlGeneratorCii\tulo.eInvoiceXmlGeneratorCii.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
 		<ProjectReference Include="..\..\tulo.UpgradeToPdfA3\tulo.UpgradeToPdfA3.csproj" />

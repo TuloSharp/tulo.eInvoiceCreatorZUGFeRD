@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Fonts;

@@ -53,12 +53,14 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.0.1" />
     <PackageVersion Include="MSTest" Version="4.1.0" />
     <PackageVersion Include="tulo.CommonMVVM.WPF" Version="1.0.0" />
+    <PackageVersion Include="tulo.DropdownMenuControl" Version="1.0.0" />
     <PackageVersion Include="tulo.FontSizePicker" Version="1.0.0" />
     <PackageVersion Include="tulo.LeaderLabeledTextBlock" Version="1.0.0" />
+    <PackageVersion Include="tulo.LoadingSpinnerControl" Version="1.0.0" />
     <PackageVersion Include="tulo.ModalViewControl" Version="1.0.0" />
     <PackageVersion Include="tulo.PlaceholderTextBoxControl" Version="1.0.0" />
+    <PackageVersion Include="tulo.RevealPasswordBox" Version="1.0.0" />
+    <PackageVersion Include="tulo.SerilogLib" Version="1.0.0" />
     <PackageVersion Include="tulo.SlideToComfirmControl" Version="1.0.0" />
-    <PackageVersion Include="ZUGFeRD-csharp" Version="18.0.0-beta3" />
-    <PackageVersion Include="ZUGFeRD.PDF-csharp" Version="18.0.0-beta3" />
   </ItemGroup>
 </Project>

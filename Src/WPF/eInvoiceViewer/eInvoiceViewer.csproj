@@ -44,12 +44,13 @@
   <ItemGroup>
     <PackageReference Include="Markdig.Wpf" />
     <PackageReference Include="tulo.CommonMVVM.WPF" />
+    <PackageReference Include="tulo.LoadingSpinnerControl" />
+    <PackageReference Include="tulo.SerilogLib" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
     <ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
-    <ProjectReference Include="..\..\Common\tulo.SerilogLib\tulo.SerilogLib.csproj" />
     <ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
 
   </ItemGroup>
