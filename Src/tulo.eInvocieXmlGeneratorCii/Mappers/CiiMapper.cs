@@ -6,442 +6,392 @@ namespace tulo.eInvoiceXmlGeneratorCii.Mappers;
 
 public class CiiMapper : ICiiMapper
 {
+    // ── Inline helpers ──────────────────────────────────────────────────────
+    private static bool Has(string? s) => !string.IsNullOrWhiteSpace(s);
+    private static IDType MakeId(string v, string? scheme = null) => new() { Value = v, schemeID = scheme };
+    private static TextType MakeText(string v) => new() { Value = v };
+    private static CodeType MakeCode(string v) => new() { Value = v };
+    private static AmountType MakeAmt(decimal v) => new() { Value = v };
+    private static PercentType MakePct(decimal v) => new() { Value = v };
+    private static DateTimeType MakeDate(DateTime dt) => new()
+    {
+        Item = new DateTimeTypeDateTimeString { format = "102", Value = dt.ToString("yyyyMMdd") }
+    };
+    private static FormattedDateTimeType MakeFmtDate(DateTime dt) => new()
+    {
+        DateTimeString = new FormattedDateTimeTypeDateTimeString { format = "102", Value = dt.ToString("yyyyMMdd") }
+    };
+    private static ReferencedDocumentType? MakeRefDoc(string? id) =>
+        Has(id) ? new ReferencedDocumentType { IssuerAssignedID = MakeId(id!) } : null;
+
+    // ── Map ─────────────────────────────────────────────────────────────────
     public CrossIndustryInvoiceType Map(Invoice inv)
     {
         if (inv == null) return new CrossIndustryInvoiceType();
-        var currency = string.IsNullOrWhiteSpace(inv.Currency) ? "EUR" : inv.Currency;
+        var currency = Has(inv.Currency) ? inv.Currency : "EUR";
+        var typeCode = Has(inv.DocumentTypeCode) ? inv.DocumentTypeCode : "380";
 
-        var typeCodeValue = string.IsNullOrWhiteSpace(inv.DocumentTypeCode) ? "380" : inv.DocumentTypeCode;
-
-        var invoice = new CrossIndustryInvoiceType
+        return new CrossIndustryInvoiceType
         {
-            ExchangedDocumentContext = CreateExchangedDocumentContext(),
-
+            ExchangedDocumentContext = new ExchangedDocumentContextType
+            {
+                GuidelineSpecifiedDocumentContextParameter = new DocumentContextParameterType
+                {
+                    ID = MakeId("urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended")
+                }
+            },
             ExchangedDocument = new ExchangedDocumentType
             {
-                ID = new IDType { Value = inv.InvoiceNumber },
-                Name = string.IsNullOrWhiteSpace(inv.DocumentName) ? null : new TextType { Value = inv.DocumentName },
-                TypeCode = new DocumentCodeType { Value = typeCodeValue },
-                IssueDateTime = new DateTimeType
-                {
-                    Item = new DateTimeTypeDateTimeString
-                    {
-                        format = "102",
-                        Value = inv.InvoiceDate.ToString("yyyyMMdd")
-                    }
-                },
+                ID = MakeId(inv.InvoiceNumber),
+                Name = Has(inv.DocumentName) ? MakeText(inv.DocumentName!) : null,
+                TypeCode = new DocumentCodeType { Value = typeCode },
+                IssueDateTime = MakeDate(inv.InvoiceDate),
                 IncludedNote = MapNotes(inv)
             },
-
             SupplyChainTradeTransaction = new SupplyChainTradeTransactionType
             {
                 ApplicableHeaderTradeAgreement = new HeaderTradeAgreementType
                 {
-                    BuyerReference = string.IsNullOrWhiteSpace(inv.BuyerReference) ? null : new TextType { Value = inv.BuyerReference },
+                    BuyerReference = Has(inv.BuyerReference) ? MakeText(inv.BuyerReference!) : null,
                     SellerTradeParty = MapParty(inv.Seller),
                     BuyerTradeParty = MapParty(inv.Buyer),
-                    SellerOrderReferencedDocument = string.IsNullOrWhiteSpace(inv.SellerOrderReferencedId) ? null : new ReferencedDocumentType
-                    {
-                        IssuerAssignedID = new IDType { Value = inv.SellerOrderReferencedId }
-                    },
-
-                    BuyerOrderReferencedDocument = string.IsNullOrWhiteSpace(inv.BuyerOrderReferencedId) ? null : new ReferencedDocumentType
-                    {
-                        IssuerAssignedID = new IDType { Value = inv.BuyerOrderReferencedId }
-                    },
-
-                    ContractReferencedDocument = string.IsNullOrWhiteSpace(inv.ContractReferencedId) ? null : new ReferencedDocumentType
-                    {
-                        IssuerAssignedID = new IDType { Value = inv.ContractReferencedId }
-                    }
+                    SellerOrderReferencedDocument = MakeRefDoc(inv.SellerOrderReferencedId),
+                    BuyerOrderReferencedDocument = MakeRefDoc(inv.BuyerOrderReferencedId),
+                    ContractReferencedDocument = MakeRefDoc(inv.ContractReferencedId)
                 },
-
                 ApplicableHeaderTradeDelivery = MapHeaderDelivery(inv),
-                IncludedSupplyChainTradeLineItem = inv.Lines == null ? [] : [.. inv.Lines.Select((line, idx) => MapLine(inv, line, idx + 1, currency)).Where(x => x != null)],
-                ApplicableHeaderTradeSettlement = MapHeaderSettlement(inv)
+                ApplicableHeaderTradeSettlement = MapHeaderSettlement(inv),
+                IncludedSupplyChainTradeLineItem = inv.Lines == null ? []
+                    : [.. inv.Lines.Select((l, i) => MapLine(inv, l, i + 1, currency!)).Where(x => x != null)]
             }
         };
-
-        return invoice;
     }
 
+    // ── Party ────────────────────────────────────────────────────────────────
     private TradePartyType MapParty(Party p)
     {
         if (p == null) return null!;
 
         var party = new TradePartyType
         {
-            Name = string.IsNullOrWhiteSpace(p.Name) ? null : new TextType { Value = p.Name },
-            PostalTradeAddress =
-                string.IsNullOrWhiteSpace(p.Street) &&
-                string.IsNullOrWhiteSpace(p.Zip) &&
-                string.IsNullOrWhiteSpace(p.City) &&
-                string.IsNullOrWhiteSpace(p.CountryCode)
-                    ? null
-                    : new TradeAddressType
-                    {
-                        LineOne = string.IsNullOrWhiteSpace(p.Street) ? null : new TextType { Value = p.Street },
-                        PostcodeCode = string.IsNullOrWhiteSpace(p.Zip) ? null : new CodeType { Value = p.Zip },
-                        CityName = string.IsNullOrWhiteSpace(p.City) ? null : new TextType { Value = p.City },
-                        CountryID = string.IsNullOrWhiteSpace(p.CountryCode) ? null : new CountryIDType { Value = p.CountryCode }
-                    }
+            Name = Has(p.Name) ? MakeText(p.Name!) : null,
+            PostalTradeAddress = (Has(p.Street) || Has(p.Zip) || Has(p.City) || Has(p.CountryCode))
+                ? new TradeAddressType
+                {
+                    LineOne = Has(p.Street) ? MakeText(p.Street!) : null,
+                    PostcodeCode = Has(p.Zip) ? MakeCode(p.Zip!) : null,
+                    CityName = Has(p.City) ? MakeText(p.City!) : null,
+                    CountryID = Has(p.CountryCode) ? new CountryIDType { Value = p.CountryCode } : null
+                }
+                : null
         };
 
-        if (!string.IsNullOrWhiteSpace(p.ID))
-            party.ID = [new IDType { Value = p.ID }];
+        if (Has(p.ID))
+            party.ID = [MakeId(p.ID!)];
 
-        if (!string.IsNullOrWhiteSpace(p.ContactPersonName) || !string.IsNullOrWhiteSpace(p.ContactPhone) || !string.IsNullOrWhiteSpace(p.ContactEmail))
+        if (Has(p.ContactPersonName) || Has(p.ContactPhone) || Has(p.ContactEmail))
             party.DefinedTradeContact =
             [
                 new TradeContactType
-            {
-                PersonName = string.IsNullOrWhiteSpace(p.ContactPersonName) ? null : new TextType { Value = p.ContactPersonName },
-                TelephoneUniversalCommunication = string.IsNullOrWhiteSpace(p.ContactPhone) ? null : new UniversalCommunicationType { CompleteNumber = new TextType { Value = p.ContactPhone } },
-                EmailURIUniversalCommunication = string.IsNullOrWhiteSpace(p.ContactEmail) ? null : new UniversalCommunicationType { URIID = new IDType { Value = p.ContactEmail } }
-            }
+                {
+                    PersonName = Has(p.ContactPersonName) ? MakeText(p.ContactPersonName!) : null,
+                    TelephoneUniversalCommunication = Has(p.ContactPhone)
+                        ? new UniversalCommunicationType { CompleteNumber = MakeText(p.ContactPhone!) } : null,
+                    EmailURIUniversalCommunication = Has(p.ContactEmail)
+                        ? new UniversalCommunicationType { URIID = MakeId(p.ContactEmail!) } : null
+                }
             ];
 
-        if (!string.IsNullOrWhiteSpace(p.GeneralEmail))
-            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { Value = p.GeneralEmail, schemeID = "EM" } };
-        else if (!string.IsNullOrWhiteSpace(p.LeitwegId))
-            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = new IDType { Value = p.LeitwegId, schemeID = string.IsNullOrWhiteSpace(p.LeitwegIdSchemeId) ? "0204" : p.LeitwegIdSchemeId } };
+        if (Has(p.GeneralEmail))
+            party.URIUniversalCommunication = new UniversalCommunicationType { URIID = MakeId(p.GeneralEmail!, "EM") };
+        else if (Has(p.LeitwegId))
+            party.URIUniversalCommunication = new UniversalCommunicationType
+            {
+                URIID = MakeId(p.LeitwegId!, Has(p.LeitwegIdSchemeId) ? p.LeitwegIdSchemeId : "0204")
+            };
 
-        var legalId = !string.IsNullOrWhiteSpace(p.LegalOrganizationId) ? p.LegalOrganizationId : p.FiscalId;
-        if (!string.IsNullOrWhiteSpace(legalId))
+        var legalId = Has(p.LegalOrganizationId) ? p.LegalOrganizationId : p.FiscalId;
+        if (Has(legalId))
             party.SpecifiedLegalOrganization = new LegalOrganizationType
             {
-                ID = new IDType { Value = legalId, schemeID = string.IsNullOrWhiteSpace(p.IdSchemeId) ? null : p.IdSchemeId }
+                ID = MakeId(legalId!, Has(p.IdSchemeId) ? p.IdSchemeId : null)
             };
 
         var taxes = new List<TaxRegistrationType>();
-        if (!string.IsNullOrWhiteSpace(p.VatId))
-            taxes.Add(new TaxRegistrationType { ID = new IDType { Value = p.VatId, schemeID = "VA" } });
-        if (!string.IsNullOrWhiteSpace(p.TaxRegistrationFcId))
-            taxes.Add(new TaxRegistrationType { ID = new IDType { Value = p.TaxRegistrationFcId, schemeID = "FC" } });
-        if (taxes.Count > 0)
-            party.SpecifiedTaxRegistration = [.. taxes];
+        if (Has(p.VatId)) taxes.Add(new TaxRegistrationType { ID = MakeId(p.VatId!, "VA") });
+        if (Has(p.TaxRegistrationFcId)) taxes.Add(new TaxRegistrationType { ID = MakeId(p.TaxRegistrationFcId!, "FC") });
+        if (taxes.Count > 0) party.SpecifiedTaxRegistration = [.. taxes];
 
-        if (!string.IsNullOrWhiteSpace(p.GlobalId))
-            party.GlobalID = [new IDType { Value = p.GlobalId, schemeID = string.IsNullOrWhiteSpace(p.GlobalIdSchemeId) ? null : p.GlobalIdSchemeId }];
+        if (Has(p.GlobalId))
+            party.GlobalID = [MakeId(p.GlobalId!, Has(p.GlobalIdSchemeId) ? p.GlobalIdSchemeId : null)];
 
         return party;
     }
 
+    // ── Line ─────────────────────────────────────────────────────────────────
     private SupplyChainTradeLineItemType MapLine(Invoice inv, InvoiceLine invLine, int lineNo, string currency)
     {
         if (invLine == null) return null!;
 
         var lineNet = invLine.ForcedLineTotalAmount ?? ComputeLineNet(invLine);
-        var priceBasisQuantity = invLine.PriceBasisQuantity.GetValueOrDefault(1m);
+        var priceBasisQty = invLine.PriceBasisQuantity.GetValueOrDefault(1m);
+        var isChildOrDetail = Has(invLine.ParentLineId) || IsStatus(invLine, "DETAIL");
+        var omitGrossPrice = isChildOrDetail || IsStatus(invLine, "GROUP");
+        var omitLineTaxAmts = omitGrossPrice;
+        var omitNetBasisQty = invLine.OmitNetPriceBasisQuantity ?? isChildOrDetail;
+        var chargeAmount = Math.Round(invLine.UnitPrice * priceBasisQty, 2, MidpointRounding.AwayFromZero);
 
-        var isChildOrDetailLine = !string.IsNullOrWhiteSpace(invLine.ParentLineId) || string.Equals(invLine.LineStatusReasonCode, "DETAIL", StringComparison.OrdinalIgnoreCase);
-        var omitGrossPrice = !string.IsNullOrWhiteSpace(invLine.ParentLineId) || string.Equals(invLine.LineStatusReasonCode, "DETAIL", StringComparison.OrdinalIgnoreCase) || string.Equals(invLine.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
-        var omitLineTaxAmounts = !string.IsNullOrWhiteSpace(invLine.ParentLineId) || string.Equals(invLine.LineStatusReasonCode, "DETAIL", StringComparison.OrdinalIgnoreCase) || string.Equals(invLine.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
-        var omitNetPriceBasisQuantity = invLine.OmitNetPriceBasisQuantity ?? isChildOrDetailLine;
-
-        var grossBasisQuantity = omitGrossPrice ? null : new QuantityType { unitCode = invLine.UnitCode, Value = priceBasisQuantity };
-        var netBasisQuantity = omitNetPriceBasisQuantity ? null : new QuantityType { unitCode = invLine.UnitCode, Value = priceBasisQuantity };
-
-        var chargeAmount = Math.Round(invLine.UnitPrice * priceBasisQuantity, 2, MidpointRounding.AwayFromZero);
+        QuantityType? GrossQty() => omitGrossPrice ? null : new QuantityType { unitCode = invLine.UnitCode, Value = priceBasisQty };
+        QuantityType? NetQty() => omitNetBasisQty ? null : new QuantityType { unitCode = invLine.UnitCode, Value = priceBasisQty };
 
         return new SupplyChainTradeLineItemType
         {
             AssociatedDocumentLineDocument = new DocumentLineDocumentType
             {
-                LineID = new IDType { Value = !string.IsNullOrWhiteSpace(invLine.LineId) ? invLine.LineId : lineNo.ToString(CultureInfo.InvariantCulture) },
-                ParentLineID = string.IsNullOrWhiteSpace(invLine.ParentLineId) ? null : new IDType { Value = invLine.ParentLineId },
-                LineStatusReasonCode = string.IsNullOrWhiteSpace(invLine.LineStatusReasonCode) ? null : new CodeType { Value = invLine.LineStatusReasonCode },
+                LineID = MakeId(Has(invLine.LineId) ? invLine.LineId! : lineNo.ToString(CultureInfo.InvariantCulture)),
+                ParentLineID = Has(invLine.ParentLineId) ? MakeId(invLine.ParentLineId!) : null,
+                LineStatusReasonCode = Has(invLine.LineStatusReasonCode) ? MakeCode(invLine.LineStatusReasonCode!) : null,
                 IncludedNote = MapLineNotes(invLine)
             },
-
             SpecifiedTradeProduct = new TradeProductType
             {
-                GlobalID = string.IsNullOrWhiteSpace(invLine.GlobalId) ? null : new IDType { schemeID = string.IsNullOrWhiteSpace(invLine.GlobalIdSchemeId) ? null : invLine.GlobalIdSchemeId, Value = invLine.GlobalId },
-                SellerAssignedID = string.IsNullOrWhiteSpace(invLine.SellerAssignedId) ? null : new IDType { Value = invLine.SellerAssignedId },
-                BuyerAssignedID = string.IsNullOrWhiteSpace(invLine.BuyerAssignedId) ? null : new IDType { Value = invLine.BuyerAssignedId },
-                Name = string.IsNullOrWhiteSpace(invLine.Description) ? null : new TextType { Value = invLine.Description },
-                Description = string.IsNullOrWhiteSpace(invLine.ProductDescription) ? null : new TextType { Value = invLine.ProductDescription },
-                OriginTradeCountry = string.IsNullOrWhiteSpace(invLine.OriginCountryCode) ? null : new TradeCountryType { ID = new CountryIDType { Value = invLine.OriginCountryCode } }
+                GlobalID = Has(invLine.GlobalId) ? MakeId(invLine.GlobalId!, Has(invLine.GlobalIdSchemeId) ? invLine.GlobalIdSchemeId : null) : null,
+                SellerAssignedID = Has(invLine.SellerAssignedId) ? MakeId(invLine.SellerAssignedId!) : null,
+                BuyerAssignedID = Has(invLine.BuyerAssignedId) ? MakeId(invLine.BuyerAssignedId!) : null,
+                Name = Has(invLine.Description) ? MakeText(invLine.Description!) : null,
+                Description = Has(invLine.ProductDescription) ? MakeText(invLine.ProductDescription!) : null,
+                OriginTradeCountry = Has(invLine.OriginCountryCode)
+                    ? new TradeCountryType { ID = new CountryIDType { Value = invLine.OriginCountryCode } } : null
             },
-
             SpecifiedLineTradeAgreement = new LineTradeAgreementType
             {
-                BuyerOrderReferencedDocument =
-                    string.IsNullOrWhiteSpace(invLine.BuyerOrderReferencedId) &&
-                    string.IsNullOrWhiteSpace(invLine.BuyerOrderLineId) &&
-                    invLine.BuyerOrderDate == null
-                        ? null
-                        : new ReferencedDocumentType
-                        {
-                            IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.BuyerOrderReferencedId) ? null : new IDType { Value = invLine.BuyerOrderReferencedId },
-                            LineID = string.IsNullOrWhiteSpace(invLine.BuyerOrderLineId) ? null : new IDType { Value = invLine.BuyerOrderLineId },
-                            FormattedIssueDateTime = invLine.BuyerOrderDate == null ? null : new FormattedDateTimeType { DateTimeString = new FormattedDateTimeTypeDateTimeString { format = "102", Value = invLine.BuyerOrderDate.Value.ToString("yyyyMMdd") } }
-                        },
-                GrossPriceProductTradePrice = omitGrossPrice ? null : new TradePriceType { ChargeAmount = new AmountType { Value = chargeAmount }, BasisQuantity = grossBasisQuantity },
-                NetPriceProductTradePrice = new TradePriceType { ChargeAmount = new AmountType { Value = chargeAmount }, BasisQuantity = netBasisQuantity }
+                BuyerOrderReferencedDocument = (Has(invLine.BuyerOrderReferencedId) || Has(invLine.BuyerOrderLineId) || invLine.BuyerOrderDate != null)
+                    ? new ReferencedDocumentType
+                    {
+                        IssuerAssignedID = Has(invLine.BuyerOrderReferencedId) ? MakeId(invLine.BuyerOrderReferencedId!) : null,
+                        LineID = Has(invLine.BuyerOrderLineId) ? MakeId(invLine.BuyerOrderLineId!) : null,
+                        FormattedIssueDateTime = invLine.BuyerOrderDate != null ? MakeFmtDate(invLine.BuyerOrderDate.Value) : null
+                    }
+                    : null,
+                GrossPriceProductTradePrice = omitGrossPrice ? null
+                    : new TradePriceType { ChargeAmount = MakeAmt(chargeAmount), BasisQuantity = GrossQty() },
+                NetPriceProductTradePrice = new TradePriceType { ChargeAmount = MakeAmt(chargeAmount), BasisQuantity = NetQty() }
             },
-
             SpecifiedLineTradeDelivery = new LineTradeDeliveryType
             {
                 BilledQuantity = new QuantityType { unitCode = invLine.UnitCode, Value = invLine.Quantity },
                 ShipToTradeParty = MapParty(inv.Buyer),
-                DeliveryNoteReferencedDocument =
-                    string.IsNullOrWhiteSpace(invLine.DeliveryNoteNumber) && string.IsNullOrWhiteSpace(invLine.DeliveryNoteLineId) && invLine.DeliveryNoteDate == null
-                        ? null
-                        : new ReferencedDocumentType
-                        {
-                            IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.DeliveryNoteNumber) ? null : new IDType { Value = invLine.DeliveryNoteNumber },
-                            LineID = string.IsNullOrWhiteSpace(invLine.DeliveryNoteLineId) ? null : new IDType { Value = invLine.DeliveryNoteLineId },
-                            FormattedIssueDateTime = invLine.DeliveryNoteDate == null ? null : new FormattedDateTimeType { DateTimeString = new FormattedDateTimeTypeDateTimeString { format = "102", Value = invLine.DeliveryNoteDate.Value.ToString("yyyyMMdd") } }
-                        }
+                DeliveryNoteReferencedDocument = (Has(invLine.DeliveryNoteNumber) || Has(invLine.DeliveryNoteLineId) || invLine.DeliveryNoteDate != null)
+                    ? new ReferencedDocumentType
+                    {
+                        IssuerAssignedID = Has(invLine.DeliveryNoteNumber) ? MakeId(invLine.DeliveryNoteNumber!) : null,
+                        LineID = Has(invLine.DeliveryNoteLineId) ? MakeId(invLine.DeliveryNoteLineId!) : null,
+                        FormattedIssueDateTime = invLine.DeliveryNoteDate != null ? MakeFmtDate(invLine.DeliveryNoteDate.Value) : null
+                    }
+                    : null
             },
-
             SpecifiedLineTradeSettlement = new LineTradeSettlementType
             {
-                ApplicableTradeTax = new[]
-                {
+                ApplicableTradeTax =
+                [
                     new TradeTaxType
                     {
-                        TypeCode = new TaxTypeCodeType { Value = "VAT" },
-                        CategoryCode = new TaxCategoryCodeType { Value = invLine.TaxCategory },
-                        BasisAmount = omitLineTaxAmounts ? null : null,
-                        CalculatedAmount = omitLineTaxAmounts ? null : null,
-                        RateApplicablePercent = new PercentType { Value = invLine.TaxPercent }
+                        TypeCode             = new TaxTypeCodeType  { Value = "VAT" },
+                        CategoryCode         = new TaxCategoryCodeType { Value = invLine.TaxCategory },
+                        BasisAmount          = omitLineTaxAmts ? null : null,
+                        CalculatedAmount     = omitLineTaxAmts ? null : null,
+                        RateApplicablePercent = MakePct(invLine.TaxPercent)
                     }
-                },
-                BillingSpecifiedPeriod = invLine.BillingPeriodEndDate == null ? null : new SpecifiedPeriodType { EndDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = invLine.BillingPeriodEndDate.Value.ToString("yyyyMMdd") } } },
+                ],
+                BillingSpecifiedPeriod = invLine.BillingPeriodEndDate == null ? null
+                    : new SpecifiedPeriodType { EndDateTime = MakeDate(invLine.BillingPeriodEndDate.Value) },
                 SpecifiedTradeSettlementLineMonetarySummation = new TradeSettlementLineMonetarySummationType
                 {
-                    LineTotalAmount = new AmountType { Value = lineNet },
-                    TotalAllowanceChargeAmount = new AmountType { Value = 0m }
+                    LineTotalAmount = MakeAmt(lineNet),
+                    TotalAllowanceChargeAmount = MakeAmt(0m)
                 },
-                AdditionalReferencedDocument =
-                    string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) &&
-                    string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) &&
-                    string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode)
-                        ? null
-                        : new[]
-                        {
-                            new ReferencedDocumentType
-                            {
-                                IssuerAssignedID = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentId) ? null : new IDType { Value = invLine.AdditionalReferencedDocumentId },
-                                TypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentTypeCode) ? null : new DocumentCodeType { Value = invLine.AdditionalReferencedDocumentTypeCode },
-                                ReferenceTypeCode = string.IsNullOrWhiteSpace(invLine.AdditionalReferencedDocumentReferenceTypeCode) ? null : new ReferenceCodeType { Value = invLine.AdditionalReferencedDocumentReferenceTypeCode }
-                            }
-                        }
+                AdditionalReferencedDocument = (Has(invLine.AdditionalReferencedDocumentId) || Has(invLine.AdditionalReferencedDocumentTypeCode) || Has(invLine.AdditionalReferencedDocumentReferenceTypeCode))
+                    ? [new ReferencedDocumentType
+                    {
+                        IssuerAssignedID  = Has(invLine.AdditionalReferencedDocumentId)                ? MakeId(invLine.AdditionalReferencedDocumentId!)                : null,
+                        TypeCode          = Has(invLine.AdditionalReferencedDocumentTypeCode)           ? new DocumentCodeType  { Value = invLine.AdditionalReferencedDocumentTypeCode }           : null,
+                        ReferenceTypeCode = Has(invLine.AdditionalReferencedDocumentReferenceTypeCode)  ? new ReferenceCodeType { Value = invLine.AdditionalReferencedDocumentReferenceTypeCode }  : null
+                    }]
+                    : null
             }
         };
     }
 
+    // ── Settlement ───────────────────────────────────────────────────────────
     private HeaderTradeSettlementType MapHeaderSettlement(Invoice inv)
     {
-        var currency = string.IsNullOrWhiteSpace(inv.Currency) ? "EUR" : inv.Currency;
+        var currency = Has(inv.Currency) ? inv.Currency : "EUR";
         static decimal R2(decimal v) => Math.Round(v, 2, MidpointRounding.AwayFromZero);
 
-        var lines = (inv.Lines ?? [])
-            .Where(l => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase))
-            .ToArray();
-
+        var lines = (inv.Lines ?? []).Where(l => !IsStatus(l, "GROUP")).ToArray();
         var netTotal = R2(lines.Sum(l => l?.ForcedLineTotalAmount ?? R2((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m))));
         var chargeTotal = R2(inv.HeaderChargeTotalAmount);
         var allowanceTotal = R2(inv.HeaderAllowanceTotalAmount);
         var prepaidTotal = R2(inv.HeaderTotalPrepaidAmount);
-
-        var headerTaxes = MapHeaderTradeTax(inv, currency);
+        var headerTaxes = MapHeaderTradeTax(inv, currency!);
         var taxTotal = R2(headerTaxes?.Sum(t => t?.CalculatedAmount?.Value ?? 0m) ?? 0m);
-
         var taxBasisTotal = R2(netTotal + chargeTotal - allowanceTotal);
         var grandTotal = R2(taxBasisTotal + taxTotal);
         var duePayable = R2(grandTotal - prepaidTotal);
 
         var settlement = new HeaderTradeSettlementType
         {
-            PaymentReference = string.IsNullOrWhiteSpace(inv.Payment?.PaymentReference) ? null : new TextType { Value = inv.Payment.PaymentReference },
+            PaymentReference = Has(inv.Payment?.PaymentReference) ? MakeText(inv.Payment!.PaymentReference!) : null,
             InvoiceCurrencyCode = new CurrencyCodeType { Value = currency },
             ApplicableTradeTax = headerTaxes,
             SpecifiedTradeSettlementHeaderMonetarySummation = new TradeSettlementHeaderMonetarySummationType
             {
-                LineTotalAmount = new AmountType { Value = netTotal },
-                ChargeTotalAmount = new AmountType { Value = chargeTotal },
-                AllowanceTotalAmount = new AmountType { Value = allowanceTotal },
-                TaxBasisTotalAmount = new AmountType { Value = taxBasisTotal },
+                LineTotalAmount = MakeAmt(netTotal),
+                ChargeTotalAmount = MakeAmt(chargeTotal),
+                AllowanceTotalAmount = MakeAmt(allowanceTotal),
+                TaxBasisTotalAmount = MakeAmt(taxBasisTotal),
                 TaxTotalAmount = [new AmountType { currencyID = currency, Value = taxTotal }],
-                GrandTotalAmount = new AmountType { Value = grandTotal },
-                TotalPrepaidAmount = new AmountType { Value = prepaidTotal },
-                DuePayableAmount = new AmountType { Value = duePayable }
+                GrandTotalAmount = MakeAmt(grandTotal),
+                TotalPrepaidAmount = MakeAmt(prepaidTotal),
+                DuePayableAmount = MakeAmt(duePayable)
             }
         };
 
         if (inv.Payment != null)
         {
-            settlement.SpecifiedTradeSettlementPaymentMeans = MapPaymentMeans(inv.Payment, currency);
+            settlement.SpecifiedTradeSettlementPaymentMeans = MapPaymentMeans(inv.Payment, currency!);
             settlement.SpecifiedTradePaymentTerms = MapPaymentTerms(inv.Payment);
         }
 
         return settlement;
     }
 
+    // ── Payment means ────────────────────────────────────────────────────────
     private TradeSettlementPaymentMeansType[] MapPaymentMeans(PaymentDetails payment, string currency)
     {
         if (payment == null) return null!;
 
-        var hasAnything = !string.IsNullOrWhiteSpace(payment.PaymentMeansTypeCode) ||
-                              !string.IsNullOrWhiteSpace(payment.PaymentMeansInformation) ||
-                              !string.IsNullOrWhiteSpace(payment.Iban) ||
-                              !string.IsNullOrWhiteSpace(payment.Bic) ||
-                              !string.IsNullOrWhiteSpace(payment.AccountName);
+        var hasAnything = Has(payment.PaymentMeansTypeCode) || Has(payment.PaymentMeansInformation)
+                       || Has(payment.Iban) || Has(payment.Bic) || Has(payment.AccountName);
+        if (!hasAnything) return null!;
 
-        if (!hasAnything)
-            return null!;
-
+        // TypeCode: 58 = SEPA direct debit, 31 = bank transfer
         var means = new TradeSettlementPaymentMeansType
         {
-            // 58 = SEPA direct debit, 31 = bank transfer
-            TypeCode = string.IsNullOrWhiteSpace(payment.PaymentMeansTypeCode) ? null : new PaymentMeansCodeType { Value = payment.PaymentMeansTypeCode },
-            Information = string.IsNullOrWhiteSpace(payment.PaymentMeansInformation) ? null : new TextType { Value = payment.PaymentMeansInformation },
-            PayeePartyCreditorFinancialAccount =
-                string.IsNullOrWhiteSpace(payment.Iban) && string.IsNullOrWhiteSpace(payment.AccountName) ? null : new CreditorFinancialAccountType
+            TypeCode = Has(payment.PaymentMeansTypeCode) ? new PaymentMeansCodeType { Value = payment.PaymentMeansTypeCode } : null,
+            Information = Has(payment.PaymentMeansInformation) ? MakeText(payment.PaymentMeansInformation!) : null,
+            PayeePartyCreditorFinancialAccount = (Has(payment.Iban) || Has(payment.AccountName))
+                ? new CreditorFinancialAccountType
                 {
-                    IBANID = string.IsNullOrWhiteSpace(payment.Iban) ? null : new IDType { Value = payment.Iban },
-                    AccountName = string.IsNullOrWhiteSpace(payment.AccountName) ? null : new TextType { Value = payment.AccountName }
-                },
-            PayeeSpecifiedCreditorFinancialInstitution = string.IsNullOrWhiteSpace(payment.Bic) ? null : new CreditorFinancialInstitutionType { BICID = new IDType { Value = payment.Bic } }
+                    IBANID = Has(payment.Iban) ? MakeId(payment.Iban!) : null,
+                    AccountName = Has(payment.AccountName) ? MakeText(payment.AccountName!) : null
+                }
+                : null,
+            PayeeSpecifiedCreditorFinancialInstitution = Has(payment.Bic)
+                ? new CreditorFinancialInstitutionType { BICID = MakeId(payment.Bic!) } : null
         };
 
         return [means];
     }
 
+    // ── Payment terms ────────────────────────────────────────────────────────
     private TradePaymentTermsType[] MapPaymentTerms(PaymentDetails payment)
     {
         if (payment == null) return null!;
 
-        var hasStructuredTerms = payment.Terms != null && payment.Terms.Count > 0;
-        var hasLegacyTerms = !string.IsNullOrWhiteSpace(payment.PaymentTermsText) || payment.DueDate != null || !string.IsNullOrWhiteSpace(payment.DirectDebitMandateId);
+        var hasStructured = payment.Terms?.Count > 0;
+        var hasLegacy = Has(payment.PaymentTermsText) || payment.DueDate != null || Has(payment.DirectDebitMandateId);
 
-        if (!hasStructuredTerms && !hasLegacyTerms)
-            return null!;
+        if (!hasStructured && !hasLegacy) return null!;
 
-        DateTimeType MakeDate(DateTime dt) => new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = dt.ToString("yyyyMMdd") } };
-
-        if (hasStructuredTerms)
-        {
+        if (hasStructured)
             return payment.Terms!.Select(t => new TradePaymentTermsType
             {
-                Description = string.IsNullOrWhiteSpace(t.Description) ? null : new TextType { Value = t.Description },
-                DueDateDateTime = t.DueDate == null ? null : MakeDate(t.DueDate.Value),
+                Description = Has(t.Description) ? MakeText(t.Description!) : null,
+                DueDateDateTime = t.DueDate != null ? MakeDate(t.DueDate.Value) : null,
                 ApplicableTradePaymentDiscountTerms = t.DiscountTerms == null ? null : new TradePaymentDiscountTermsType
                 {
                     BasisDateTime = t.DiscountTerms.BasisDate == default ? null : MakeDate(t.DiscountTerms.BasisDate),
                     BasisPeriodMeasure = t.DiscountTerms.BasisPeriodDays <= 0 ? null : new MeasureType { unitCode = "DAY", Value = t.DiscountTerms.BasisPeriodDays },
-                    BasisAmount = t.DiscountTerms.BasisAmount == 0m ? null : new AmountType { Value = t.DiscountTerms.BasisAmount },
-                    CalculationPercent = t.DiscountTerms.CalculationPercent == 0m ? null : new PercentType { Value = t.DiscountTerms.CalculationPercent },
-                    ActualDiscountAmount = t.DiscountTerms.ActualDiscountAmount == 0m ? null : new AmountType { Value = t.DiscountTerms.ActualDiscountAmount }
+                    BasisAmount = t.DiscountTerms.BasisAmount == 0m ? null : MakeAmt(t.DiscountTerms.BasisAmount),
+                    CalculationPercent = t.DiscountTerms.CalculationPercent == 0m ? null : MakePct(t.DiscountTerms.CalculationPercent),
+                    ActualDiscountAmount = t.DiscountTerms.ActualDiscountAmount == 0m ? null : MakeAmt(t.DiscountTerms.ActualDiscountAmount)
                 }
             }).ToArray();
-        }
 
-        // Fallback
+        // Fallback (legacy fields)
         return
         [
             new TradePaymentTermsType
             {
-                Description = string.IsNullOrWhiteSpace(payment.PaymentTermsText) ? null : new TextType { Value = payment.PaymentTermsText },
-                DueDateDateTime = payment.DueDate == null ? null : MakeDate(payment.DueDate.Value),
-                DirectDebitMandateID = string.IsNullOrWhiteSpace(payment.DirectDebitMandateId) ? null : new IDType { Value = payment.DirectDebitMandateId }
+                Description          = Has(payment.PaymentTermsText)    ? MakeText(payment.PaymentTermsText!)         : null,
+                DueDateDateTime      = payment.DueDate != null           ? MakeDate(payment.DueDate.Value)              : null,
+                DirectDebitMandateID = Has(payment.DirectDebitMandateId) ? MakeId(payment.DirectDebitMandateId!)        : null
             }
         ];
     }
 
-    private ExchangedDocumentContextType CreateExchangedDocumentContext()
+    // ── Header delivery ──────────────────────────────────────────────────────
+    private HeaderTradeDeliveryType MapHeaderDelivery(Invoice inv) => new()
     {
-        return new ExchangedDocumentContextType
-        {
-            GuidelineSpecifiedDocumentContextParameter = new DocumentContextParameterType { ID = new IDType { Value = "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended" } }
-        };
-    }
+        ShipToTradeParty = MapParty(inv.Buyer),
+        ShipFromTradeParty = MapParty(inv.Seller),
+        ActualDeliverySupplyChainEvent = new SupplyChainEventType { OccurrenceDateTime = MakeDate(inv.InvoiceDate) }
+    };
 
-    private HeaderTradeDeliveryType MapHeaderDelivery(Invoice inv)
-    {
-        var delivery = new HeaderTradeDeliveryType
-        {
-            ShipToTradeParty = MapParty(inv.Buyer),
-            ShipFromTradeParty = MapParty(inv.Seller),
-            ActualDeliverySupplyChainEvent = new SupplyChainEventType { OccurrenceDateTime = new DateTimeType { Item = new DateTimeTypeDateTimeString { format = "102", Value = inv.InvoiceDate.ToString("yyyyMMdd") } } }
-        };
-
-        return delivery;
-    }
-
+    // ── Header trade tax ─────────────────────────────────────────────────────
     private TradeTaxType[] MapHeaderTradeTax(Invoice inv, string currency)
     {
-        if (inv.Lines == null || inv.Lines.Count == 0)
-            return null!;
+        if (inv.Lines == null || inv.Lines.Count == 0) return null!;
 
-        // Same rounding logic as header totals
-        decimal LineNet(InvoiceLine l) => l?.ForcedLineTotalAmount ?? Math.Round((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m), 2, MidpointRounding.AwayFromZero);
-        bool CountsTowardsHeaderTotals(InvoiceLine l) => !string.Equals(l?.LineStatusReasonCode, "GROUP", StringComparison.OrdinalIgnoreCase);
+        static decimal LineNet(InvoiceLine l) =>
+            l?.ForcedLineTotalAmount ?? Math.Round((l?.Quantity ?? 0m) * (l?.UnitPrice ?? 0m), 2, MidpointRounding.AwayFromZero);
 
-        var relevantLines = inv.Lines.Where(CountsTowardsHeaderTotals).ToArray();
-        if (relevantLines.Length == 0)
-            return null!;
+        var relevant = inv.Lines.Where(l => !IsStatus(l, "GROUP")).ToArray();
+        if (relevant.Length == 0) return null!;
 
-        var groups = relevantLines.GroupBy(l => new { l.TaxPercent, l.TaxCategory });
-
-        var result = new List<TradeTaxType>();
-
-        foreach (var g in groups)
-        {
-            var basisAmount = g.Sum(LineNet);
-            var taxAmount = Math.Round(basisAmount * g.Key.TaxPercent / 100m, 2, MidpointRounding.AwayFromZero);
-
-            result.Add(new TradeTaxType
+        return relevant
+            .GroupBy(l => new { l.TaxPercent, l.TaxCategory })
+            .Select(g =>
             {
-                TypeCode = new TaxTypeCodeType { Value = "VAT" },
-                CategoryCode = new TaxCategoryCodeType { Value = g.Key.TaxCategory },
-                BasisAmount = new AmountType { Value = basisAmount },
-                CalculatedAmount = new AmountType { Value = taxAmount },
-                RateApplicablePercent = new PercentType { Value = g.Key.TaxPercent }
-            });
-        }
-
-        return result.ToArray();
+                var basis = g.Sum(LineNet);
+                var tax = Math.Round(basis * g.Key.TaxPercent / 100m, 2, MidpointRounding.AwayFromZero);
+                return new TradeTaxType
+                {
+                    TypeCode = new TaxTypeCodeType { Value = "VAT" },
+                    CategoryCode = new TaxCategoryCodeType { Value = g.Key.TaxCategory },
+                    BasisAmount = MakeAmt(basis),
+                    CalculatedAmount = MakeAmt(tax),
+                    RateApplicablePercent = MakePct(g.Key.TaxPercent)
+                };
+            })
+            .ToArray();
     }
 
+    // ── Notes ────────────────────────────────────────────────────────────────
     private NoteType[] MapNotes(Invoice inv)
     {
-        if (inv.Notes == null || inv.Notes.Count == 0)
-            return null!;
-
-        return [.. inv.Notes
-            .Where(n => !string.IsNullOrWhiteSpace(n.Content))
-            .Select(n => new NoteType
-            {
-                Content = new TextType { Value = n.Content },
-                SubjectCode = string.IsNullOrWhiteSpace(n.SubjectCode) ? null : new CodeType { Value = n.SubjectCode },
-                ContentCode = string.IsNullOrWhiteSpace(n.ContentCode) ? null : new CodeType { Value = n.ContentCode }
-            })];
+        if (inv.Notes == null || inv.Notes.Count == 0) return null!;
+        return [.. inv.Notes.Where(n => Has(n.Content)).Select(MapNote)];
     }
 
     private static NoteType[]? MapLineNotes(InvoiceLine line)
     {
-        if (line.Notes == null || line.Notes.Count == 0)
-            return null;
-
-        return
-        [
-            .. line.Notes
-            .Where(n => !string.IsNullOrWhiteSpace(n.Content))
-            .Select(n => new NoteType
-            {
-                Content = new TextType { Value = n.Content },
-                SubjectCode = string.IsNullOrWhiteSpace(n.SubjectCode) ? null : new CodeType { Value = n.SubjectCode },
-                ContentCode = string.IsNullOrWhiteSpace(n.ContentCode) ? null : new CodeType { Value = n.ContentCode }
-            })
-        ];
+        if (line.Notes == null || line.Notes.Count == 0) return null;
+        return [.. line.Notes.Where(n => Has(n.Content)).Select(MapNote)];
     }
 
-    private static decimal ComputeLineNet(InvoiceLine line)
+    private static NoteType MapNote(InvoiceNote n) => new()
     {
-        return Math.Round(line.Quantity * line.UnitPrice, 2, MidpointRounding.AwayFromZero);
-    }
+        Content = MakeText(n.Content!),
+        SubjectCode = Has(n.SubjectCode) ? MakeCode(n.SubjectCode!) : null,
+        ContentCode = Has(n.ContentCode) ? MakeCode(n.ContentCode!) : null
+    };
+
+    // ── Utilities ────────────────────────────────────────────────────────────
+    private static bool IsStatus(InvoiceLine? l, string code) =>
+        string.Equals(l?.LineStatusReasonCode, code, StringComparison.OrdinalIgnoreCase);
+
+    private static decimal ComputeLineNet(InvoiceLine line) =>
+        Math.Round(line.Quantity * line.UnitPrice, 2, MidpointRounding.AwayFromZero);
 }

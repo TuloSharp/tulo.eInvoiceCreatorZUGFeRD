@@ -12,7 +12,6 @@ using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
-using tulo.SigningPdfA3.Interfaces;
 using tulo.UpgradeToPdfA3.Interfaces;
 using tulo.UpgradeToPdfA3.Options;
 using tulo.XMLeInvoiceToPdf.Services;
@@ -32,7 +31,6 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     private readonly IOptions<UpgradeToPdfA3Options> _upgradeToPdfA3Options = collectorCollection.GetService<IOptions<UpgradeToPdfA3Options>>();
     private readonly IToPdfAConverterService _toPdfAConverterService = collectorCollection.GetService<IToPdfAConverterService>();
     private readonly IToPdfA3UpgradeService _toPdfA3UpgradeService = collectorCollection.GetService<IToPdfA3UpgradeService>();
-    private readonly IPdfSignatureService _pdfSignatureService = collectorCollection.GetService<IPdfSignatureService>();
     #endregion
 
     protected override async Task ExecuteAsync(object parameter)
@@ -244,46 +242,6 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         }
 
         _logger.LogDebug("[Create] Step 2 OK → {Path}.", outputPdfA3Path);
-
-        //// ── Step 3: Optional signing ──────────────────────────────────────────
-        //var signatureOptions = _appOptions?.Value?.Signature;
-        //bool hasPublicKey = !string.IsNullOrWhiteSpace(signatureOptions?.PublicKey);
-        //bool hasCertificate = !string.IsNullOrWhiteSpace(signatureOptions?.SignaturePath)
-        //                        && File.Exists(signatureOptions!.SignaturePath);
-
-        //if (hasPublicKey && hasCertificate)
-        //{
-        //    _logger.LogInformation("[Create] Step 3/3: Signing PDF/A-3 → {Path}.", outputSignedPath);
-
-        //    var signResult = _pdfSignatureService.SignPdf(
-        //        outputPdfA3Path,
-        //        outputSignedPath,
-        //        signatureOptions!.SignaturePath!,
-        //        signatureOptions.PublicKey!,
-        //        signatureOptions.Reason,
-        //        signatureOptions.Location,
-        //        signatureOptions.ContactInfo);
-
-        //    if (!signResult.Success)
-        //    {
-        //        _logger.LogWarning("[Create] Step 3 WARNING (SignPdf). " +
-        //                           "InvoiceNumber={InvoiceNumber}, Reason={Reason}.",
-        //            invoiceViewModel.InvoiceNumber, signResult.Message);
-
-        //        invoiceViewModel.StatusMessage = $"PDF kann nicht signiert werden. {signResult.Message}";
-        //        // Signing failure is non-fatal → continue with unsigned PDF/A-3
-        //    }
-        //    else
-        //    {
-        //        _logger.LogDebug("[Create] Step 3 OK → {Path}.", outputSignedPath);
-        //    }
-        //}
-        //else
-        //{
-        //    _logger.LogInformation("[Create] Step 3/3: Skipping signing. " +
-        //                           "hasPublicKey={HasPublicKey}, hasCertificate={HasCertificate}.",
-        //        hasPublicKey, hasCertificate);
-        //}
 
         // ── Reset UI slide button ─────────────────────────────────────────────
         invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
