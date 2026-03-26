@@ -9,6 +9,9 @@
              xmlns:commoncontrols="clr-namespace:tulo.ResourcesWpfLib.Controls.Common;assembly=tulo.ResourcesWpfLib"
              xmlns:extended="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
              xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
+             xmlns:publickey="clr-namespace:tulo.RevealPasswordBox;assembly=tulo.RevealPasswordBox"
+             xmlns:utilities="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+             xmlns:placeholder="clr-namespace:tulo.PlaceholderTextBoxControl;assembly=tulo.PlaceholderTextBoxControl"
              Focusable="True"
              FocusManager.IsFocusScope="True"
              KeyboardNavigation.TabNavigation="Cycle"
@@ -19,18 +22,60 @@
              ToolTipService.InitialShowDelay="500"
              BorderThickness="2"
              mc:Ignorable="d"
-             Width="670"
+             Width="444"
              Height="Auto"
              d:DesignHeight="330"
-             d:DesignWidth="670">
+             d:DesignWidth="444">
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:InputErrorToBorderBrushConverter x:Key="InputErrorToBorderBrushConverter" />
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:DebuggerConverter x:Key="DebuggerConverter" />
             <converters:ButtonStateDiagnosticConverter x:Key="ButtonStateDiagnosticConverter" />
             <flag:Boolean x:Key="TrueFlag">True</flag:Boolean>
             <flag:Boolean x:Key="FalseFlag">False</flag:Boolean>
+
+            <Style TargetType="{x:Type TextBox}"
+                   BasedOn="{StaticResource {x:Type TextBox}}"
+                   x:Key="ErrorAtBorderBrushTextBox">
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource InputErrorToBorderBrushConverter}">
+                            <Binding Path="Text" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="IsInvalidStateAtInputField" />
+                            <Binding Source="TextBox" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                        <Setter Property="Background" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type placeholder:PlaceholderTextBox}"
+                   BasedOn="{StaticResource {x:Type placeholder:PlaceholderTextBox}}"
+                   x:Key="ErrorAtBorderBrushTextBoxPlaceholder">
+
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource InputErrorToBorderBrushConverter}">
+                            <Binding Path="Text" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="IsInvalidStateAtInputField" />
+                            <Binding Source="TextBox" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                        <Setter Property="Background" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -211,10 +256,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="14" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+
                     <RowDefinition Height="6" />
                 </Grid.RowDefinitions>
 
@@ -222,7 +264,8 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="16" />
                     </Grid.RowDefinitions>
 
                     <GroupBox Grid.Row="0"
@@ -236,18 +279,82 @@
                                        Text="{Binding LabelHeaderGroupBox}" />
                         </GroupBox.Header>
 
-                        <!--<Grid Margin="0,5,0,5">
-                            <passwordbox:UncoverPasswordBox x:Name="PasswordBox"
-                                        TabIndex="0"
-                                        Width="250"
-                                        HorizontalAlignment="Left"
-                                        extended:TextBoxProperties.AllowedCharactersRegex="[^~]"
-                                        extendedfocus:NewFocus.ExtendedByEnterKey="True"
-                                        Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>-->
+                        <Grid Margin="0,5,0,5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <placeholder:PlaceholderTextBox Grid.Row="0"
+                                                            Placeholder="{Binding PlaceholderSelectSignature}"
+                                                            ToolTip="{Binding ToolTipSelectSignature}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding SelectSignature, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,0,0,0"
+                                                            Padding="2" />
+
+                            <publickey:RevealPasswordBox Grid.Row="1"
+                                                         x:Name="PasswordBox"
+                                                         Height="24"
+                                                         Width="400"
+                                                         HorizontalAlignment="Left"
+                                                         extended:TextBoxProperties.AllowedCharactersRegex="[^~]"
+                                                         Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <placeholder:PlaceholderTextBox Grid.Row="2"
+                                                            Placeholder="{Binding PlaceholderReasonSigning}"
+                                                            ToolTip="{Binding ToolTipSReasonSigning}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding ReasonSigning, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,0,0,0"
+                                                            Padding="2" />
+
+                            <placeholder:PlaceholderTextBox Grid.Row="3"
+                                                            Placeholder="{Binding PlaceholderLocationSigning}"
+                                                            ToolTip="{Binding ToolTipLocationSigning}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding LocationSigning, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,4,0,0"
+                                                            Padding="2" />
+
+                            <placeholder:PlaceholderTextBox Grid.Row="4"
+                                                            Placeholder="{Binding PlaceholderContactInfoSigning}"
+                                                            ToolTip="{Binding ToolTipContactInfoSigning}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding ContactInfoSigning, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,4,0,0"
+                                                            Padding="2" />
+                        </Grid>
                     </GroupBox>
 
-                    <commoncontrols:StatusMessageControl Grid.Row="2"
+                    <commoncontrols:StatusMessageControl Grid.Row="1"
                                                          Margin="0,8,0,0"
                                                          Grid.Column="1"
                                                          Grid.ColumnSpan="1"
@@ -258,4 +365,3 @@
         </Grid>
     </Grid>
 </UserControl>
-

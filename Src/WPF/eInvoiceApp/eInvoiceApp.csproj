@@ -45,6 +45,7 @@
 		<ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvocieXmlGeneratorCii\tulo.eInvoiceXmlGeneratorCii.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
+		<ProjectReference Include="..\..\tulo.SigningPdfA3\tulo.SigningPdfA3.csproj" />
 		<ProjectReference Include="..\..\tulo.UpgradeToPdfA3\tulo.UpgradeToPdfA3.csproj" />
 	</ItemGroup>
 

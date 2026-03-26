@@ -56,6 +56,7 @@ public sealed class VatsOptions
 public sealed class ArchiveOptions
 {
     public string OutputPath { get; set; } = string.Empty;
+    public bool CanOpenPdfWithDefaultApp { get; set; } = false;
 }
 
 public sealed class LocalizationOptions
