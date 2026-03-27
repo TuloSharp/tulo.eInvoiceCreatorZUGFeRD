@@ -4,14 +4,13 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
 		<RootNamespace>tulo.CoreLib</RootNamespace>
 		<AssemblyName>tulo.CoreLib</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>tulo.CoreLib</PackageId>
-		<Version>0.0.1</Version>
+		<Version>1.0.0</Version>
 		<Authors>Tulo Team</Authors>
 		<Company>Tulo Team</Company>
 		<Description>
@@ -19,11 +18,20 @@
 			Generate an framework project
 		</Description>
 		<RepositoryType>GitHub</RepositoryType>
-		<RepositoryUrl></RepositoryUrl>
-		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Copyright>Copyright (c) 2025 Tulo's Company. All rights reserved.</Copyright>
-	</PropertyGroup>
+    <RepositoryUrl>https://github.com/TuloSharp/tulo.eInvoiceApp.git</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Copyright>© 2025–2026 Tulo Team</Copyright>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" />
