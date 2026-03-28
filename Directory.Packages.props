@@ -6,8 +6,8 @@
   <ItemGroup>
     <PackageVersion Include="itext" Version="9.5.0" />
     <PackageVersion Include="itext.bouncy-castle-adapter" Version="9.5.0" />
-    <PackageVersion Include="Mapster" Version="7.4.0" />
-    <PackageVersion Include="Mapster.DependencyInjection" Version="1.0.1" />
+    <!--<PackageVersion Include="Mapster" Version="7.4.0" />
+    <PackageVersion Include="Mapster.DependencyInjection" Version="1.0.1" />-->
     <PackageVersion Include="Markdig.Wpf" Version="0.5.0.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.22" />
