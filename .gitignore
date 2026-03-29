@@ -367,3 +367,7 @@ FodyWeavers.xsd
 !Packages/
 !Packages/*.nupkg
 !Packages/*.snupkg
+
+# Test output
+TestResults/
+TestArtifacts/
