@@ -26,6 +26,12 @@ public class TranslatorUiProvider : ITranslatorUiProvider
         LoadFromEmbeddedResource(assembly, resourceName);
     }
 
+    // 3) In-memory constructor (perfect for tests)
+    public TranslatorUiProvider(IDictionary<string, string> translations)
+    {
+        _translations = new Dictionary<string, string>(translations);
+    }
+
     private void LoadFromFile(string xmlPath)
     {
         try
