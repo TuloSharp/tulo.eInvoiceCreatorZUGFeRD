@@ -568,7 +568,7 @@ public class InvoiceBuilderServiceTests : IDisposable
     [Fact(DisplayName = "ApplySellerFromAppOptions: null seller in AppOptions is skipped without throwing")]
     public async Task ApplySellerFromAppOptions_NullSeller_IsSkipped()
     {
-        _appOptions.Invoice = new InvoiceOptions { Seller = null };
+        _appOptions.Invoice = new InvoiceOptions { Seller = null! };
         var vm = _wpf.Invoke(CreateVm);
 
         var result = await CreateService().BuildAsync(vm);
@@ -642,7 +642,7 @@ public class InvoiceBuilderServiceTests : IDisposable
     [Fact(DisplayName = "ApplyPaymentAccountFromAppOptions: null payment in AppOptions is skipped without throwing")]
     public async Task ApplyPaymentAccountFromAppOptions_NullPayment_IsSkipped()
     {
-        _appOptions.Invoice = new InvoiceOptions { Payment = null };
+        _appOptions.Invoice = new InvoiceOptions { Payment = null! };
         var vm = _wpf.Invoke(CreateVm);
 
         var result = await CreateService().BuildAsync(vm);
@@ -694,7 +694,7 @@ public class InvoiceBuilderServiceTests : IDisposable
     [Fact(DisplayName = "ApplyNotesFromAppOptions: null notes in AppOptions is skipped without throwing")]
     public async Task ApplyNotesFromAppOptions_NullNotes_IsSkipped()
     {
-        _appOptions.Invoice = new InvoiceOptions { Notes = null };
+        _appOptions.Invoice = new InvoiceOptions { Notes = null! };
         var vm = _wpf.Invoke(CreateVm);
 
         var result = await CreateService().BuildAsync(vm);
