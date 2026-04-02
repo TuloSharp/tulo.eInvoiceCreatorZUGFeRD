@@ -41,8 +41,15 @@ public class FakeInvoicePositionService : IInvoicePositionService
     private int _nextPositionNo = 1;
     public int SuggestNextPositionNo() => _nextPositionNo++;
 
+    public Exception? ExceptionToThrow { get; set; }
+
     public Task<OperationResult<List<InvoicePositionDetailsDTO>>> LoadAllInvoicePositionsAsync()
     {
+        if (ExceptionToThrow is not null)
+            // Return a faulted Task instead of throwing synchronously
+            // This correctly mimics how a real async service would fail
+            return Task.FromException<OperationResult<List<InvoicePositionDetailsDTO>>>(ExceptionToThrow);
+
         IsLoaded = true;
 
         // For ViewModel tests we don't need a real DB; return an empty successful result

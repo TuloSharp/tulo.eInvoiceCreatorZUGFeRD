@@ -589,6 +589,7 @@ public class InvoicePositionDetailsFormViewModel : BaseViewModel
         VatListItemCollectionView.MoveCurrentToFirst();
 
         InvoicePositionSelectedVatCategory = VatCategoriesObservableCollection.First(x => x.Code == "S");
+        _invoicePositionVatCategoryCode = "S";
         LoadUintsList();
     }
 

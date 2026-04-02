@@ -70,10 +70,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         string xmlInvoiceContent = _xmlCiiExporter.ToXml(cii);
 
         _logger.LogInformation("[Pipeline] Generating PDF stream.");
-        var pdfStream = _pdfGeneratorFromInvoice.GeneratePdfStream(
-            xmlInvoiceFileName: string.Empty,
-            xmlInvoiceContent: xmlInvoiceContent,
-            hasToRenderHeader: false);
+        var pdfStream = _pdfGeneratorFromInvoice.GeneratePdfStream(xmlInvoiceFileName: string.Empty, xmlInvoiceContent: xmlInvoiceContent, hasToRenderHeader: false);
 
         if (pdfStream is null)
         {

@@ -156,9 +156,7 @@ public sealed class InvoiceBuilderService(ICollectorCollection collectorCollecti
                 UnitPrice = dto.InvoicePositionUnitPrice,
 
                 TaxPercent = dto.InvoicePositionVatRate,
-                TaxCategory = string.IsNullOrWhiteSpace(dto.InvoicePositionSelectedVatCategory?.ToString())
-                ? "S"
-                : dto.InvoicePositionSelectedVatCategory!.ToString()!,
+                TaxCategory = string.IsNullOrWhiteSpace(dto.InvoicePositionVatCategoryCode) ? "S" : dto.InvoicePositionVatCategoryCode,
 
                 // Discount handling: store already provides NetAmountAfterDiscount.
                 ForcedLineTotalAmount = dto.InvoicePositionNetAmountAfterDiscount ?? dto.InvoicePositionNetAmount,

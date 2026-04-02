@@ -23,6 +23,7 @@ public class GenerateCollectInvoiceXmlCiiIntegrationTests
     }
 
     [TestMethod(DisplayName = "Verifies it creates ZUGFeRD invoice equal to official extended collect invoice sample")]
+    [DoNotParallelize]
     public void Generated_invoice_matches_official_extended_collective_invoice()
     {
         // Arrange
@@ -33,6 +34,7 @@ public class GenerateCollectInvoiceXmlCiiIntegrationTests
     }
 
     [TestMethod(DisplayName = "Verifies it creates ZUGFeRD invoice equal to official extended collect invoice sample from JSON example")]
+    [DoNotParallelize]
     public void Generated_invoice_from_json_matches_official_extended_collective_invoice()
     {
         // Arrange

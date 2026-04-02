@@ -23,11 +23,12 @@ public sealed class WpfTestContext : IDisposable
         _ready.Wait(); // wait until dispatcher is ready
     }
 
-    public void Invoke(Action action) =>
-        _dispatcher.Invoke(action);
+    public void Invoke(Action action) => _dispatcher.Invoke(action);
 
-    public T Invoke<T>(Func<T> func) =>
-        _dispatcher.Invoke(func);
+    public T Invoke<T>(Func<T> func) => _dispatcher.Invoke(func);
+
+    // Pumps the dispatcher until all pending async void continuations are done
+    public void WaitForIdle() => _dispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
 
     public void Dispose()
     {

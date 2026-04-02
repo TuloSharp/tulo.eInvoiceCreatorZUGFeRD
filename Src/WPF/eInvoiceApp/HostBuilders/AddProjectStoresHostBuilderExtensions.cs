@@ -14,21 +14,6 @@ public static class AddProjectStoresHostBuilderExtensions
             services.AddSingleton<INavigationStore, NavigationStore>();
             services.AddSingleton<IModalStackNavigationStore, ModalStackNavigationStore>();
             #endregion
-
-
-            //services.AddSingleton<ISelectedAccountStore, SelectedAccountStore>(delegate (IServiceProvider sp)
-            //{
-
-            //    return new AccountStore(new Account
-            //    {
-            //        AccountHolder =
-            //    {
-            //        Username = Environment.UserName
-            //    },
-            //        UserRole = Role.Standard,
-            //    });
-            //});
-
         });
 
         return host;

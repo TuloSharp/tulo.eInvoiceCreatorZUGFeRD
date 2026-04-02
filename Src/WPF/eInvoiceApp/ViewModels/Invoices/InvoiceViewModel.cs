@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
@@ -684,7 +683,7 @@ public class InvoiceViewModel : BaseViewModel
 
         //Only for UI Tests
         SeedTestSellerData();
-        SeedTestInvoicePositions();
+        //SeedTestInvoicePositions();
     }
 
     private void OnInvoicePositionCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
