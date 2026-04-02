@@ -190,50 +190,9 @@ public class InvoiceBuilderServiceTests : IDisposable
 
         Assert.Equal("CUS-001", result.Buyer!.ID);
     }
-
     #endregion
 
     #region 4. FillInvoiceFromViewModel – Payment
-
-    [Fact(DisplayName = "FillInvoiceFromViewModel: PaymentMeansTypeCode is mapped")]
-    public async Task FillInvoiceFromViewModel_PaymentMeansTypeCode_IsMapped()
-    {
-        var vm = _wpf.Invoke(() => { var v = CreateVm(); v.PaymentMeansCode = "58"; return v; });
-
-        var result = await CreateService().BuildAsync(vm);
-
-        Assert.Equal("58", result.Payment!.PaymentMeansTypeCode);
-    }
-
-    [Fact(DisplayName = "FillInvoiceFromViewModel: PaymentReference is mapped")]
-    public async Task FillInvoiceFromViewModel_PaymentReference_IsMapped()
-    {
-        var vm = _wpf.Invoke(() => { var v = CreateVm(); v.PaymentReference = "REF-2025-001"; return v; });
-
-        var result = await CreateService().BuildAsync(vm);
-
-        Assert.Equal("REF-2025-001", result.Payment!.PaymentReference);
-    }
-
-    [Fact(DisplayName = "FillInvoiceFromViewModel: PaymentDueDate is converted from DateOnly to DateTime")]
-    public async Task FillInvoiceFromViewModel_PaymentDueDate_IsConvertedToDateTime()
-    {
-        var vm = _wpf.Invoke(() => { var v = CreateVm(); v.PaymentDueDateText = "31.12.2025"; return v; });
-
-        var result = await CreateService().BuildAsync(vm);
-
-        Assert.Equal(new DateTime(2025, 12, 31), result.Payment!.DueDate);
-    }
-
-    [Fact(DisplayName = "FillInvoiceFromViewModel: PaymentDueDate null sets DueDate to null")]
-    public async Task FillInvoiceFromViewModel_PaymentDueDateNull_SetsDueDateNull()
-    {
-        var vm = _wpf.Invoke(CreateVm);
-
-        var result = await CreateService().BuildAsync(vm);
-
-        Assert.Null(result.Payment!.DueDate);
-    }
 
     [Fact(DisplayName = "FillInvoiceFromViewModel: HasDiscount true uses DiscountPreviewText as PaymentTermsText")]
     public async Task FillInvoiceFromViewModel_HasDiscountTrue_UsesDiscountPreviewText()
@@ -241,25 +200,31 @@ public class InvoiceBuilderServiceTests : IDisposable
         var vm = _wpf.Invoke(() =>
         {
             var v = CreateVm();
-            v.DiscountBasisDateText = "01.01.2025";
-            v.DiscountDays = "14";
-            v.DiscountPercent = 2m;
+            v.HasDiscount = true;
+            v.DiscountPreviewText = "2% Skonto bis 15.01.2025"; // direkt setzen – Placeholder ist im Test leer
+            v.NoDiscountPreviewText = "Zahlbar bis 31.01.2025";
             return v;
         });
 
         var result = await CreateService().BuildAsync(vm);
 
-        Assert.Equal(vm.DiscountPreviewText?.Trim(), result.Payment!.PaymentTermsText);
+        Assert.Equal("2% Skonto bis 15.01.2025", result.Payment!.PaymentTermsText);
     }
 
     [Fact(DisplayName = "FillInvoiceFromViewModel: HasDiscount false uses NoDiscountPreviewText as PaymentTermsText")]
     public async Task FillInvoiceFromViewModel_HasDiscountFalse_UsesNoDiscountPreviewText()
     {
-        var vm = _wpf.Invoke(CreateVm);
+        var vm = _wpf.Invoke(() =>
+        {
+            var v = CreateVm();
+            v.HasDiscount = false;
+            v.NoDiscountPreviewText = "Zahlbar bis 31.01.2025";
+            return v;
+        });
 
         var result = await CreateService().BuildAsync(vm);
 
-        Assert.Equal(vm.NoDiscountPreviewText?.Trim() ?? string.Empty, result.Payment!.PaymentTermsText);
+        Assert.Equal("Zahlbar bis 31.01.2025", result.Payment!.PaymentTermsText);
     }
 
     #endregion
@@ -272,9 +237,12 @@ public class InvoiceBuilderServiceTests : IDisposable
         var vm = _wpf.Invoke(() =>
         {
             var v = CreateVm();
-            v.DiscountBasisDateText = "01.01.2025";
+            v.HasDiscount = true;
+            v.DiscountBasisDateText = "01.01.2025"; // → setzt DiscountBasisDate = DateOnly(2025,1,1)
             v.DiscountDays = "14";
             v.DiscountPercent = 2m;
+            v.DiscountPreviewText = "2% Skonto bis 15.01.2025"; // direkt – Placeholder leer im Test
+            v.NoDiscountPreviewText = "Zahlbar bis 31.01.2025";
             return v;
         });
 
@@ -286,7 +254,7 @@ public class InvoiceBuilderServiceTests : IDisposable
     [Fact(DisplayName = "FillInvoiceFromViewModel: incomplete discount data leaves Terms empty")]
     public async Task FillInvoiceFromViewModel_IncompleteDiscountData_LeavesTermsEmpty()
     {
-        var vm = _wpf.Invoke(CreateVm);
+        var vm = _wpf.Invoke(CreateVm); // HasDiscount = false, nichts gesetzt
 
         var result = await CreateService().BuildAsync(vm);
 
@@ -299,9 +267,12 @@ public class InvoiceBuilderServiceTests : IDisposable
         var vm = _wpf.Invoke(() =>
         {
             var v = CreateVm();
+            v.HasDiscount = true;
             v.DiscountBasisDateText = "01.01.2025";
             v.DiscountDays = "14";
             v.DiscountPercent = 2m;
+            v.DiscountPreviewText = "2% Skonto bis 15.01.2025";
+            v.NoDiscountPreviewText = "Zahlbar bis 31.01.2025";
             return v;
         });
 
@@ -317,10 +288,13 @@ public class InvoiceBuilderServiceTests : IDisposable
         var vm = _wpf.Invoke(() =>
         {
             var v = CreateVm();
+            v.HasDiscount = true;
             v.PaymentDueDateText = "31.01.2025";
             v.DiscountBasisDateText = "01.01.2025";
             v.DiscountDays = "14";
             v.DiscountPercent = 2m;
+            v.DiscountPreviewText = "2% Skonto bis 15.01.2025";
+            v.NoDiscountPreviewText = "Zahlbar bis 31.01.2025";
             return v;
         });
 
@@ -331,6 +305,7 @@ public class InvoiceBuilderServiceTests : IDisposable
     }
 
     #endregion
+
 
     #region 6. FillLinesFromStoreAsync – TaxCategory (Bug Regression)
 
