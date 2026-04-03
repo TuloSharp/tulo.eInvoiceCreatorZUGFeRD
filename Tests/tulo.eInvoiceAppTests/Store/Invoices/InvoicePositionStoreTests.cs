@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using tulo.eInvoice.eInvoiceApp.DTOs;
+﻿using tulo.eInvoice.eInvoiceApp.DTOs;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
 
 namespace tulo.eInvoiceAppTests.Store.Invoices;
@@ -20,7 +15,25 @@ public class InvoicePositionStoreTests
         InvoicePositionVatRate = 19
     };
 
+    private static InvoicePositionDetailsDTO MakeGroupDto(string description) => new()
+    {
+        InvoicePositionDescription = description,
+        LineStatusReasonCode = "GROUP"
+    };
+
+    private static InvoicePositionDetailsDTO MakeSubPositionDto(string description) => new()
+    {
+        InvoicePositionDescription = description,
+        LineStatusReasonCode = "DETAIL",
+        InvoicePositionQuantity = 1,
+        InvoicePositionUnitPrice = 100m,
+        InvoicePositionNetAmount = 100m,
+        InvoicePositionGrossAmount = 119m,
+        InvoicePositionVatRate = 19
+    };
+
     #region AddAsync
+
     [Fact(DisplayName = "AddAsync: single item is added successfully and gets position number 1")]
     public async Task AddAsync_SingleItem_ShouldSucceedAndHavePositionNo1()
     {
@@ -48,12 +61,12 @@ public class InvoicePositionStoreTests
         var all = (await store.GetAllAsync()).Data;
 
         Assert.Equal(3, all.Count);
-        Assert.Equal(1, all[0].InvoicePositionNr);
         Assert.Equal("A", all[0].InvoicePositionDescription);
-        Assert.Equal(2, all[1].InvoicePositionNr);
+        Assert.Equal(1, all[0].InvoicePositionNr);
         Assert.Equal("B", all[1].InvoicePositionDescription);
-        Assert.Equal(3, all[2].InvoicePositionNr);
+        Assert.Equal(2, all[1].InvoicePositionNr);
         Assert.Equal("C", all[2].InvoicePositionDescription);
+        Assert.Equal(3, all[2].InvoicePositionNr);
     }
 
     [Fact(DisplayName = "AddAsync: item with desired position number is inserted at the correct index")]
@@ -88,6 +101,121 @@ public class InvoicePositionStoreTests
         Assert.Equal("B", all[1].InvoicePositionDescription);
         Assert.Equal(2, all[1].InvoicePositionNr);
     }
+
+    [Fact(DisplayName = "AddAsync: inserting at a position occupied by a GROUP inserts before that GROUP's first sub-position")]
+    public async Task AddAsync_DesiredPositionOccupiedByGroup_ShouldInsertBeforeGroupBlock()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+
+        await store.AddAsync(MakeDto("Standalone"), desiredPositionNo: 1);
+
+        var all = (await store.GetAllAsync()).Data;
+
+        Assert.Equal("Standalone", all[0].InvoicePositionDescription);
+        Assert.Equal(1, all[0].InvoicePositionNr);
+        Assert.Equal("Sub A1", all[1].InvoicePositionDescription);
+        Assert.Equal("Group A", all[2].InvoicePositionDescription);
+        Assert.Equal(2, all[2].InvoicePositionNr);
+    }
+
+    #endregion
+
+    #region AddSubPositionAsync
+
+    [Fact(DisplayName = "AddSubPositionAsync: sub-position is inserted immediately before its GROUP parent in the ordered list")]
+    public async Task AddSubPositionAsync_SingleSubPosition_ShouldBeInsertedBeforeGroup()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+
+        var result = await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+
+        Assert.True(result.Success);
+
+        var all = (await store.GetAllAsync()).Data;
+        Assert.Equal(2, all.Count);
+        Assert.Equal("Sub A1", all[0].InvoicePositionDescription);
+        Assert.Equal("Group A", all[1].InvoicePositionDescription);
+    }
+
+    [Fact(DisplayName = "AddSubPositionAsync: multiple sub-positions are inserted before GROUP in insertion order")]
+    public async Task AddSubPositionAsync_MultipleSubPositions_ShouldMaintainOrderBeforeGroup()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A2"));
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A3"));
+
+        var all = (await store.GetAllAsync()).Data;
+
+        Assert.Equal(4, all.Count);
+        Assert.Equal("Sub A1", all[0].InvoicePositionDescription);
+        Assert.Equal("Sub A2", all[1].InvoicePositionDescription);
+        Assert.Equal("Sub A3", all[2].InvoicePositionDescription);
+        Assert.Equal("Group A", all[3].InvoicePositionDescription);
+    }
+
+    [Fact(DisplayName = "AddSubPositionAsync: sub-position has LineStatusReasonCode DETAIL and correct ParentPositionId")]
+    public async Task AddSubPositionAsync_SubPosition_ShouldHaveCorrectMetadata()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+
+        var subId = (await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"))).Data;
+
+        var all = (await store.GetAllAsync()).Data;
+        var sub = all.First(p => p.Id == subId);
+
+        Assert.True(sub.IsSubPosition);
+        Assert.Equal("DETAIL", sub.LineStatusReasonCode);
+        Assert.Equal(groupId, sub.ParentPositionId);
+    }
+
+    [Fact(DisplayName = "AddSubPositionAsync: two GROUP positions each keep their sub-positions in separate blocks")]
+    public async Task AddSubPositionAsync_TwoGroups_ShouldKeepBlocksSeparated()
+    {
+        var store = new InvoicePositionStore();
+        var groupAId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        var groupBId = (await store.AddAsync(MakeGroupDto("Group B"))).Data;
+
+        await store.AddSubPositionAsync(groupAId, MakeSubPositionDto("Sub A1"));
+        await store.AddSubPositionAsync(groupBId, MakeSubPositionDto("Sub B1"));
+
+        var all = (await store.GetAllAsync()).Data;
+
+        // Expected order: Sub A1 → Group A → Sub B1 → Group B
+        Assert.Equal(4, all.Count);
+        Assert.Equal("Sub A1", all[0].InvoicePositionDescription);
+        Assert.Equal("Group A", all[1].InvoicePositionDescription);
+        Assert.Equal("Sub B1", all[2].InvoicePositionDescription);
+        Assert.Equal("Group B", all[3].InvoicePositionDescription);
+    }
+
+    [Fact(DisplayName = "AddSubPositionAsync: non-existing parent id returns a failed result")]
+    public async Task AddSubPositionAsync_NonExistingParent_ShouldFail()
+    {
+        var store = new InvoicePositionStore();
+
+        var result = await store.AddSubPositionAsync(Guid.NewGuid(), MakeSubPositionDto("Sub"));
+
+        Assert.False(result.Success);
+    }
+
+    [Fact(DisplayName = "AddSubPositionAsync: parent that is not a GROUP position returns a failed result")]
+    public async Task AddSubPositionAsync_ParentIsNotGroup_ShouldFail()
+    {
+        var store = new InvoicePositionStore();
+        var standaloneId = (await store.AddAsync(MakeDto("Standalone"))).Data;
+
+        var result = await store.AddSubPositionAsync(standaloneId, MakeSubPositionDto("Sub"));
+
+        Assert.False(result.Success);
+    }
+
     #endregion
 
     #region SuggestNextPositionNo
@@ -110,7 +238,7 @@ public class InvoicePositionStoreTests
         Assert.Equal(3, store.SuggestNextPositionNo());
     }
 
-    [Fact(DisplayName = "SuggestNextPositionNo: decreases by one after an item is deleted")]
+    [Fact(DisplayName = "SuggestNextPositionNo: decreases by one after a top-level item is deleted")]
     public async Task SuggestNextPositionNo_AfterDelete_ShouldDecrease()
     {
         var store = new InvoicePositionStore();
@@ -120,6 +248,56 @@ public class InvoicePositionStoreTests
 
         Assert.Equal(2, store.SuggestNextPositionNo());
     }
+
+    [Fact(DisplayName = "SuggestNextPositionNo: sub-positions are not counted — only top-level positions are considered")]
+    public async Task SuggestNextPositionNo_WithSubPositions_ShouldOnlyCountTopLevel()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A2"));
+
+        Assert.Equal(2, store.SuggestNextPositionNo());
+    }
+
+    #endregion
+
+    #region SuggestNextSubPositionNo
+
+    [Fact(DisplayName = "SuggestNextSubPositionNo: returns 1 when the GROUP has no sub-positions yet")]
+    public async Task SuggestNextSubPositionNo_NoChildren_ShouldReturn1()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+
+        Assert.Equal(1, store.SuggestNextSubPositionNo(groupId));
+    }
+
+    [Fact(DisplayName = "SuggestNextSubPositionNo: returns 2 after one sub-position has been added to the GROUP")]
+    public async Task SuggestNextSubPositionNo_OneChild_ShouldReturn2()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+
+        Assert.Equal(2, store.SuggestNextSubPositionNo(groupId));
+    }
+
+    [Fact(DisplayName = "SuggestNextSubPositionNo: counts sub-positions per parent independently across multiple GROUP positions")]
+    public async Task SuggestNextSubPositionNo_MultipleGroups_ShouldCountIndependently()
+    {
+        var store = new InvoicePositionStore();
+        var groupAId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        var groupBId = (await store.AddAsync(MakeGroupDto("Group B"))).Data;
+
+        await store.AddSubPositionAsync(groupAId, MakeSubPositionDto("Sub A1"));
+        await store.AddSubPositionAsync(groupAId, MakeSubPositionDto("Sub A2"));
+        await store.AddSubPositionAsync(groupBId, MakeSubPositionDto("Sub B1"));
+
+        Assert.Equal(3, store.SuggestNextSubPositionNo(groupAId));
+        Assert.Equal(2, store.SuggestNextSubPositionNo(groupBId));
+    }
+
     #endregion
 
     #region UpdateAsync
@@ -159,9 +337,11 @@ public class InvoicePositionStoreTests
         Assert.False(result.Success);
         Assert.Empty((await store.GetAllAsync()).Data);
     }
+
     #endregion
 
     #region DeleteAsync
+
     [Fact(DisplayName = "DeleteAsync: existing item is removed successfully and store is empty afterwards")]
     public async Task DeleteAsync_ExistingItem_ShouldSucceed()
     {
@@ -183,6 +363,37 @@ public class InvoicePositionStoreTests
 
         Assert.False(result.Success);
     }
+
+    [Fact(DisplayName = "DeleteAsync: deleting a GROUP position cascade-deletes all its DETAIL sub-positions")]
+    public async Task DeleteAsync_GroupPosition_ShouldCascadeDeleteAllChildren()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A2"));
+
+        var result = await store.DeleteAsync(groupId);
+
+        Assert.True(result.Success);
+        Assert.Empty((await store.GetAllAsync()).Data);
+    }
+
+    [Fact(DisplayName = "DeleteAsync: deleting a DETAIL sub-position leaves the GROUP and remaining siblings intact")]
+    public async Task DeleteAsync_SubPosition_ShouldNotAffectGroupOrSiblings()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        var sub1Id = (await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"))).Data;
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A2"));
+
+        await store.DeleteAsync(sub1Id);
+
+        var all = (await store.GetAllAsync()).Data;
+        Assert.Equal(2, all.Count);
+        Assert.Contains(all, p => p.InvoicePositionDescription == "Sub A2");
+        Assert.Contains(all, p => p.InvoicePositionDescription == "Group A");
+    }
+
     #endregion
 
     #region Positionsnummer-Renummerierung nach Delete
@@ -285,6 +496,7 @@ public class InvoicePositionStoreTests
         Assert.Equal("B", after[1].InvoicePositionDescription);
         Assert.Equal(2, after[1].InvoicePositionNr); // unchanged ✅
     }
+
     #endregion
 
     #region SetPositionNoAsync
@@ -337,6 +549,42 @@ public class InvoicePositionStoreTests
         Assert.Equal("A", all[1].InvoicePositionDescription);
         Assert.Equal(2, all[1].InvoicePositionNr);
     }
+
+    [Fact(DisplayName = "SetPositionNoAsync: moving a GROUP position also moves all its DETAIL sub-positions as a block")]
+    public async Task SetPositionNoAsync_GroupPosition_ShouldMoveEntireBlockWithChildren()
+    {
+        var store = new InvoicePositionStore();
+        var groupAId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        await store.AddSubPositionAsync(groupAId, MakeSubPositionDto("Sub A1"));
+        await store.AddAsync(MakeDto("Standalone B"));
+
+        // Move Group A from position 1 to position 2
+        var result = await store.SetPositionNoAsync(groupAId, 2);
+
+        Assert.True(result.Success);
+        var all = result.Data;
+
+        // Expected order: Standalone B → Sub A1 → Group A
+        Assert.Equal("Standalone B", all[0].InvoicePositionDescription);
+        Assert.Equal(1, all[0].InvoicePositionNr);
+        Assert.Equal("Sub A1", all[1].InvoicePositionDescription);
+        Assert.Equal(0, all[1].InvoicePositionNr);
+        Assert.Equal("Group A", all[2].InvoicePositionDescription);
+        Assert.Equal(2, all[2].InvoicePositionNr);
+    }
+
+    [Fact(DisplayName = "SetPositionNoAsync: attempting to reorder a DETAIL sub-position independently returns a failed result")]
+    public async Task SetPositionNoAsync_SubPosition_ShouldFail()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        var subId = (await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"))).Data;
+
+        var result = await store.SetPositionNoAsync(subId, 1);
+
+        Assert.False(result.Success);
+    }
+
     #endregion
 
     #region GetAllAsync
@@ -365,7 +613,21 @@ public class InvoicePositionStoreTests
 
         Assert.Equal(1, all[0].InvoicePositionNr);
     }
+
+    [Fact(DisplayName = "GetAllAsync: DETAIL sub-positions have InvoicePositionNr 0, only top-level positions are numbered")]
+    public async Task GetAllAsync_SubPositions_ShouldHavePositionNrZero()
+    {
+        var store = new InvoicePositionStore();
+        var groupId = (await store.AddAsync(MakeGroupDto("Group A"))).Data;
+        await store.AddSubPositionAsync(groupId, MakeSubPositionDto("Sub A1"));
+
+        var all = (await store.GetAllAsync()).Data;
+        var sub = all.First(p => p.IsSubPosition);
+        var group = all.First(p => p.IsGroupPosition);
+
+        Assert.Equal(0, sub.InvoicePositionNr);  // sub-positions are not numbered ✅
+        Assert.Equal(1, group.InvoicePositionNr); // GROUP counts as top-level ✅
+    }
+
     #endregion
 }
-
-

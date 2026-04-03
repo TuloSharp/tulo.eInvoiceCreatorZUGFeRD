@@ -74,5 +74,8 @@ public interface IInvoicePositionStore
     /// or a failure result if the operation could not be completed.
     /// </returns>
     Task<OperationResult<List<InvoicePositionDetailsDTO>>> SetPositionNoAsync(Guid id, int newPositionNo);
+
+    Task<OperationResult<Guid>> AddSubPositionAsync(Guid parentId, InvoicePositionDetailsDTO dto);
+    int SuggestNextSubPositionNo(Guid parentId);
 }
 

@@ -6,7 +6,7 @@ namespace tulo.eInvoiceXmlGeneratorCii.Mappers;
 
 public class CiiMapper : ICiiMapper
 {
-    // ── Constants ────────────────────────────────────────────────────────────
+    #region Constants
     private static class C
     {
         public const string TaxTypeVat = "VAT";
@@ -19,8 +19,9 @@ public class CiiMapper : ICiiMapper
         public const string DayUnit = "DAY";
         public const string LeitwegScheme = "0204";
     }
+    #endregion
 
-    // ── Inline helpers ───────────────────────────────────────────────────────
+    #region Inline helpers
     private static bool Has(string? s) => !string.IsNullOrWhiteSpace(s);
     private static decimal R2(decimal v) => Math.Round(v, 2, MidpointRounding.AwayFromZero);
 
@@ -40,10 +41,10 @@ public class CiiMapper : ICiiMapper
         DateTimeString = new FormattedDateTimeTypeDateTimeString { format = C.DateFormat102, Value = dt.ToString("yyyyMMdd") }
     };
 
-    private static ReferencedDocumentType? MakeRefDoc(string? id) =>
-        Has(id) ? new ReferencedDocumentType { IssuerAssignedID = MakeId(id!) } : null;
+    private static ReferencedDocumentType? MakeRefDoc(string? id) => Has(id) ? new ReferencedDocumentType { IssuerAssignedID = MakeId(id!) } : null;
+    #endregion
 
-    // ── Map (entry point) ────────────────────────────────────────────────────
+    #region Map (entry point)
     public CrossIndustryInvoiceType Map(Invoice inv)
     {
         if (inv == null) return new CrossIndustryInvoiceType();
@@ -86,8 +87,9 @@ public class CiiMapper : ICiiMapper
             }
         };
     }
+    #endregion
 
-    // ── Party ────────────────────────────────────────────────────────────────
+    #region Party
     private TradePartyType MapParty(Party p)
     {
         if (p == null) return null!;
@@ -150,8 +152,9 @@ public class CiiMapper : ICiiMapper
         EmailURIUniversalCommunication = Has(p.ContactEmail)
             ? new UniversalCommunicationType { URIID = MakeId(p.ContactEmail!) } : null
     };
+    #endregion
 
-    // ── Line ─────────────────────────────────────────────────────────────────
+    #region Line
     private SupplyChainTradeLineItemType MapLine(Invoice inv, InvoiceLine invLine, int lineNo, string currency)
     {
         if (invLine == null) return null!;
@@ -280,8 +283,9 @@ public class CiiMapper : ICiiMapper
             }
         ];
     }
+    #endregion
 
-    // ── Header delivery ──────────────────────────────────────────────────────
+    #region Header delivery
     private HeaderTradeDeliveryType MapHeaderDelivery(Invoice inv) => new()
     {
         ShipToTradeParty = MapParty(inv.Buyer),
@@ -289,8 +293,9 @@ public class CiiMapper : ICiiMapper
         ActualDeliverySupplyChainEvent = new SupplyChainEventType
         { OccurrenceDateTime = MakeDate(inv.InvoiceDate) }
     };
+    #endregion
 
-    // ── Settlement ───────────────────────────────────────────────────────────
+    #region Settlement
     private HeaderTradeSettlementType MapHeaderSettlement(Invoice inv)
     {
         var currency = Has(inv.Currency) ? inv.Currency : C.DefaultCurrency;
@@ -332,8 +337,9 @@ public class CiiMapper : ICiiMapper
 
         return settlement;
     }
+    #endregion
 
-    // ── Header trade tax ─────────────────────────────────────────────────────
+    #region Header trade tax
     private TradeTaxType[] MapHeaderTradeTax(Invoice inv, string currency)
     {
         if (inv.Lines == null || inv.Lines.Count == 0) return null!;
@@ -378,8 +384,9 @@ public class CiiMapper : ICiiMapper
         var proportion = totalLineNet != 0m ? groupNet / totalLineNet : 0m;
         return R2(groupNet + totalAdjustment * proportion);
     }
+    #endregion
 
-    // ── Payment means ────────────────────────────────────────────────────────
+    #region Payment means
     private TradeSettlementPaymentMeansType[] MapPaymentMeans(PaymentDetails payment, string currency)
     {
         if (payment == null) return null!;
@@ -407,8 +414,9 @@ public class CiiMapper : ICiiMapper
             }
         ];
     }
+    #endregion
 
-    // ── Payment terms ────────────────────────────────────────────────────────
+    #region Payment terms
     private TradePaymentTermsType[] MapPaymentTerms(PaymentDetails payment)
     {
         if (payment == null) return null!;
@@ -444,8 +452,9 @@ public class CiiMapper : ICiiMapper
             }
         ];
     }
+    #endregion
 
-    // ── Notes ────────────────────────────────────────────────────────────────
+    #region Notes
     private NoteType[] MapNotes(Invoice inv)
     {
         if (inv.Notes == null || inv.Notes.Count == 0) return null!;
@@ -464,11 +473,13 @@ public class CiiMapper : ICiiMapper
         SubjectCode = Has(n.SubjectCode) ? MakeCode(n.SubjectCode!) : null,
         ContentCode = Has(n.ContentCode) ? MakeCode(n.ContentCode!) : null
     };
+    #endregion
 
-    // ── Utilities ────────────────────────────────────────────────────────────
+    #region Utilities
     private static bool IsStatus(InvoiceLine? l, string code) =>
         string.Equals(l?.LineStatusReasonCode, code, StringComparison.OrdinalIgnoreCase);
 
     private static decimal ComputeLineNet(InvoiceLine line) =>
         R2(line.Quantity * line.UnitPrice);
+    #endregion
 }
