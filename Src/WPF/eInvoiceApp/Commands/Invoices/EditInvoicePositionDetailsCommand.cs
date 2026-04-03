@@ -17,7 +17,7 @@ public class EditInvoicePositionDetailsCommand(EditInvoicePositionViewModel edit
 
     protected override async Task ExecuteAsync(object parameter)
     {
-        _logger.LogInformation($"{nameof(AddInvoicePositionDetailsCommand)} start exection");
+        _logger.LogInformation($"{nameof(EditInvoicePositionDetailsCommand)} start exection");
 
         _editInvoicePositionViewModel.StatusMessage = string.Empty;
 
@@ -62,7 +62,7 @@ public class EditInvoicePositionDetailsCommand(EditInvoicePositionViewModel edit
         try
         {
             await _invoicePositionService.UpdateInvoicePositionAsync(updatedInvPos.Id, updatedInvPos);
-            if (_invoicePositionService.IsCreated)
+            if (_invoicePositionService.IsUpdated)
             {
                 _editInvoicePositionViewModel.StatusMessage = string.Empty;
 
@@ -85,8 +85,8 @@ public class EditInvoicePositionDetailsCommand(EditInvoicePositionViewModel edit
         }
         finally
         {
-            _logger.LogInformation(updatedInvPos.InvoicePositionNr.ToString() + " is created = " + _invoicePositionService.IsCreated);
-            _logger.LogInformation($"{nameof(EditInvoicePositionDetailsCommand)} was ececuted");
+            _logger.LogInformation(updatedInvPos.InvoicePositionNr.ToString() + " is updated = " + _invoicePositionService.IsUpdated);
+            _logger.LogInformation($"{nameof(EditInvoicePositionDetailsCommand)} was executed");
         }
     }
 }

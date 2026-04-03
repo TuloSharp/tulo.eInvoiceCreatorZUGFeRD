@@ -703,13 +703,42 @@ public class InvoiceViewModel : BaseViewModel
         _invoicePositionCardListItemViewModel.Add(invoicePositionCardItemViewModel);
     }
 
+    // smart update instead of clear + rebuild
+    // - preserves existing card VM instances (no flicker, no selection loss)
+    // - updates InvoicePositionNr and all amounts on existing cards
+    // - adds new cards, removes deleted ones
+    // - syncs the ObservableCollection order with the store order
     private void OnInvoicePositionsLoaded(List<InvoicePositionDetailsDTO> invoicePositions)
     {
-        _invoicePositionCardListItemViewModel.Clear();
-
-        foreach (var invoicePosition in invoicePositions)
+        // 1. Update existing cards / add new ones
+        foreach (var dto in invoicePositions)
         {
-            AddInvoicePostion(invoicePosition, _collectorCollection);
+            var existing = _invoicePositionCardListItemViewModel
+                .FirstOrDefault(vm => vm.InvoicePositionId == dto.Id);
+
+            if (existing is not null)
+                existing.Update(dto);
+            else
+                AddInvoicePostion(dto, _collectorCollection);
+        }
+
+        // 2. Remove cards that no longer exist in the store
+        var activeIds = invoicePositions.Select(d => d.Id).ToHashSet();
+        var toRemove = _invoicePositionCardListItemViewModel
+            .Where(vm => !activeIds.Contains(vm.InvoicePositionId))
+            .ToList();
+        foreach (var vm in toRemove)
+            _invoicePositionCardListItemViewModel.Remove(vm);
+
+        // 3. Sync ObservableCollection order with store order
+        for (var i = 0; i < invoicePositions.Count; i++)
+        {
+            var currentIndex = _invoicePositionCardListItemViewModel
+                .IndexOf(_invoicePositionCardListItemViewModel
+                    .First(vm => vm.InvoicePositionId == invoicePositions[i].Id));
+
+            if (currentIndex != i)
+                _invoicePositionCardListItemViewModel.Move(currentIndex, i);
         }
 
         InvoicePositionCardListItemCollectionView.Refresh();

@@ -63,6 +63,7 @@ public class InvoicePositionCardItemViewModel : BaseViewModel
         #region Get Services / Stores from CollectorCollection
         _lookup = collectorCollection.GetService<IInvoicePositionLookupService>();
         #endregion
+        
         InvoicePositionDetails = invoicePositionDetails;
 
         #region Invoice position Commands
@@ -76,6 +77,7 @@ public class InvoicePositionCardItemViewModel : BaseViewModel
     public void Update(InvoicePositionDetailsDTO invoicePositionDetails)
     {
         InvoicePositionDetails = invoicePositionDetails;
-        OnPropertyChanged(nameof(InvoicePositionDetails));
+        //OnPropertyChanged(nameof(InvoicePositionDetails));
+        OnPropertyChanged(string.Empty); // FIX: notifies all properties at once
     }
 }

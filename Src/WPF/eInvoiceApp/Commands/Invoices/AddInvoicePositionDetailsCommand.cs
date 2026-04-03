@@ -85,7 +85,7 @@ public class AddInvoicePositionDetailsCommand(AddInvoicePositionViewModel addInv
         finally
         {
             _logger.LogInformation(newInvPos.InvoicePositionNr.ToString() + " is created = " + _invoicePositionService.IsCreated);
-            _logger.LogInformation($"{nameof(AddInvoicePositionDetailsCommand)} was ececuted");
+            _logger.LogInformation($"{nameof(AddInvoicePositionDetailsCommand)} was executed");
         }
     }
 }

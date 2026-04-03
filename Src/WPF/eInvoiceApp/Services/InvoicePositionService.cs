@@ -65,7 +65,12 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
         StatusMessage = "Invoice position created successfully.";
 
         invPos.Id = result.Data;
-        InvoicePositionCreated?.Invoke(invPos);  
+        
+        // Fire Created first so the UI can select and scroll to the new card
+        InvoicePositionCreated?.Invoke(invPos);
+
+        // FIX: fire the full updated list so ALL cards get correct position numbers
+        await FireUpdatedListAsync();
 
         return OperationResult<Guid>.Ok(result.Data, StatusMessage);
     }
@@ -111,7 +116,12 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
         IsDeleted = true;
         StatusMessage = "Invoice position deleted successfully.";
 
+        // Fire Deleted first so the UI removes the card and clears the selection
         InvoicePositionDeleted?.Invoke(id);
+        
+        // FIX: fire the full updated list so remaining cards get renumbered
+        await FireUpdatedListAsync();
+
         return OperationResult<Guid>.Ok(id, StatusMessage);
     }
 
@@ -137,6 +147,7 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
         return OperationResult<List<InvoicePositionDetailsDTO>>.Ok(list, StatusMessage);
     }
 
+    #region Utilities
     private static List<InvoicePositionDetailsDTO> BuildNumberedCalculatedList(List<InvoicePositionDetailsDTO> raw)
     {
         for (int i = 0; i < raw.Count; i++)
@@ -181,4 +192,16 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
         var vatFactor = 1m + (invPos.InvoicePositionVatRate / 100m);
         invPos.InvoicePositionGrossAmount = (decimal)invPos.InvoicePositionNetAmountAfterDiscount * vatFactor;
     }
+
+    private async Task FireUpdatedListAsync()
+    {
+        var allResult = await _invoicePositionStore.GetAllAsync();
+        if (!allResult.Success) return;
+
+        var list = BuildNumberedCalculatedList(allResult.Data ?? []);
+        TotalCount = list.Count;
+        InvoicePositionsLoaded?.Invoke(list);
+    } 
+    #endregion
+
 }

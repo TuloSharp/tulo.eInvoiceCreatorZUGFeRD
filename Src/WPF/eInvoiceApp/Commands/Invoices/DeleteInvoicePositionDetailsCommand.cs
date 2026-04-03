@@ -16,7 +16,7 @@ public class DeleteInvoicePositionDetailsCommand(DeleteInvoicePositionViewModel 
 
     protected override async Task ExecuteAsync(object parameter)
     {
-        _logger.LogInformation($"{nameof(AddInvoicePositionDetailsCommand)} start exection");
+        _logger.LogInformation($"{nameof(DeleteInvoicePositionDetailsCommand)} start exection");
 
         _deleteInvoicePositionViewModel.StatusMessage = string.Empty;
 
@@ -25,7 +25,7 @@ public class DeleteInvoicePositionDetailsCommand(DeleteInvoicePositionViewModel 
         try
         {
             await _invoicePositionService.DeleteInvoicePositionAsync(invPosDetailsViewModel.Id);
-            if (_invoicePositionService.IsCreated)
+            if (_invoicePositionService.IsDeleted)
             {
                 _deleteInvoicePositionViewModel.StatusMessage = string.Empty;
 
@@ -48,8 +48,8 @@ public class DeleteInvoicePositionDetailsCommand(DeleteInvoicePositionViewModel 
         }
         finally
         {
-            _logger.LogInformation(invPosDetailsViewModel.InvoicePositionNr.ToString() + " is created = " + _invoicePositionService.IsCreated);
-            _logger.LogInformation($"{nameof(DeleteInvoicePositionDetailsCommand)} was ececuted");
+            _logger.LogInformation(invPosDetailsViewModel.InvoicePositionNr.ToString() + " is deleted = " + _invoicePositionService.IsDeleted);
+            _logger.LogInformation($"{nameof(DeleteInvoicePositionDetailsCommand)} was executed");
         }
     }
 }
