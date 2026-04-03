@@ -591,6 +591,7 @@ public class InvoiceViewModel : BaseViewModel
     public ICommand IsAltShortcutKeyPressedCommand { get; }
     public ICommand SaveCustomerDataCommand { get; }
     public ICommand LoadCustomerDataCommand { get; }
+    public ICommand ClearAllInvoiceViewCommand { get; }
     #endregion
 
     #region Datepicker error message 
@@ -646,6 +647,7 @@ public class InvoiceViewModel : BaseViewModel
 
         _invoicePositionCardListItemViewModel = [];
         InvoicePositionCardListItemCollectionView = CollectionViewSource.GetDefaultView(_invoicePositionCardListItemViewModel);
+        InvoicePositionCardListItemCollectionView.Filter = FilterInvoicePositions;
 
         StatusMessageViewModel = new MessageViewModel();
 
@@ -660,6 +662,7 @@ public class InvoiceViewModel : BaseViewModel
         IsAltShortcutKeyPressedCommand = new IsAltShortcutKeyPressedCommand(collectorCollection);
         SaveCustomerDataCommand = new SaveCustomerDataCommand(this, _collectorCollection);
         LoadCustomerDataCommand = new LoadCustomerDataCommand(this, _collectorCollection);
+        ClearAllInvoiceViewCommand = new ClearAllInvoiceViewCommand(this, _collectorCollection);
         #endregion
 
         LoadInvoicePositionsCommand = new LoadInvoicePositionsCommand(this, _collectorCollection);
@@ -683,7 +686,7 @@ public class InvoiceViewModel : BaseViewModel
 
         //Only for UI Tests
         SeedTestSellerData();
-        //SeedTestInvoicePositions();
+        SeedTestInvoicePositions();
     }
 
     private void OnInvoicePositionCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -793,6 +796,35 @@ public class InvoiceViewModel : BaseViewModel
         invoiceViewModel.LoadInvoicePositionsCommand.Execute(null);
         return invoiceViewModel;
     }
+
+    #region Search / Filter
+    private string _searchText = string.Empty;
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (SetField(ref _searchText, value))
+                InvoicePositionCardListItemCollectionView.Refresh();
+        }
+    }
+
+    private bool FilterInvoicePositions(object item)
+    {
+        if (item is not InvoicePositionCardItemViewModel vm)
+            return false;
+
+        if (string.IsNullOrWhiteSpace(SearchText))
+            return true;
+
+        var search = SearchText.Trim();
+
+        return vm.InvoicePositionDescription.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || vm.InvoicePositionProductDescription.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || vm.InvoicePositionEan.Contains(search, StringComparison.OrdinalIgnoreCase);
+    }
+
+    #endregion
 
     #region Tooltips
     public string ToolTipCompanyBuyerParty { get; private set; } = string.Empty;
