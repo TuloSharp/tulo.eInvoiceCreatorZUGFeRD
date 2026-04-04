@@ -74,9 +74,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
         if (pdfStream is null)
         {
-            _logger.LogWarning("[Pipeline] PDF generation returned null. Aborting. " +
-                               "isPreview={IsPreview}, hasToCreate={HasToCreate}, " +
-                               "InvoiceNumber={InvoiceNumber}.",
+            _logger.LogWarning("[Pipeline] PDF generation returned null. Aborting. " + "isPreview={IsPreview}, hasToCreate={HasToCreate}, " + "InvoiceNumber={InvoiceNumber}.",
                 isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
             SetError("PDF generation returned null result.");
             return;
@@ -90,10 +88,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
         if (pdfMemoryStream.Length == 0)
         {
-            _logger.LogWarning("[Pipeline] PDF stream is empty after copy. Aborting. " +
-                               "isPreview={IsPreview}, hasToCreate={HasToCreate}, " +
-                               "InvoiceNumber={InvoiceNumber}.",
-                isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
+            _logger.LogWarning("[Pipeline] PDF stream is empty after copy. Aborting. " + "isPreview={IsPreview}, hasToCreate={HasToCreate}, " + "InvoiceNumber={InvoiceNumber}.", isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
             pdfMemoryStream.Dispose();
             SetError("PDF stream is empty.");
             return;

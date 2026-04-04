@@ -24,6 +24,15 @@ public class FakeInvoicePositionService : IInvoicePositionService
     public event Action<InvoicePositionDetailsDTO>? InvoicePositionUpdated;
     public event Action<Guid>? InvoicePositionDeleted;
 
+
+    // Captured DTOs for assertion in command tests
+    public InvoicePositionDetailsDTO? LastAddedDto { get; private set; }
+    public InvoicePositionDetailsDTO? LastAddedSubDto { get; private set; }
+    public Guid? LastAddedSubParentId { get; private set; }
+
+    // When true — Add methods do not set IsCreated, simulating a validation failure
+    public bool SimulateValidationFailure { get; set; }
+
     // Helper methods so tests can manually raise events
     public void RaiseLoaded(List<InvoicePositionDetailsDTO> list) => InvoicePositionsLoaded?.Invoke(list);
 
@@ -55,6 +64,18 @@ public class FakeInvoicePositionService : IInvoicePositionService
 
     public Task<OperationResult<Guid>> AddInvoicePositionAsync(InvoicePositionDetailsDTO invPos, int? desiredPositionNo = null)
     {
+        // Throw if a forced exception is configured — simulates unexpected service failures
+        if (ExceptionToThrow is not null)
+            return Task.FromException<OperationResult<Guid>>(ExceptionToThrow);
+
+        LastAddedDto = invPos;
+
+        if (SimulateValidationFailure)
+        {
+            StatusMessage = "Validation failed.";
+            return Task.FromResult(OperationResult<Guid>.Fail(StatusMessage));
+        }
+
         IsCreated = true;
         TotalCount++;
 
@@ -101,6 +122,16 @@ public class FakeInvoicePositionService : IInvoicePositionService
 
     public Task<OperationResult<Guid>> AddSubInvoicePositionAsync(Guid parentId, InvoicePositionDetailsDTO subPos)
     {
+        LastAddedSubDto = subPos;
+        LastAddedSubParentId = parentId;
+
+        if (SimulateValidationFailure)
+        {
+            StatusMessage = "Validation failed.";
+            AreRequiredFieldsFilled = false;
+            return Task.FromResult(OperationResult<Guid>.Fail(StatusMessage));
+        }
+
         IsCreated = true;
         TotalCount++;
 
@@ -116,4 +147,3 @@ public class FakeInvoicePositionService : IInvoicePositionService
         return Task.FromResult(result);
     }
 }
-
