@@ -1,115 +1,194 @@
 # tulo.eInvoiceApp
 
-A WPF desktop application for creating, previewing, and archiving compliant electronic invoices
-in **ZUGFeRD / Factur-X** format — including PDF/A-3 generation and optional digital signing.
+> A professional WPF desktop application for creating, previewing, archiving, and digitally signing
+> fully compliant electronic invoices in **ZUGFeRD 2.4 EXTENDED / Factur-X 1.0** format — built on **.NET 8**,
+> designed for real business use, and ready to run without an installer.
+
+![Image 1](./ReadMeImages/UiImage01.png)
+![Image 2](./ReadMeImages/UiImage02.png)
 
 ---
 
 ## What this application does
 
-`tulo.eInvoiceApp` allows users to create structured electronic invoices based on the
-**CII (Cross Industry Invoice)** standard, generate a fully compliant **PDF/A-3** document
-with the XML embedded, and optionally sign the result with a digital certificate.
+`tulo.eInvoiceApp` is a full invoice creation tool that goes far beyond simple XML viewing.
 
-The application is intended for businesses and developers who need to produce, preview,
-and archive legally structured electronic invoices in a practical desktop environment.
+It allows users to fill in all relevant invoice data — seller, buyer, positions, payment terms,
+discounts — and generates a complete **ZUGFeRD 2.4 EXTENDED / Factur-X 1.0** compliant document
+package: CII XML, PDF, PDF/A, PDF/A-3 with embedded XML, and an optionally digitally signed PDF.
+
+The application is focused on the **ZUGFeRD 2.4 EXTENDED** profile.
+Other profiles are not actively tested and are not the intended target of this project.
 
 ---
 
 ## Important disclaimer
 
-Please read the disclaimer information available inside the application.
+Please read the disclaimer information available inside the application before using it
+in any productive, legal, or compliance-related context.
 
 You can find it in:
 
 **View → About**
 
-This information is important and should be read before using the application in productive,
-legal, business, or compliance-related scenarios.
+---
 
-The disclaimer shown in the application is the relevant notice for usage, limitations,
-and responsibility.
+## Supported invoice standards
+
+| Standard | Details |
+|---|---|
+| **ZUGFeRD 2.4 EXTENDED** | Primary target — fully supported and tested |
+| **Factur-X 1.0 EXTENDED** | French/European equivalent — fully supported and tested |
+| **CII** | Cross Industry Invoice (UN/CEFACT) — used as the underlying data format |
+| **PDF/A-3** | Part 3, Conformance B — archival PDF with embedded XML |
+| **XRechnung SubLine EXTENDED** | 🚧 Coming soon |
+
+> **Note:** Other ZUGFeRD profiles (MINIMUM, BASIC WL, BASIC, EN16931) are not actively
+> tested. They may work but are not guaranteed. The focus of this application is
+> **ZUGFeRD 2.4 EXTENDED**.
 
 ---
 
 ## Core pipeline
 
-Every invoice goes through the following processing steps:
+Every invoice runs through the following steps automatically:
 
 ```
-Invoice Data (ViewModel)
+Invoice Data (UI / ViewModel)
         │
         ▼
-  1. Build Invoice Model          (IInvoiceBuilderService)
+  1. Build Invoice Model              (IInvoiceBuilderService)
         │
         ▼
-  2. Map to CII structure         (ICiiMapper)
+  2. Map to CII structure             (ICiiMapper)
         │
         ▼
-  3. Export CII to XML            (IXmlCiiExporter)
+  3. Export CII to XML                (IXmlCiiExporter)
         │
         ▼
-  4. Generate PDF stream          (IPdfGeneratorFromInvoice)
+  4. Generate PDF stream              (IPdfGeneratorFromInvoice)
         │
         ▼
-  5. Convert PDF → PDF/A          (IToPdfAConverterService)
+  5. Write PDF + XML to disk
         │
         ▼
-  6. Upgrade PDF/A → PDF/A-3      (IToPdfA3UpgradeService)
-     + embed CII XML attachment
+  6. Convert PDF → PDF/A              (IToPdfAConverterService)
         │
         ▼
-  7. Sign PDF/A-3 (optional)      (tulo.SigningPdfA3.exe)
+  7. Upgrade PDF/A → PDF/A-3          (IToPdfA3UpgradeService)
+     + embed CII XML as attachment
         │
         ▼
-  8. Open with default viewer     (if configured)
+  8. Sign PDF/A-3 (optional)          (tulo.SigningPdfA3.exe via CLI)
+        │
+        ▼
+  9. Open final file in default viewer (if configured)
 ```
 
 ---
 
-## Features
+## Invoice data — what you can fill in
 
-- Create structured electronic invoices based on the CII / EN16931 standard
-- Generate PDF from invoice data with full layout rendering
-- Convert PDF to **PDF/A** (archival format)
-- Upgrade PDF/A to **PDF/A-3** with embedded CII XML (ZUGFeRD / Factur-X compliant)
-- **Optional digital signing** of the final PDF/A-3 via external signing tool
-- **Preview mode** with watermark before final file creation
-- **Archive** output files to a configured directory
-- Open the final invoice automatically with the default PDF viewer
-- Full **localization support** for UI messages via translation provider
-- Structured **Serilog** logging throughout the entire pipeline
-- Configurable via `appsettings.json`
+### Header
+
+| Field | Description |
+|---|---|
+| Invoice Number | Unique document identifier |
+| Currency | e.g. EUR |
+| Document Name | Free text document name |
+| Document Type Code | 380 Invoice / 381 Credit note / 383 Debit note |
+
+### Buyer party
+
+| Field | Description |
+|---|---|
+| Company Name | Legal name of the buyer |
+| Fiscal ID | Tax registration number |
+| VAT ID | VAT identification number |
+| ERP Customer Number | Internal customer reference |
+| Leitweg-ID | German routing ID for public sector |
+| Contact Person | Name of the contact at the buyer |
+| Street / House Number | Address |
+| Postal Code / City / Country | Address |
+| Phone / Email | Contact details |
+
+> 💾 Buyer data can be **saved and loaded as JSON** — no need to re-enter it for every invoice.
+
+### Payment information
+
+| Field | Description |
+|---|---|
+| Payment Means Code | 58 Credit transfer / 59 SEPA / 49 Direct debit / 10 Cash / 48 Card |
+| Payment Reference | e.g. invoice + customer number |
+| Payment Terms | Free text terms |
+| Due Date | Date by which payment is expected |
+
+### Payment terms — discount
+
+| Field | Description |
+|---|---|
+| Discount % | Early payment discount percentage |
+| Discount Days | Number of days the discount is valid |
+| Discount Basis Date | Start date for the discount period |
+
+### Invoice positions
+
+Each position includes:
+
+| Field | Description |
+|---|---|
+| Position Nr | Auto-managed line number |
+| Description | Main line item description |
+| Product Description | Additional product detail |
+| Item Nr / EAN | Seller article number and barcode |
+| Quantity / Unit | Amount and unit of measure (UN/ECE) |
+| Unit Price | Net price per unit |
+| VAT Rate / VAT Category | Tax rate and category code |
+| Discount | Position-level discount amount and reason |
+| Order reference | Order ID and date |
+| Delivery note | Delivery note ID, date, and line reference |
+| Reference document | External document reference (e.g. VN / 130) |
+
+### Seller data — configured via appsettings
+
+Seller information is not entered manually in the UI.
+It is pre-configured in `appsettings.json` and applied automatically to every invoice:
+
+- Seller name, address, VAT ID, Fiscal ID, Leitweg-ID
+- IBAN, BIC, account name for bank transfer
+- Contact person name, phone, email
+- Invoice notes (e.g. bank details text, general conditions)
 
 ---
 
 ## Preview mode
 
-Before creating the final files, the user can request a preview.
+Before committing to file creation, a preview can be requested directly from the UI.
 
 In preview mode:
-- The invoice is rendered as PDF in memory
-- A **PREVIEW** watermark is applied to the document
-- The result is displayed inside the application
-- No files are written to disk
+- The invoice is rendered as a PDF entirely in memory
+- A **PREVIEW** watermark is applied across the document
+- The result is displayed inside the application in the built-in PDF viewer
+- **No files are written to disk**
 
-This allows the user to verify the invoice content visually before committing to file creation.
+This allows full visual verification of layout, data, and structure
+before the final PDF/A-3 is created.
 
 ---
 
-## Archive and output
+## Archive and output files
 
-When file creation is triggered, the following files are written to the configured output path:
+When invoice creation is triggered, the following files are written to the configured output directory:
 
 | File | Description |
 |---|---|
 | `{InvoiceNumber}.pdf` | Raw generated PDF |
-| `{InvoiceNumber}.xml` | CII XML export |
-| `{InvoiceNumber}_PdfA.pdf` | PDF/A intermediate |
+| `{InvoiceNumber}.xml` | CII XML (ZUGFeRD 2.4 EXTENDED) |
+| `{InvoiceNumber}_PdfA.pdf` | PDF/A intermediate (archival) |
 | `{InvoiceNumber}_PdfA3.pdf` | Final PDF/A-3 with embedded XML |
-| `{InvoiceNumber}_SignedPdfA3.pdf` | Digitally signed PDF/A-3 (if signing is configured) |
+| `{InvoiceNumber}_SignedPdfA3.pdf` | Digitally signed PDF/A-3 (if configured) |
 
-The output path is configured in `appsettings.json`:
+Configure the output path in `appsettings.json`:
 
 ```json
 "Archive": {
@@ -119,24 +198,26 @@ The output path is configured in `appsettings.json`:
 ```
 
 If no valid path is configured, the system temp directory is used as fallback.
+If `CanOpenPdfWithDefaultApp` is `true`, the best available output file opens automatically
+after creation (signed PDF is preferred over unsigned).
 
 ---
 
-## Digital signing (optional)
+## Digital signing — optional
 
-The application supports optional PDF/A-3 signing via the external CLI tool `tulo.SigningPdfA3.exe`.
+PDF/A-3 signing is handled by the companion CLI tool `tulo.SigningPdfA3.exe`.
 
-Signing is **skipped silently** if any of the following is missing or not found:
-- The signing executable (`SignedExepath`)
+Signing is **skipped silently and without error** if any of the following is absent:
+- The signing executable path (`SignedExepath`)
 - The certificate file (`SignaturePath`)
 - The certificate password (`PublicKey`)
 
-Configure signing in `appsettings.json`:
+Configure in `appsettings.json`:
 
 ```json
 "Signature": {
   "SignedExepath": "C:\\Tools\\tulo.SigningPdfA3.exe",
-  "SignaturePath": "C:\\Certificates\\invoice.pfx",
+  "SignaturePath": "C:\\Certificates\\your-certificate.pfx",
   "PublicKey": "your-certificate-password",
   "Reason": "Invoice approval",
   "Location": "Germany",
@@ -144,44 +225,176 @@ Configure signing in `appsettings.json`:
 }
 ```
 
-If all values are present and valid, the signed PDF is created automatically after Step 6
-and is preferred over the unsigned PDF when opening with the default viewer.
-
 ---
 
-## Configuration overview
+## Seller configuration
 
-All application behaviour is controlled via `appsettings.json`:
+Seller data is defined once in `appsettings.json` and reused for all invoices:
 
 ```json
-{
-  "Archive": {
-    "OutputPath": "C:\\Invoices\\Output",
-    "CanOpenPdfWithDefaultApp": true
+"Invoice": {
+  "Seller": {
+    "Name": "Your Company Name",
+    "Street": "Your Street",
+    "Zip": "12345",
+    "City": "Your City",
+    "CountryCode": "DE",
+    "VatId": "DE000000000",
+    "FiscalId": "00000/00000",
+    "LeitwegId": "",
+    "GeneralEmail": "info@yourcompany.com",
+    "ContactPersonName": "Your Contact",
+    "ContactPhone": "+49 000 0000000",
+    "ContactEmail": "contact@yourcompany.com"
   },
-  "Signature": {
-    "SignedExepath": "C:\\Tools\\tulo.SigningPdfA3.exe",
-    "SignaturePath": "C:\\Certificates\\invoice.pfx",
-    "PublicKey": "your-password",
-    "Reason": "Invoice approval",
-    "Location": "Germany",
-    "ContactInfo": "contact@example.com"
-  }
+  "Payment": {
+    "Iban": "DE00000000000000000000",
+    "Bic": "YOURBICXXX",
+    "AccountName": "Your Company Name"
+  },
+  "Notes": [
+    { "Content": "Your bank info note here", "SubjectCode": "REG" },
+    { "Content": "Your general terms note here", "SubjectCode": "AAI" }
+  ]
 }
 ```
 
 ---
 
-## Supported invoice standards
+## Machine-specific configuration
 
-This application is designed for structured electronic invoices based on:
+The application supports **machine-specific appsettings overrides** without modifying the base file.
 
-- **CII** – Cross Industry Invoice (UN/CEFACT)
-- **EN 16931** – European standard for electronic invoicing
-- **ZUGFeRD** – German eInvoice profile (all conformance levels)
-- **Factur-X** – French/European equivalent of ZUGFeRD
+The following files are loaded automatically if they exist:
 
-Only invoice data that maps to these supported structures can be processed correctly.
+| File | Purpose |
+|---|---|
+| `appsettings.json` | Base configuration (required) |
+| `appsettings.{machinename}.json` | Machine-specific overrides (optional, hot-reload) |
+| `{AppDataFolder}/appsettings.json` | External app data folder override (optional, hot-reload) |
+| `AdditionalParameters_{machinename}.json` | Additional machine-specific parameters |
+
+This allows different machines (e.g. dev, staging, production) to use different
+certificate paths, output folders, or seller data — without touching the base config.
+
+---
+
+## Localization
+
+All UI labels, tooltips, placeholders, and error messages are driven by **XML translation files**.
+
+Supported languages out of the box:
+
+| Language | Culture |
+|---|---|
+| English | `en-US` |
+| German | `de-DE` |
+| Spanish | `es-ES` |
+
+The active language is configured in `appsettings.json`:
+
+```json
+"Localization": {
+  "DefaultCulture": "en-US",
+  "SupportedCultures": [ "de-DE", "en-US", "es-ES" ]
+}
+```
+
+Additional languages can be added by creating a new translation XML file
+following the existing key/value structure.
+
+---
+
+## VAT rates
+
+Supported VAT rates are configurable in `appsettings.json`:
+
+```json
+"Vats": {
+  "VatList": [ 0, 7, 19 ]
+}
+```
+
+---
+
+## Logging
+
+The application uses **Serilog** for structured, enriched logging across the entire pipeline.
+
+Two log files are written to the system temp directory:
+
+| File | Content |
+|---|---|
+| `tulo.eInvoiceApp_.log` | Full log — all levels (rolling daily, 7 days) |
+| `tulo.eInvoiceApp_Error_.log` | Error-only log (rolling daily, 7 days) |
+
+Every log entry includes timestamp, username, thread ID, process ID, log level,
+and source context — making it easy to trace issues across pipeline steps.
+
+---
+
+## Validation
+
+After generating an invoice, validation using official tools is strongly recommended:
+
+- **[Kosit Validator](https://github.com/itplr-kosit/validator)**
+- ⭐ **[Online ZUGFeRD Validator](https://www.portinvoice.com/en/)**
+
+---
+
+## Requirements
+
+| Requirement | Detail |
+|---|---|
+| OS | Windows x64 |
+| Runtime | .NET 8 (must be installed separately) |
+| .NET Download | https://dotnet.microsoft.com/en-us/download/dotnet/8.0 |
+
+---
+
+## Getting started
+
+1. Go to the [Releases](../../releases) page
+2. Download the latest `.zip` file
+3. Extract the ZIP to any folder
+4. Edit `appsettings.json` with your seller data, paths, and preferences
+5. Run `tulo.eInvoiceApp.exe`
+
+No installer required.
+
+---
+
+## Roadmap
+
+| Feature | Status |
+|---|---|
+| ZUGFeRD 2.4 EXTENDED | ✅ Supported |
+| Factur-X 1.0 EXTENDED | ✅ Supported |
+| PDF/A-3 generation | ✅ Supported |
+| Digital signing (optional) | ✅ Supported |
+| Buyer data save / load (JSON) | ✅ Supported |
+| Multi-language UI (EN / DE / ES) | ✅ Supported |
+| XRechnung SubLine EXTENDED | 🚧 Coming soon |
+
+---
+
+## CI/CD — GitHub Actions
+
+Releases are built and published automatically via a reusable GitHub Actions workflow.
+
+The release pipeline:
+- Checks out the repository
+- Sets up .NET 8
+- Verifies that the project `<Version>` matches the Git tag
+- Publishes as a **single-file Windows x64 executable** (no self-contained, .NET 8 runtime required)
+- Creates a ZIP archive
+- Uploads the ZIP as a GitHub Release asset
+
+```
+publishes as:  single-file, win-x64, .NET 8
+release name:  {project_name} {tag}
+ZIP name:      {zip_prefix}-{tag}-win-x64.zip
+```
 
 ---
 
@@ -189,25 +402,24 @@ Only invoice data that maps to these supported structures can be processed corre
 
 This project is open source and can be used, modified, and improved by the community.
 
-The source code is available at:
-https://github.com/TuloSharp/tulo.eInvoiceApp.git
+👉 https://github.com/TuloSharp/tulo.eInvoiceApp.git
 
 ---
 
 ## Third-Party Libraries
 
-This project uses the following third-party NuGet packages:
+| Library | Purpose |
+|---|---|
+| PDFsharp-extended | PDF generation and PDF/A conversion |
+| Serilog | Structured logging |
+| tulo.CommonMVVM.WPF | MVVM base infrastructure |
+| tulo.CoreLib | Core utilities |
+| tulo.SerilogLib | Serilog host builder extensions |
+| tulo.XMLeInvoiceToPdf | CII XML to PDF rendering |
+| tulo.ResourcesWpfLib | WPF resource helpers |
+| tulo.LoadingSpinnerControl | UI loading spinner |
 
-- PDFsharp-extended
-- Serilog
-- tulo.CommonMVVM.WPF
-- tulo.CoreLib
-- tulo.SerilogLib
-- tulo.XMLeInvoiceToPdf
-- tulo.ResourcesWpfLib
-- tulo.LoadingSpinnerControl
-
-All credits for these libraries go to their respective authors and maintainers.
+All credits go to their respective authors and maintainers.
 
 ---
 
@@ -219,40 +431,16 @@ All credits go to their respective authors and maintainers.
 
 ---
 
-## Logging
+## Support
 
-The application uses **Serilog** for structured logging throughout the entire pipeline.
+This tool is a private project. If it helps you, support is appreciated.
 
-Log entries are written for every processing step, including:
-- Pipeline start and completion
-- File write operations with byte/character counts
-- Step-by-step PDF/A conversion and upgrade results
-- Signing process output (stdout / stderr) and exit code
-- All errors with full context
-
-Logs help identify configuration issues, file access problems, and pipeline failures
-during development and production use.
-
----
-
-## Build and development notes
-
-If example invoice XML files are included in the project, configure them to be copied
-to the output directory automatically:
-
-```xml
-<ItemGroup>
-  <None Update="Examples\**\*.xml">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
-</ItemGroup>
-```
+- ☕ [PayPal](https://paypal.me/MarceloGuartanAndrad)
+- ⭐ [GitHub](https://github.com/TuloSharp/tulo.eInvoiceApp.git)
 
 ---
 
 ## License
 
-This project is open source.
-
-- **Apache License**
-- Version 2.0, January 2004
+- **Apache License, Version 2.0**
+- https://www.apache.org/licenses/LICENSE-2.0
