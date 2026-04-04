@@ -37,15 +37,15 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     {
         _logger.LogInformation("[{Cmd}] Execution started.", nameof(CreateElectronicInvoiceComponentsCommand));
 
-        // ── 1. Parse parameters ───────────────────────────────────────────────
+        // Step 1. Parse parameters
         var (window, isPreview, hasToCreate) = ParseParameters(parameter);
         _logger.LogDebug("[{Cmd}] Parameters parsed → isPreview={IsPreview}, hasToCreate={HasToCreate}, windowPresent={WindowPresent}.",
             nameof(CreateElectronicInvoiceComponentsCommand), isPreview, hasToCreate, window is not null);
 
-        // ── 2. UI update (must run on UI thread) ──────────────────────────────
+        // Step 2. UI update (must run on UI thread) 
         await UpdateUiAsync(window, isPreview);
 
-        // ── 3. Core pipeline ──────────────────────────────────────────────────
+        // Step 3. Core pipeline
         try
         {
             await RunPipelineAsync(isPreview, hasToCreate);
@@ -56,7 +56,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             SetError($"Failed to generate or render PDF: {ex.Message}", encode: true);
         }
     }
-
+   
     #region Pipeline
     private async Task RunPipelineAsync(bool isPreview, bool hasToCreate)
     {
@@ -97,7 +97,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         _logger.LogDebug("[Pipeline] PDF stream ready ({Bytes} bytes).", pdfMemoryStream.Length);
         pdfMemoryStream.Position = 0;
 
-        // ── 3a. Create artefacts on disk ──────────────────────────────────────
+        #region Create artefacts on disk
         if (hasToCreate)
         {
             _logger.LogInformation("[Pipeline] hasToCreate=true → starting file creation.");
@@ -122,8 +122,9 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                 return;
             }
         }
-
-        // ── 3b. Preview rendering ─────────────────────────────────────────────
+        #endregion
+        
+        #region Preview rendering
         if (isPreview)
         {
             _logger.LogInformation("[Pipeline] isPreview=true → applying watermark and rendering.");
@@ -139,10 +140,10 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         }
         else
         {
-            _logger.LogInformation("[Pipeline] isPreview=false and hasToCreate=false → nothing to render or create. " +
-                                   "InvoiceNumber={InvoiceNumber}.", invoiceViewModel.InvoiceNumber);
+            _logger.LogInformation("[Pipeline] isPreview=false and hasToCreate=false → nothing to render or create. " + "InvoiceNumber={InvoiceNumber}.", invoiceViewModel.InvoiceNumber);
             pdfMemoryStream.Dispose();
         }
+        #endregion
 
         _logger.LogInformation("[Pipeline] Execution completed successfully.");
     }
@@ -154,21 +155,14 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     /// Writes PDF + XML to disk, converts to PDF/A → PDF/A-3, optionally signs.
     /// Returns <c>true</c> on success, <c>false</c> if any step fails.
     /// </summary>
-    private async Task<bool> CreateInvoiceFilesAsync(
-        MemoryStream pdfMemoryStream,
-        string xmlInvoiceContent,
-        bool isPreview)
+    private async Task<bool> CreateInvoiceFilesAsync(MemoryStream pdfMemoryStream, string xmlInvoiceContent, bool isPreview)
     {
         var invoiceFileName = invoiceViewModel.InvoiceNumber ?? "NotInvoiceNrPresent";
         var ct = CancellationToken.None;
 
         var configuredPath = _appOptions?.Value?.Archive?.OutputPath ?? string.Empty;
-        var archiveRootPath = !string.IsNullOrWhiteSpace(configuredPath) && Path.IsPathFullyQualified(configuredPath)
-            ? configuredPath
-            : Path.GetTempPath();
-
+        var archiveRootPath = !string.IsNullOrWhiteSpace(configuredPath) && Path.IsPathFullyQualified(configuredPath) ? configuredPath : Path.GetTempPath();
         var safeFileName = MakeSafeFileName(invoiceFileName);
-
         var inputPdfPath = Path.Combine(archiveRootPath, $"{safeFileName}.pdf");
         var inputXmlPath = Path.Combine(archiveRootPath, $"{safeFileName}.xml");
         var intermediatePdfAPath = Path.Combine(archiveRootPath, $"{safeFileName}_PdfA.pdf");
@@ -176,19 +170,17 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         var outputSignedPath = Path.Combine(archiveRootPath, $"{safeFileName}_SignedPdfA3.pdf");
 
         _logger.LogDebug("[Create] Archive root: {ArchiveRoot}", archiveRootPath);
-        _logger.LogDebug("[Create] File paths → pdf={Pdf}, xml={Xml}, pdfA={PdfA}, pdfA3={PdfA3}, signed={Signed}.",
-            inputPdfPath, inputXmlPath, intermediatePdfAPath, outputPdfA3Path, outputSignedPath);
+        _logger.LogDebug("[Create] File paths → pdf={Pdf}, xml={Xml}, pdfA={PdfA}, pdfA3={PdfA3}, signed={Signed}.", inputPdfPath, inputXmlPath, intermediatePdfAPath, outputPdfA3Path, outputSignedPath);
 
-        // ── Write source files ────────────────────────────────────────────────
-        _logger.LogInformation("[Create] Writing source PDF ({Bytes} bytes) → {Path}.",
-            pdfMemoryStream.Length, inputPdfPath);
+        #region Write source files
+        _logger.LogInformation("[Create] Writing source PDF ({Bytes} bytes) → {Path}.", pdfMemoryStream.Length, inputPdfPath);
         await File.WriteAllBytesAsync(inputPdfPath, pdfMemoryStream.ToArray(), ct);
 
-        _logger.LogInformation("[Create] Writing XML ({Chars} chars) → {Path}.",
-            xmlInvoiceContent.Length, inputXmlPath);
+        _logger.LogInformation("[Create] Writing XML ({Chars} chars) → {Path}.", xmlInvoiceContent.Length, inputXmlPath);
         await File.WriteAllTextAsync(inputXmlPath, xmlInvoiceContent, ct);
+        #endregion
 
-        // ── Step 1: PDF → PDF/A ───────────────────────────────────────────────
+        #region Step 1: PDF → PDF/A
         _logger.LogInformation("[Create] Step 1/3: Converting PDF to PDF/A → {Path}.", intermediatePdfAPath);
 
         using (var pdfDocument = PdfReader.Open(inputPdfPath, PdfDocumentOpenMode.Modify))
@@ -209,8 +201,9 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             pdfDocument.Save(intermediatePdfAPath);
             _logger.LogDebug("[Create] Step 1 OK → {Path}.", intermediatePdfAPath);
         }
+        #endregion
 
-        // ── Step 2: PDF/A → PDF/A-3 + embedded XML ───────────────────────────
+        #region Step 2: PDF/A → PDF/A-3 + embedded XML
         _logger.LogInformation("[Create] Step 2/3: Upgrading to PDF/A-3 with embedded XML → {Path}.", outputPdfA3Path);
 
         byte[] xmlBytes = await File.ReadAllBytesAsync(inputXmlPath, ct);
@@ -224,16 +217,83 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
         if (!pdfA3Result.Success)
         {
-            _logger.LogError("[Create] Step 2 FAILED (UpgradeToPdfA3). " +
-                             "InvoiceNumber={InvoiceNumber}, Reason={Reason}.",
-                invoiceViewModel.InvoiceNumber, pdfA3Result.Message);
+            _logger.LogError("[Create] Step 2 FAILED (UpgradeToPdfA3). " + "InvoiceNumber={InvoiceNumber}, Reason={Reason}.", invoiceViewModel.InvoiceNumber, pdfA3Result.Message);
 
-            invoiceViewModel.StatusMessage = $"UpgradeToPdfA3 failed: {pdfA3Result.Message}";
+            var userMessage = pdfA3Result.Message.Contains("being used by another process")
+                                    ? "The PDF file is still open in another application. Please close the PDF viewer and try again."
+                                    : $"UpgradeToPdfA3 failed: {pdfA3Result.Message}";
+
+            SetError(userMessage);
             invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
             return false;
         }
 
         _logger.LogDebug("[Create] Step 2 OK → {Path}.", outputPdfA3Path);
+        #endregion
+
+        #region Step 3: Sign PDF/A-3
+        var sig = _appOptions!.Value.Signature;
+        bool hasExe = !string.IsNullOrWhiteSpace(sig.SignedExepath) && File.Exists(sig.SignedExepath);
+        bool hasCert = !string.IsNullOrWhiteSpace(sig.SignaturePath) && File.Exists(sig.SignaturePath);
+        bool hasKey = !string.IsNullOrWhiteSpace(sig.PublicKey);
+
+        if (!hasExe || !hasCert || !hasKey)
+        {
+            _logger.LogInformation("[Create] Step 3/3: Signing skipped (exe={HasExe}, cert={HasCert}, key={HasKey}).",
+                hasExe, hasCert, hasKey);
+        }
+        else
+        {
+            _logger.LogInformation("[Create] Step 3/3: Signing PDF/A-3 → {Path}.", outputSignedPath);
+
+            var args = $"--inputPathPdf \"{outputPdfA3Path}\" " +
+                       $"--outputPathSignedPdf \"{outputSignedPath}\" " +
+                       $"--signaturePath \"{sig.SignaturePath}\" " +
+                       $"--publicKey \"{sig.PublicKey}\" " +
+                       $"--reason \"{sig.Reason}\" " +
+                       $"--location \"{sig.Location}\" " +
+                       $"--contactInfo \"{sig.ContactInfo}\"";
+
+            using var proc = Process.Start(new ProcessStartInfo(sig.SignedExepath!, args)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                WorkingDirectory = Path.GetDirectoryName(sig.SignedExepath)!
+            });
+
+            if (proc is not null)
+            {
+                var stdoutTask = proc.StandardOutput.ReadToEndAsync();
+                var stderrTask = proc.StandardError.ReadToEndAsync();
+                await proc.WaitForExitAsync(ct);
+
+                var stdout = await stdoutTask;
+                var stderr = await stderrTask;
+
+                _logger.LogDebug("[Create] Step 3/3: Process exited with code {Code}.", proc.ExitCode);
+
+                if (!string.IsNullOrWhiteSpace(stdout))
+                    _logger.LogInformation("[Create] Step 3/3 stdout: {Out}", stdout.Trim());
+
+                if (!string.IsNullOrWhiteSpace(stderr))
+                    _logger.LogError("[Create] Step 3/3 stderr: {Err}", stderr.Trim());
+
+                if (File.Exists(outputSignedPath))
+                    _logger.LogInformation("[Create] Step 3/3 OK → {Path}.", outputSignedPath);
+                else
+                    _logger.LogWarning("[Create] Step 3/3: Signed file not found after exit code {Code} → {Path}.",
+                        proc.ExitCode, outputSignedPath);
+            }
+            else
+            {
+                _logger.LogWarning("[Create] Step 3/3: Process could not be started → {Exe}.", sig.SignedExepath);
+            }
+        }
+
+        #endregion
+
 
         // ── Reset UI slide button ─────────────────────────────────────────────
         invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
@@ -241,9 +301,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         // ── Open with default viewer ──────────────────────────────────────────
         if (_appOptions!.Value.Archive.CanOpenPdfWithDefaultApp)
         {
-            var fileToOpen = File.Exists(outputSignedPath) ? outputSignedPath
-                           : File.Exists(outputPdfA3Path) ? outputPdfA3Path
-                           : null;
+            var fileToOpen = File.Exists(outputSignedPath) ? outputSignedPath : File.Exists(outputPdfA3Path) ? outputPdfA3Path : null;
 
             if (fileToOpen is not null)
             {
@@ -252,19 +310,15 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             }
             else
             {
-                _logger.LogWarning("[Create] CanOpenPdfWithDefaultApp=true but no output file found to open. " +
-                                   "Expected paths: signed={Signed}, pdfA3={PdfA3}.",
-                    outputSignedPath, outputPdfA3Path);
+                _logger.LogWarning("[Create] CanOpenPdfWithDefaultApp=true but no output file found to open. " + "Expected paths: signed={Signed}, pdfA3={PdfA3}.", outputSignedPath, outputPdfA3Path);
             }
         }
 
         return true;
     }
-
     #endregion
 
     #region Helpers
-
     private async Task UpdateUiAsync(Window? window, bool isPreview)
     {
         await Application.Current.Dispatcher.InvokeAsync(() =>
@@ -303,13 +357,12 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     private void SetError(string message, bool encode = false)
     {
         var safe = encode ? System.Net.WebUtility.HtmlEncode(message) : message;
+        invoiceViewModel.StatusMessage = safe;
         invoiceViewModel.DocumentSource = $"<html><body><h1>{safe}</h1></body></html>";
     }
-
     #endregion
 
-    #region Parameter parsing
-
+    #region Parameter Parsing
     private static (Window? window, bool isPreview, bool hasToCreate) ParseParameters(object parameter)
     {
         Window? window = null;
@@ -343,7 +396,6 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     #endregion
 
     #region Utilities
-
     private static string MakeSafeFileName(string value)
     {
         foreach (var c in Path.GetInvalidFileNameChars())
@@ -351,8 +403,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         return value.Trim();
     }
 
-    private static void OpenWithDefaultPdfViewer(string pdfPath) =>
-        Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
+    private static void OpenWithDefaultPdfViewer(string pdfPath) => Process.Start(new ProcessStartInfo(pdfPath) { UseShellExecute = true });
 
     #endregion
 }

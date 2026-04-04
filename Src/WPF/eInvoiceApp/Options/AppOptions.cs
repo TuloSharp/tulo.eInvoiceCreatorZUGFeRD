@@ -67,6 +67,7 @@ public sealed class LocalizationOptions
 
 public sealed class SignatureOptions
 {
+    public string? SignedExepath { get; set; }
     public string? SignaturePath { get; set; }
     public string? PublicKey { get; set; }
     public string? Reason { get; set; }
