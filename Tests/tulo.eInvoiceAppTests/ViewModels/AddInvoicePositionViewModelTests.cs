@@ -6,6 +6,7 @@ using tulo.CommonMVVM.GlobalProperties;
 using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.Services;
 using tulo.CoreLib.Translators;
+using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
@@ -20,14 +21,14 @@ public class AddInvoicePositionViewModelTests : IDisposable
     private readonly WpfTestContext _wpf = new();
     private readonly ICollectorCollection _collectorCollection;
     private readonly GlobalPropsUiManage _globalProps;
-    private readonly FakeSelectedInvoicePositionStore _selectionStore;
+    private readonly SelectedInvoicePositionStore _selectionStore;
     private readonly FakeInvoicePositionService _invoiceService;
 
     public AddInvoicePositionViewModelTests()
     {
         _globalProps = new GlobalPropsUiManage();
-        _selectionStore = new FakeSelectedInvoicePositionStore();
         _invoiceService = new FakeInvoicePositionService();
+        _selectionStore = new SelectedInvoicePositionStore(_invoiceService);
         _collectorCollection = new CollectorCollection();
 
         var testTranslations = new Dictionary<string, string>
@@ -45,11 +46,11 @@ public class AddInvoicePositionViewModelTests : IDisposable
         _collectorCollection.AddService<ISelectedInvoicePositionStore>(_selectionStore);
         _collectorCollection.AddService<IGlobalPropsUiManage>(_globalProps);
         _collectorCollection.AddService<ITranslatorUiProvider>(translator);
-        _collectorCollection.AddService<IInvoicePositionService>(_invoiceService);  // bleibt Fake → DB
+        _collectorCollection.AddService<IInvoicePositionService>(_invoiceService);
         _collectorCollection.AddService<ILoggerFactory>(NullLoggerFactory.Instance);
         _collectorCollection.AddService<IOptions<AppOptions>>(appOptions);
-        _collectorCollection.AddService<ISnapShotService>(new SnapShotService());                        // real
-        _collectorCollection.AddService<IInvoicePositionLookupService>(new InvoicePositionLookupService(_collectorCollection)); // real
+        _collectorCollection.AddService<ISnapShotService>(new SnapShotService());     
+        _collectorCollection.AddService<IInvoicePositionLookupService>(new InvoicePositionLookupService(_collectorCollection));
     }
 
     private AddInvoicePositionViewModel CreateVm() =>
@@ -354,6 +355,96 @@ public class AddInvoicePositionViewModelTests : IDisposable
         });
     }
     #endregion
+
+    #region 7. Sub-Position Context
+    [Fact(DisplayName = "IsSubPosition: false when SelectedParentPositionId is null (normal position context)")]
+    public void IsSubPosition_False_WhenSelectedParentPositionIdIsNull()
+    {
+        _wpf.Invoke(() =>
+        {
+            _selectionStore.SelectedParentPositionId = null;
+            var vm = CreateVm();
+
+            Assert.False(vm.IsSubPosition);
+        });
+    }
+
+    [Fact(DisplayName = "IsSubPosition: true when SelectedParentPositionId is set before construction")]
+    public void IsSubPosition_True_WhenSelectedParentPositionIdIsSet()
+    {
+        _wpf.Invoke(() =>
+        {
+            _selectionStore.SelectedParentPositionId = Guid.NewGuid();
+            var vm = CreateVm();
+
+            Assert.True(vm.IsSubPosition);
+        });
+    }
+
+    [Fact(DisplayName = "ParentPositionId: null when SelectedParentPositionId is not set")]
+    public void ParentPositionId_Null_WhenStoreHasNoParent()
+    {
+        _wpf.Invoke(() =>
+        {
+            _selectionStore.SelectedParentPositionId = null;
+            var vm = CreateVm();
+
+            Assert.Null(vm.ParentPositionId);
+        });
+    }
+
+    [Fact(DisplayName = "ParentPositionId: matches store value when SelectedParentPositionId is set")]
+    public void ParentPositionId_MatchesStoreValue_WhenSet()
+    {
+        _wpf.Invoke(() =>
+        {
+            var parentId = Guid.NewGuid();
+            _selectionStore.SelectedParentPositionId = parentId;
+            var vm = CreateVm();
+
+            Assert.Equal(parentId, vm.ParentPositionId);
+        });
+    }
+
+    [Fact(DisplayName = "AddInvoicePositionDetailsCommand: is AddInvoicePositionDetailsCommand type when IsSubPosition is false")]
+    public void Command_IsAddInvoicePositionDetailsCommand_WhenNotSubPosition()
+    {
+        _wpf.Invoke(() =>
+        {
+            _selectionStore.SelectedParentPositionId = null;
+            var vm = CreateVm();
+
+            Assert.IsType<AddInvoicePositionDetailsCommand>(vm.AddInvoicePositionDetailsCommand);
+        });
+    }
+
+    [Fact(DisplayName = "AddInvoicePositionDetailsCommand: is AddSubInvoicePositionDetailsCommand type when IsSubPosition is true")]
+    public void Command_IsAddSubInvoicePositionDetailsCommand_WhenIsSubPosition()
+    {
+        _wpf.Invoke(() =>
+        {
+            _selectionStore.SelectedParentPositionId = Guid.NewGuid();
+            var vm = CreateVm();
+
+            Assert.IsType<AddSubInvoicePositionDetailsCommand>(vm.AddInvoicePositionDetailsCommand);
+        });
+    }
+
+    [Fact(DisplayName = "Dispose: resets SelectedParentPositionId in store to null")]
+    public void Dispose_ResetsSelectedParentPositionIdToNull()
+    {
+        _wpf.Invoke(() =>
+        {
+            _selectionStore.SelectedParentPositionId = Guid.NewGuid();
+            var vm = CreateVm();
+
+            vm.Dispose();
+
+            Assert.Null(_selectionStore.SelectedParentPositionId);
+        });
+    }
+    #endregion
+
 
     #region Utilities
     public void Dispose() => _wpf.Dispose();

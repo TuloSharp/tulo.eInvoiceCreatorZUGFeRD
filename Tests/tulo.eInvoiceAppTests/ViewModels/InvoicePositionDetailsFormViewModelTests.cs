@@ -23,12 +23,14 @@ public class InvoicePositionDetailsFormViewModelTests : IDisposable
     private readonly WpfTestContext _wpf = new();
     private readonly ICollectorCollection _collectorCollection;
     private readonly GlobalPropsUiManage _globalProps;
-    private readonly FakeSelectedInvoicePositionStore _selectionStore;
+    private readonly SelectedInvoicePositionStore _selectionStore;
+    private readonly FakeInvoicePositionService _invoiceService;
 
     public InvoicePositionDetailsFormViewModelTests()
     {
         _globalProps = new GlobalPropsUiManage();
-        _selectionStore = new FakeSelectedInvoicePositionStore();
+        _invoiceService = new FakeInvoicePositionService();
+        _selectionStore = new SelectedInvoicePositionStore(_invoiceService);
         _collectorCollection = new CollectorCollection();
 
         var testTranslations = new Dictionary<string, string>

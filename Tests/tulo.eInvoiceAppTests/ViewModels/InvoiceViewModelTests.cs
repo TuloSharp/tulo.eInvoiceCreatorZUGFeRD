@@ -17,13 +17,13 @@ public class InvoiceViewModelTests : IDisposable
 {
     private readonly WpfTestContext _wpf = new();
     private readonly FakeInvoicePositionService _invoiceService;
-    private readonly FakeSelectedInvoicePositionStore _selectionStore;
+    private readonly SelectedInvoicePositionStore _selectionStore;
     private readonly ICollectorCollection _collectorCollection;
 
     public InvoiceViewModelTests()
     {
         _invoiceService = new FakeInvoicePositionService();
-        _selectionStore = new FakeSelectedInvoicePositionStore();
+        _selectionStore = new SelectedInvoicePositionStore(_invoiceService);
         _collectorCollection = new CollectorCollection();
 
         var testTranslations = new Dictionary<string, string>

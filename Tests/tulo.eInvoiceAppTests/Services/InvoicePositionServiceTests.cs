@@ -76,8 +76,8 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A2"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A2"));
 
         var result = await svc.LoadAllInvoicePositionsAsync();
 
@@ -90,7 +90,7 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
 
         var result = await svc.LoadAllInvoicePositionsAsync();
 
@@ -199,7 +199,7 @@ public class InvoicePositionServiceTests
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
 
-        var result = await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
+        var result = await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
 
         Assert.True(result.Success);
         Assert.True(svc.IsCreated);
@@ -210,7 +210,7 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
 
-        var result = await svc.AddSubPositionAsync(Guid.NewGuid(), MakeSubDto("Sub"));
+        var result = await svc.AddSubInvoicePositionAsync(Guid.NewGuid(), MakeSubDto("Sub"));
 
         Assert.False(result.Success);
         Assert.False(svc.IsCreated);
@@ -222,7 +222,7 @@ public class InvoicePositionServiceTests
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
 
-        var result = await svc.AddSubPositionAsync(groupId, MakeSubDto(description: ""));
+        var result = await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto(description: ""));
 
         Assert.False(result.Success);
         Assert.False(svc.AreRequiredFieldsFilled);
@@ -233,8 +233,8 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1", qty: 2m, price: 100m)); // 200
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A2", qty: 3m, price: 50m));  // 150
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1", qty: 2m, price: 100m)); // 200
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A2", qty: 3m, price: 50m));  // 150
 
         var list = (await svc.LoadAllInvoicePositionsAsync()).Data;
         var group = list.First(p => p.IsGroupPosition);
@@ -251,7 +251,7 @@ public class InvoicePositionServiceTests
         InvoicePositionDetailsDTO? firedDto = null;
         svc.InvoicePositionCreated += dto => firedDto = dto;
 
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
 
         Assert.NotNull(firedDto);
         Assert.True(firedDto.IsSubPosition);
@@ -448,8 +448,8 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A2"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A2"));
 
         Assert.Equal(2, svc.SuggestNextPositionNo()); // only 1 top-level GROUP → next is 2
     }
@@ -472,7 +472,7 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
 
         Assert.Equal(2, svc.SuggestNextSubPositionNo(groupId));
     }
@@ -522,8 +522,8 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1", qty: 2m, price: 100m)); // net=200 gross=238
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A2", qty: 1m, price: 50m));  // net=50  gross=59.50
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1", qty: 2m, price: 100m)); // net=200 gross=238
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A2", qty: 1m, price: 50m));  // net=50  gross=59.50
 
         var list = (await svc.LoadAllInvoicePositionsAsync()).Data;
         var group = list.First(p => p.IsGroupPosition);
@@ -567,7 +567,7 @@ public class InvoicePositionServiceTests
     {
         var svc = CreateService();
         var groupId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
-        await svc.AddSubPositionAsync(groupId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupId, MakeSubDto("Sub A1"));
 
         var list = (await svc.LoadAllInvoicePositionsAsync()).Data;
         var sub = list.First(p => p.IsSubPosition);
@@ -581,9 +581,9 @@ public class InvoicePositionServiceTests
         var svc = CreateService();
         var groupAId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group A"))).Data;
         var groupBId = (await svc.AddInvoicePositionAsync(MakeGroupDto("Group B"))).Data;
-        await svc.AddSubPositionAsync(groupAId, MakeSubDto("Sub A1"));
-        await svc.AddSubPositionAsync(groupAId, MakeSubDto("Sub A2"));
-        await svc.AddSubPositionAsync(groupBId, MakeSubDto("Sub B1"));
+        await svc.AddSubInvoicePositionAsync(groupAId, MakeSubDto("Sub A1"));
+        await svc.AddSubInvoicePositionAsync(groupAId, MakeSubDto("Sub A2"));
+        await svc.AddSubInvoicePositionAsync(groupBId, MakeSubDto("Sub B1"));
 
         var list = (await svc.LoadAllInvoicePositionsAsync()).Data;
         var subA1 = list.First(p => p.InvoicePositionDescription == "Sub A1");

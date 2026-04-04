@@ -26,11 +26,12 @@ public class InvoiceBuilderServiceTests : IDisposable
     {
         _appOptions = new AppOptions();
         _store = new InvoicePositionStore();
+        var fakeInvoicePositionService = new FakeInvoicePositionService();
 
         _collector = new CollectorCollection();
         _collector.AddService<IInvoicePositionStore>(_store);
         _collector.AddService<IOptions<AppOptions>>(Options.Create(_appOptions));
-        _collector.AddService<ISelectedInvoicePositionStore>(new FakeSelectedInvoicePositionStore());
+        _collector.AddService<ISelectedInvoicePositionStore>(new SelectedInvoicePositionStore(fakeInvoicePositionService));
         _collector.AddService<IGlobalPropsUiManage>(new GlobalPropsUiManage());
         _collector.AddService<ITranslatorUiProvider>(new TranslatorUiProvider(new Dictionary<string, string>()));
         _collector.AddService<IInvoicePositionService>(new FakeInvoicePositionService());

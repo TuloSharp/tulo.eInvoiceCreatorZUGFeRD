@@ -136,5 +136,24 @@ public interface IInvoicePositionService
     /// or an error result on failure.
     /// </returns>
     Task<OperationResult<List<InvoicePositionDetailsDTO>>> SetInvoicePositionNoAsync(Guid id, int newPositionNo);
+
+    /// <summary>
+    /// Adds a new DETAIL sub-position under an existing GROUP position.
+    /// </summary>
+    /// <param name="parentId">
+    /// The <see cref="Guid"/> of the parent GROUP position.
+    /// Must refer to a position with <c>LineStatusReasonCode = "GROUP"</c>,
+    /// otherwise the operation will fail.
+    /// </param>
+    /// <param name="subPos">
+    /// The DTO containing the sub-position data to persist.
+    /// <c>ParentPositionId</c> and <c>LineStatusReasonCode</c> will be enforced
+    /// by the store regardless of what is passed here.
+    /// </param>
+    /// <returns>
+    /// An <see cref="OperationResult{Guid}"/> containing the newly created sub-position Id on success,
+    /// or an error message if the parent was not found, is not a GROUP, or the insert failed.
+    /// </returns>
+    Task<OperationResult<Guid>> AddSubInvoicePositionAsync(Guid parentId, InvoicePositionDetailsDTO subPos);
 }
 

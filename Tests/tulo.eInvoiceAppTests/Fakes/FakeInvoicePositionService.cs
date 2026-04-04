@@ -25,17 +25,13 @@ public class FakeInvoicePositionService : IInvoicePositionService
     public event Action<Guid>? InvoicePositionDeleted;
 
     // Helper methods so tests can manually raise events
-    public void RaiseLoaded(List<InvoicePositionDetailsDTO> list)
-        => InvoicePositionsLoaded?.Invoke(list);
+    public void RaiseLoaded(List<InvoicePositionDetailsDTO> list) => InvoicePositionsLoaded?.Invoke(list);
 
-    public void RaiseCreated(InvoicePositionDetailsDTO dto)
-        => InvoicePositionCreated?.Invoke(dto);
+    public void RaiseCreated(InvoicePositionDetailsDTO dto) => InvoicePositionCreated?.Invoke(dto);
 
-    public void RaiseUpdated(InvoicePositionDetailsDTO dto)
-        => InvoicePositionUpdated?.Invoke(dto);
+    public void RaiseUpdated(InvoicePositionDetailsDTO dto) => InvoicePositionUpdated?.Invoke(dto);
 
-    public void RaiseDeleted(Guid id)
-        => InvoicePositionDeleted?.Invoke(id);
+    public void RaiseDeleted(Guid id) => InvoicePositionDeleted?.Invoke(id);
 
     // Simple in-memory counter for SuggestNextPositionNo()
     private int _nextPositionNo = 1;
@@ -100,6 +96,23 @@ public class FakeInvoicePositionService : IInvoicePositionService
         // For ViewModel tests, we typically do not need real reordering logic.
         // We just return a successful result to keep the VM logic moving.
         var result = OperationResult<List<InvoicePositionDetailsDTO>>.Ok(new List<InvoicePositionDetailsDTO>());
+        return Task.FromResult(result);
+    }
+
+    public Task<OperationResult<Guid>> AddSubInvoicePositionAsync(Guid parentId, InvoicePositionDetailsDTO subPos)
+    {
+        IsCreated = true;
+        TotalCount++;
+
+        var id = subPos.Id == Guid.Empty ? Guid.NewGuid() : subPos.Id;
+        subPos.Id = id;
+        subPos.ParentPositionId = parentId;
+        subPos.LineStatusReasonCode = "DETAIL";
+
+        // Raise the same created event so the store and VM can react identically to a normal add
+        InvoicePositionCreated?.Invoke(subPos);
+
+        var result = OperationResult<Guid>.Ok(id);
         return Task.FromResult(result);
     }
 }

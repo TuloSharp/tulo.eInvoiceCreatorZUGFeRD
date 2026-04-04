@@ -30,9 +30,14 @@ public class SelectedInvoicePositionStore : ISelectedInvoicePositionStore
         }
     }
 
-    public SelectedInvoicePositionStore(IInvoicePositionService invociePositionStore)
+    // Set by InvoicePositionCardItemViewModel before opening the Add modal.
+    // If not null → AddInvoicePositionViewModel will call AddSubPositionAsync under this parent.
+    // Always reset to null after the Add operation completes (success or cancel).
+    public Guid? SelectedParentPositionId { get; set; }
+
+    public SelectedInvoicePositionStore(IInvoicePositionService invociePositionService)
     {
-        _invoicePositionService = invociePositionStore;
+        _invoicePositionService = invociePositionService;
 
         _invoicePositionService.InvoicePositionUpdated += OnPositionUpdated;
         _invoicePositionService.InvoicePositionCreated += OnPositionCreated;

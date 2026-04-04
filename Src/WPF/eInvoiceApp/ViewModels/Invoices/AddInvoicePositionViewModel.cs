@@ -21,6 +21,15 @@ public class AddInvoicePositionViewModel : BaseViewModel
 
     public InvoicePositionDetailsFormViewModel InvoicePositionDetailsFormViewModel { get; }
 
+    #region Sub-position context
+    // True when this Add modal was opened via OpenAddSubInvoicePositionViewCommand on a GROUP card.
+    // Read by AddInvoicePositionDetailsCommand to decide between AddAsync and AddSubPositionAsync.
+    public bool IsSubPosition => _selectedInvoicePositionStore.SelectedParentPositionId.HasValue;
+
+    // The parent GROUP id — only set when IsSubPosition == true.
+    public Guid? ParentPositionId => _selectedInvoicePositionStore.SelectedParentPositionId;
+    #endregion
+
     #region Manage Enable Buttons in UI
     private bool _isEnableToSaveData;
     public bool IsEnableToSaveData
@@ -146,7 +155,7 @@ public class AddInvoicePositionViewModel : BaseViewModel
         StatusMessageViewModel = new MessageViewModel();
 
         #region Invoice Position Commands 
-        AddInvoicePositionDetailsCommand = new AddInvoicePositionDetailsCommand(this, collectorCollection);
+        AddInvoicePositionDetailsCommand = IsSubPosition ? new AddSubInvoicePositionDetailsCommand(this, collectorCollection) : new AddInvoicePositionDetailsCommand(this, collectorCollection);
         CloseAddInvoicePositionDetailsCommand = new CloseModalStackCommand(collectorCollection, typeof(AddInvoicePositionViewModel), true);
         #endregion
 
@@ -213,6 +222,9 @@ public class AddInvoicePositionViewModel : BaseViewModel
     public override void Dispose()
     {
         base.Dispose();
+
+        // Always reset the parent context when this modal is closed — whether saved or cancelled
+        _selectedInvoicePositionStore.SelectedParentPositionId = null;
 
         _globalPropsUiManage.IsEnableToSaveDataChanged -= GlobalPropsUiManageOnIsEnableToSaveDataChanged;
         _globalPropsUiManage.HasUnsavedChangesChanged -= GlobalPropsUiManageOnHasUnsavedChangesChanged;

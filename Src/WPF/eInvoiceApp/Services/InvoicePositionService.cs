@@ -82,8 +82,7 @@ public sealed class InvoicePositionService(IInvoicePositionStore invoicePosition
     #endregion
 
     #region Add sub-position (DETAIL under a GROUP)
-    public async Task<OperationResult<Guid>> AddSubPositionAsync(
-        Guid parentId, InvoicePositionDetailsDTO subPos)
+    public async Task<OperationResult<Guid>> AddSubInvoicePositionAsync(Guid parentId, InvoicePositionDetailsDTO subPos)
     {
         ResetMutationFlags();
 
