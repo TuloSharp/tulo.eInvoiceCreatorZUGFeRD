@@ -8,6 +8,7 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
     <File Path="NuGet.Config" />
+    <File Path="README.md" />
   </Folder>
   <Folder Name="/Src/">
     <Project Path="Src/tulo.eInvocieXmlGeneratorCii/tulo.eInvoiceXmlGeneratorCii.csproj" />

@@ -23,10 +23,7 @@ public class ClearAllInvoiceViewCommand(InvoiceViewModel invoiceViewModel, IColl
         {
             // 1. Delete all invoice positions from the store
             //    ToList() first — never modify a collection while iterating it
-            var positionIds = invoiceViewModel.InvoicePositionCardListItemCollectionView
-                .Cast<InvoicePositionCardItemViewModel>()
-                .Select(vm => vm.InvoicePositionId)
-                .ToList();
+            var positionIds = invoiceViewModel.InvoicePositionCardListItemCollectionView.Cast<InvoicePositionCardItemViewModel>().Select(vm => vm.InvoicePositionId).ToList();
 
             foreach (var id in positionIds)
                 await _invoicePositionService.DeleteInvoicePositionAsync(id);

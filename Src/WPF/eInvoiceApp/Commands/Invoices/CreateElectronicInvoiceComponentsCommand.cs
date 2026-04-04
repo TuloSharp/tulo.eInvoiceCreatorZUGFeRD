@@ -7,6 +7,7 @@ using System.Windows;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CoreLib.PDFs;
+using tulo.CoreLib.Translators;
 using tulo.eInvoice.eInvoiceApp.Options;
 using tulo.eInvoice.eInvoiceApp.Services;
 using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
@@ -31,6 +32,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
     private readonly IOptions<UpgradeToPdfA3Options> _upgradeToPdfA3Options = collectorCollection.GetService<IOptions<UpgradeToPdfA3Options>>();
     private readonly IToPdfAConverterService _toPdfAConverterService = collectorCollection.GetService<IToPdfAConverterService>();
     private readonly IToPdfA3UpgradeService _toPdfA3UpgradeService = collectorCollection.GetService<IToPdfA3UpgradeService>();
+    private readonly ITranslatorUiProvider _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
     #endregion
 
     protected override async Task ExecuteAsync(object parameter)
@@ -53,7 +55,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         catch (Exception ex)
         {
             _logger.LogError(ex, "[{Cmd}] Unhandled exception in pipeline.", nameof(CreateElectronicInvoiceComponentsCommand));
-            SetError($"Failed to generate or render PDF: {ex.Message}", encode: true);
+            SetError(string.Format(_translatorUiProvider.Translate("CreateInvoiceCmd_ErrorPipelineFailed"), ex.Message), encode: true);
         }
     }
    
@@ -76,7 +78,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         {
             _logger.LogWarning("[Pipeline] PDF generation returned null. Aborting. " + "isPreview={IsPreview}, hasToCreate={HasToCreate}, " + "InvoiceNumber={InvoiceNumber}.",
                 isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
-            SetError("PDF generation returned null result.");
+            SetError(_translatorUiProvider.Translate("CreateInvoiceCmd_ErrorPdfNull"));
             return;
         }
 
@@ -90,7 +92,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         {
             _logger.LogWarning("[Pipeline] PDF stream is empty after copy. Aborting. " + "isPreview={IsPreview}, hasToCreate={HasToCreate}, " + "InvoiceNumber={InvoiceNumber}.", isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
             pdfMemoryStream.Dispose();
-            SetError("PDF stream is empty.");
+            SetError(_translatorUiProvider.Translate("CreateInvoiceCmd_ErrorPdfEmpty"));
             return;
         }
 
@@ -208,20 +210,15 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
         byte[] xmlBytes = await File.ReadAllBytesAsync(inputXmlPath, ct);
 
-        var pdfA3Result = _toPdfA3UpgradeService.UpgradeToPdfA3(
-            inputPdfAPath: intermediatePdfAPath,
-            outputPdfA3Path: outputPdfA3Path,
-            xmlFileName: Path.GetFileName(inputXmlPath),
-            xmlBytes: xmlBytes,
-            appOptions: _upgradeToPdfA3Options.Value);
+        var pdfA3Result = _toPdfA3UpgradeService.UpgradeToPdfA3(inputPdfAPath: intermediatePdfAPath, outputPdfA3Path: outputPdfA3Path, xmlFileName: Path.GetFileName(inputXmlPath), xmlBytes: xmlBytes, appOptions: _upgradeToPdfA3Options.Value);
 
         if (!pdfA3Result.Success)
         {
             _logger.LogError("[Create] Step 2 FAILED (UpgradeToPdfA3). " + "InvoiceNumber={InvoiceNumber}, Reason={Reason}.", invoiceViewModel.InvoiceNumber, pdfA3Result.Message);
 
             var userMessage = pdfA3Result.Message.Contains("being used by another process")
-                                    ? "The PDF file is still open in another application. Please close the PDF viewer and try again."
-                                    : $"UpgradeToPdfA3 failed: {pdfA3Result.Message}";
+                                    ? _translatorUiProvider.Translate("CreateInvoiceCmd_ErrorFileInUse")
+                                    : string.Format(_translatorUiProvider.Translate("CreateInvoiceCmd_ErrorUpgradePdfA3"), pdfA3Result.Message);
 
             SetError(userMessage);
             invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;

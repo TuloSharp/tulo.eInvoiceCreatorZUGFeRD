@@ -150,8 +150,8 @@
 
   <!--#region Main Window Labels & Contents -->
   <entry key="MainWindowTitle">Create ZUGFeRD Invoice</entry>
-   <entry key="DonateText">Like the app? Please donate.</entry>
-     <entry key="ToolTipDonateText">You can find the donation link in the About view.</entry>
+  <entry key="DonateText">Like the app? Please donate.</entry>
+  <entry key="ToolTipDonateText">You can find the donation link in the About view.</entry>
   <!--#endregion -->
 
   <!--#region Invoice Position Details - Labels -->
@@ -260,7 +260,7 @@
   <!--#region UI Payment Terms - Labels -->
   <entry key="LabelContentPaymentTerms">Payment terms</entry>
   <entry key="LabelApplyDiscount">Apply discount</entry>
-  
+
   <!--#endregion -->
 
   <!--#region UI Payment Terms - ToolTips -->
@@ -292,27 +292,35 @@
   <!--#endregion -->
 
   <!--#region DocumentTypeCode -->
-<entry key="DocumentTypeCode_380">Invoice</entry>
-<entry key="DocumentTypeCode_381">Credit note</entry>
-<entry key="DocumentTypeCode_383">Debit note</entry>
+  <entry key="DocumentTypeCode_380">Invoice</entry>
+  <entry key="DocumentTypeCode_381">Credit note</entry>
+  <entry key="DocumentTypeCode_383">Debit note</entry>
 
-<entry key="ToolTipDocumentTypeCode_380">Select this option for a standard invoice.</entry>
-<entry key="ToolTipDocumentTypeCode_381">Select this option for a credit note.</entry>
-<entry key="ToolTipDocumentTypeCode_383">Select this option for a debit note.</entry>
-<!--#endregion -->
+  <entry key="ToolTipDocumentTypeCode_380">Select this option for a standard invoice.</entry>
+  <entry key="ToolTipDocumentTypeCode_381">Select this option for a credit note.</entry>
+  <entry key="ToolTipDocumentTypeCode_383">Select this option for a debit note.</entry>
+  <!--#endregion -->
 
+  <!--#region PaymentMeansCode -->
+  <entry key="PaymentMeansCode_58">Credit transfer</entry>
+  <entry key="PaymentMeansCode_59">SEPA credit transfer</entry>
+  <entry key="PaymentMeansCode_49">SEPA direct debit</entry>
+  <entry key="PaymentMeansCode_10">Cash payment</entry>
+  <entry key="PaymentMeansCode_48">Card payment</entry>
 
-<!--#region PaymentMeansCode -->
-<entry key="PaymentMeansCode_58">Credit transfer</entry>
-<entry key="PaymentMeansCode_59">SEPA credit transfer</entry>
-<entry key="PaymentMeansCode_49">SEPA direct debit</entry>
-<entry key="PaymentMeansCode_10">Cash payment</entry>
-<entry key="PaymentMeansCode_48">Card payment</entry>
+  <entry key="ToolTipPaymentMeansCode_58">Payment by standard bank transfer.</entry>
+  <entry key="ToolTipPaymentMeansCode_59">Payment by SEPA bank transfer within the SEPA area.</entry>
+  <entry key="ToolTipPaymentMeansCode_49">Payment by SEPA direct debit from the customer's account.</entry>
+  <entry key="ToolTipPaymentMeansCode_10">Payment made in cash.</entry>
+  <entry key="ToolTipPaymentMeansCode_48">Payment made by debit or credit card.</entry>
+  <!--#endregion -->
 
-<entry key="ToolTipPaymentMeansCode_58">Payment by standard bank transfer.</entry>
-<entry key="ToolTipPaymentMeansCode_59">Payment by SEPA bank transfer within the SEPA area.</entry>
-<entry key="ToolTipPaymentMeansCode_49">Payment by SEPA direct debit from the customer's account.</entry>
-<entry key="ToolTipPaymentMeansCode_10">Payment made in cash.</entry>
-<entry key="ToolTipPaymentMeansCode_48">Payment made by debit or credit card.</entry>
-<!--#endregion -->
+  <!--#region CreateElectronicInvoiceComponentsCommand -->
+  <entry key="CreateInvoiceCmd_ErrorPipelineFailed">Failed to generate or render PDF: {0}</entry>
+  <entry key="CreateInvoiceCmd_ErrorPdfNull">PDF generation returned null result.</entry>
+  <entry key="CreateInvoiceCmd_ErrorPdfEmpty">PDF stream is empty.</entry>
+  <entry key="CreateInvoiceCmd_ErrorApplyPdfA">PDF/A conversion failed: {0}</entry>
+  <entry key="CreateInvoiceCmd_ErrorFileInUse">The PDF file is still open in another application. Please close the PDF viewer and try again.</entry>
+  <entry key="CreateInvoiceCmd_ErrorUpgradePdfA3">PDF/A-3 upgrade failed: {0}</entry>
+  <!--#endregion -->
 </properties>
