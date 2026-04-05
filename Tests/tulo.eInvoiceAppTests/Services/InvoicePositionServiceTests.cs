@@ -1,6 +1,6 @@
-﻿using tulo.eInvoice.eInvoiceApp.DTOs;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
+﻿using tulo.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.Stores.Invoices;
 
 namespace tulo.eInvoiceAppTests.Services;
 

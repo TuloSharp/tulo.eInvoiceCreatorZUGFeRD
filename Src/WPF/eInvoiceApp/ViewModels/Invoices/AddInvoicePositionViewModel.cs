@@ -5,11 +5,11 @@ using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.UiCommands;
 using tulo.CommonMVVM.ViewModels;
 using tulo.CoreLib.Translators;
-using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
+using tulo.eInvoiceApp.Commands.Invoices;
+using tulo.eInvoiceApp.Stores.Invoices;
 using tulo.LoadingSpinnerControl.ViewModels;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+namespace tulo.eInvoiceApp.ViewModels.Invoices;
 
 public class AddInvoicePositionViewModel : BaseViewModel
 {

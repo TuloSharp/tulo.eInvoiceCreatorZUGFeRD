@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.ViewModels.Invoices;
 
-namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
+namespace tulo.eInvoiceApp.Commands.Invoices;
 public class DeleteInvoicePositionDetailsCommand(DeleteInvoicePositionViewModel deleteInvoicePositionViewModel, ICollectorCollection collectorCollection) : AsyncBaseCommand
 {
     private DeleteInvoicePositionViewModel _deleteInvoicePositionViewModel = deleteInvoicePositionViewModel;

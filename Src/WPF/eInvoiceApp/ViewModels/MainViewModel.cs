@@ -7,15 +7,15 @@ using tulo.CommonMVVM.Stores;
 using tulo.CommonMVVM.UiCommands;
 using tulo.CommonMVVM.ViewModels;
 using tulo.CoreLib.Translators;
-using tulo.eInvoice.eInvoiceApp.Commands.Common;
-using tulo.eInvoice.eInvoiceApp.Properties;
-using tulo.eInvoice.eInvoiceApp.Utilities;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Factories;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.Commands.Common;
+using tulo.eInvoiceApp.Properties;
+using tulo.eInvoiceApp.Utilities;
+using tulo.eInvoiceApp.ViewModels.Factories;
+using tulo.eInvoiceApp.ViewModels.Invoices;
 using tulo.ResourcesWpfLib.Commands;
 using tulo.ResourcesWpfLib.Viewmodels;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels;
+namespace tulo.eInvoiceApp.ViewModels;
 public class MainViewModel : BaseViewModel, IResizeWindowViewModel
 {
     #region Get Services / Stores from CollectorCollection

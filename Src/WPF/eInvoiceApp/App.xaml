@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:tulo.eInvoiceManager"
              xmlns:extendeddatepicker="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
-             xmlns:invoiceviewmodels="clr-namespace:tulo.eInvoice.eInvoiceApp.ViewModels.Invoices"
-             xmlns:invoiceviews="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Invoices"
-             xmlns:sellerviewmodels="clr-namespace:tulo.eInvoice.eInvoiceApp.ViewModels.Sellers"
-             xmlns:sellerviews="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Sellers"
-             xmlns:aboutviewmodels="clr-namespace:tulo.eInvoice.eInvoiceApp.ViewModels.About"
-             xmlns:aboutviews="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.About">
+             xmlns:invoiceviewmodels="clr-namespace:tulo.eInvoiceApp.ViewModels.Invoices"
+             xmlns:invoiceviews="clr-namespace:tulo.eInvoiceApp.Views.Invoices"
+             xmlns:sellerviewmodels="clr-namespace:tulo.eInvoiceApp.ViewModels.Sellers"
+             xmlns:sellerviews="clr-namespace:tulo.eInvoiceApp.Views.Sellers"
+             xmlns:aboutviewmodels="clr-namespace:tulo.eInvoiceApp.ViewModels.About"
+             xmlns:aboutviews="clr-namespace:tulo.eInvoiceApp.Views.About">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

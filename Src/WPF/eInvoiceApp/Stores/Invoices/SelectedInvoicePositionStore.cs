@@ -1,7 +1,7 @@
-﻿using tulo.eInvoice.eInvoiceApp.DTOs;
-using tulo.eInvoice.eInvoiceApp.Services;
+﻿using tulo.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.Services;
 
-namespace tulo.eInvoice.eInvoiceApp.Stores.Invoices;
+namespace tulo.eInvoiceApp.Stores.Invoices;
 public class SelectedInvoicePositionStore : ISelectedInvoicePositionStore
 {
     private readonly IInvoicePositionService _invoicePositionService;

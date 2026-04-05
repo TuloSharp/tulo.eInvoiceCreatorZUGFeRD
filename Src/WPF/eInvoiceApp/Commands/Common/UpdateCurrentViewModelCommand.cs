@@ -2,10 +2,10 @@
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.Stores;
-using tulo.eInvoice.eInvoiceApp.Utilities;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Factories;
+using tulo.eInvoiceApp.Utilities;
+using tulo.eInvoiceApp.ViewModels.Factories;
 
-namespace tulo.eInvoice.eInvoiceApp.Commands.Common;
+namespace tulo.eInvoiceApp.Commands.Common;
 
 public class UpdateCurrentViewModelCommand : BaseCommand
 {

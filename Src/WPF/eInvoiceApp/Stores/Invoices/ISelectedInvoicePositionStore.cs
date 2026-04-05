@@ -1,6 +1,6 @@
-﻿using tulo.eInvoice.eInvoiceApp.DTOs;
+﻿using tulo.eInvoiceApp.DTOs;
 
-namespace tulo.eInvoice.eInvoiceApp.Stores.Invoices;
+namespace tulo.eInvoiceApp.Stores.Invoices;
 
 public interface ISelectedInvoicePositionStore
 {

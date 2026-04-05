@@ -10,13 +10,13 @@ using tulo.CommonMVVM.GlobalProperties;
 using tulo.CommonMVVM.ViewModels;
 using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.Translators;
-using tulo.eInvoice.eInvoiceApp.Commands.Invoices;
-using tulo.eInvoice.eInvoiceApp.DTOs;
-using tulo.eInvoice.eInvoiceApp.Options;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
+using tulo.eInvoiceApp.Commands.Invoices;
+using tulo.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.Options;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.Stores.Invoices;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+namespace tulo.eInvoiceApp.ViewModels.Invoices;
 public class InvoicePositionDetailsFormViewModel : BaseViewModel
 {
     #region Services / Stores filled via CollectorCollection

@@ -10,10 +10,10 @@ using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Services;
 using tulo.CoreLib.Translators;
-using tulo.eInvoice.eInvoiceApp.Options;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
-using tulo.eInvoice.eInvoiceApp.Utilities;
+using tulo.eInvoiceApp.Options;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.Stores.Invoices;
+using tulo.eInvoiceApp.Utilities;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.UpgradeToPdfA3.Interfaces;
@@ -22,7 +22,7 @@ using tulo.UpgradeToPdfA3.Services;
 using tulo.XMLeInvoiceToPdf.Languages;
 using tulo.XMLeInvoiceToPdf.Services;
 
-namespace tulo.eInvoice.eInvoiceApp.HostBuilders;
+namespace tulo.eInvoiceApp.HostBuilders;
 
 public static class AddServicesHostBuilderExtension
 {

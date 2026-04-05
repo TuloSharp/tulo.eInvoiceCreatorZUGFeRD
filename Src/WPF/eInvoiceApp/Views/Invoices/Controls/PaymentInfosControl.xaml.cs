@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace tulo.eInvoice.eInvoiceApp.Views.Invoices.Controls
+namespace tulo.eInvoiceApp.Views.Invoices.Controls
 {
     /// <summary>
     /// Interaction logic for PaymentInfosControl.xaml

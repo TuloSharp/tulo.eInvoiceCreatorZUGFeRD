@@ -3,7 +3,7 @@ using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.ViewModels;
 using tulo.ResourcesWpfLib.Commands;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels.About;
+namespace tulo.eInvoiceApp.ViewModels.About;
 public class AboutViewModel : BaseViewModel
 {
     public string Version { get; } = $"Version: {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";

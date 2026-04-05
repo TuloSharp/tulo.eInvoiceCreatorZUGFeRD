@@ -1,7 +1,7 @@
 ﻿using tulo.CoreLib.Components.ResultPattern;
-using tulo.eInvoice.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.DTOs;
 
-namespace tulo.eInvoice.eInvoiceApp.Services;
+namespace tulo.eInvoiceApp.Services;
 
 /// <summary>
 /// Provides CRUD operations and state tracking for invoice positions.

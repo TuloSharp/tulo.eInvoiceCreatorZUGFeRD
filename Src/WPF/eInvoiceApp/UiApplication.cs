@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Hosting;
-using tulo.eInvoice.eInvoiceApp.HostBuilders;
+using tulo.eInvoiceApp.HostBuilders;
 using tulo.SerilogLib.HostBuilders;
 
-namespace tulo.eInvoice.eInvoiceApp;
+namespace tulo.eInvoiceApp;
 
 /// <summary>
 /// Provides methods to initialize and build the application host for the WPF PDF viewer.

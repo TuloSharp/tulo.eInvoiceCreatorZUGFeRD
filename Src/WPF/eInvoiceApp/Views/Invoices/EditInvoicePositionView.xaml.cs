@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace tulo.eInvoice.eInvoiceApp.Views.Invoices
+namespace tulo.eInvoiceApp.Views.Invoices
 {
     /// <summary>
     /// Interaction logic for EditInvoicePositionView.xaml

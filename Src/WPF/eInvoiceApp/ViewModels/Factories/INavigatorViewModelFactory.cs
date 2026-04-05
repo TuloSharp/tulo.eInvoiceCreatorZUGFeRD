@@ -1,7 +1,7 @@
 ﻿using tulo.CommonMVVM.ViewModels;
-using tulo.eInvoice.eInvoiceApp.Utilities;
+using tulo.eInvoiceApp.Utilities;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels.Factories
+namespace tulo.eInvoiceApp.ViewModels.Factories
 {
     public interface INavigatorViewModelFactory
     {

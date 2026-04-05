@@ -1,4 +1,4 @@
-﻿namespace tulo.eInvoice.eInvoiceApp.DTOs;
+﻿namespace tulo.eInvoiceApp.DTOs;
 
 public class InvoicePositionDetailsDTO
 {

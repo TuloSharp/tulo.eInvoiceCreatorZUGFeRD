@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Globalization;
-using tulo.eInvoice.eInvoiceApp.Options;
+using tulo.eInvoiceApp.Options;
 
-namespace tulo.eInvoice.eInvoiceApp.Services;
+namespace tulo.eInvoiceApp.Services;
 public sealed class CultureService : ICultureService
 {
     private static readonly CultureInfo _fallbackCulture = CultureInfo.GetCultureInfo("de-DE");

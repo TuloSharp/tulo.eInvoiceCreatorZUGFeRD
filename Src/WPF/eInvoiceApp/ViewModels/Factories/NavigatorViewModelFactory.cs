@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.ViewModels;
-using tulo.eInvoice.eInvoiceApp.Utilities;
-using tulo.eInvoice.eInvoiceApp.ViewModels.About;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Sellers;
+using tulo.eInvoiceApp.Utilities;
+using tulo.eInvoiceApp.ViewModels.About;
+using tulo.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.ViewModels.Sellers;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels.Factories
+namespace tulo.eInvoiceApp.ViewModels.Factories
 {
     public class NavigatorViewModelFactory(CreateViewModel<InvoiceViewModel> createInvoiceViewModel,
                                            CreateViewModel<SellerViewModel> createSellerViewModel,

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Data;
-using tulo.eInvoice.eInvoiceApp.Properties;
+using tulo.eInvoiceApp.Properties;
 
-namespace tulo.eInvoice.eInvoiceApp.Extensions;
+namespace tulo.eInvoiceApp.Extensions;
 
 public class SettingBindingExtension : Binding
 {

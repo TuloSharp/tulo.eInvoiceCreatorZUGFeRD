@@ -2,10 +2,10 @@
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.ViewModels;
-using tulo.eInvoice.eInvoiceApp.DTOs;
-using tulo.eInvoice.eInvoiceApp.Services;
+using tulo.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.Services;
 
-namespace tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+namespace tulo.eInvoiceApp.ViewModels.Invoices;
 
 public class InvoicePositionCardItemViewModel : BaseViewModel
 {

@@ -8,16 +8,16 @@ using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CoreLib.PDFs;
 using tulo.CoreLib.Translators;
-using tulo.eInvoice.eInvoiceApp.Options;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.Options;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Mappers;
 using tulo.eInvoiceXmlGeneratorCii.Services;
 using tulo.UpgradeToPdfA3.Interfaces;
 using tulo.UpgradeToPdfA3.Options;
 using tulo.XMLeInvoiceToPdf.Services;
 
-namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
+namespace tulo.eInvoiceApp.Commands.Invoices;
 
 public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceViewModel, ICollectorCollection collectorCollection) : AsyncBaseCommand
 {
@@ -326,7 +326,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
                 if (window is not null)
                 {
-                    const double baseWidth = 740;
+                    const double baseWidth = 650;
                     const double extraWidth = 800;
 
                     invoiceViewModel.NormalWidthBeforePreview ??= baseWidth;

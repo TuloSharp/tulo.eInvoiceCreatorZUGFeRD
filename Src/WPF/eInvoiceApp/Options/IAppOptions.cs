@@ -1,4 +1,4 @@
-﻿namespace tulo.eInvoice.eInvoiceApp.Options;
+﻿namespace tulo.eInvoiceApp.Options;
 /// <summary>
 /// Represents the root application configuration, grouping all
 /// option sections used across the application.

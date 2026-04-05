@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using tulo.eInvoice.eInvoiceApp.ViewModels;
+using tulo.eInvoiceApp.ViewModels;
 using tulo.eInvoiceApp;
 
-namespace tulo.eInvoice.eInvoiceApp.HostBuilders;
+namespace tulo.eInvoiceApp.HostBuilders;
 
 public static class AddViewsHostBuilderExtensions
 {

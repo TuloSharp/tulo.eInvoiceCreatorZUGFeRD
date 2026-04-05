@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace tulo.eInvoice.eInvoiceApp.Services;
+namespace tulo.eInvoiceApp.Services;
 /// <summary>
 /// Provides culture management for the application, including resolving,
 /// applying, and querying the current and supported cultures.

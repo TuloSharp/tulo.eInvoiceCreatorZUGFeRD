@@ -1,7 +1,7 @@
 ﻿using tulo.CoreLib.Components.ResultPattern;
-using tulo.eInvoice.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.DTOs;
 
-namespace tulo.eInvoice.eInvoiceApp.Stores.Invoices;
+namespace tulo.eInvoiceApp.Stores.Invoices;
 
 public sealed class InvoicePositionStore : IInvoicePositionStore
 {

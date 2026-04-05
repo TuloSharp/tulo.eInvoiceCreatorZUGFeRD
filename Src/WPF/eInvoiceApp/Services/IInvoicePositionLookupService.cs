@@ -1,4 +1,4 @@
-﻿namespace tulo.eInvoice.eInvoiceApp.Services;
+﻿namespace tulo.eInvoiceApp.Services;
 /// <summary>
 /// Provides human-readable display text and tooltip lookups
 /// for invoice position unit codes and VAT category codes.

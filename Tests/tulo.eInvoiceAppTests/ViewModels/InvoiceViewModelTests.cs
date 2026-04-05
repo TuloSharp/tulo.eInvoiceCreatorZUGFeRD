@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CoreLib.Translators;
-using tulo.eInvoice.eInvoiceApp.DTOs;
-using tulo.eInvoice.eInvoiceApp.Options;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.DTOs;
+using tulo.eInvoiceApp.Options;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.Stores.Invoices;
+using tulo.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceAppTests.Fakes;
 using tulo.eInvoiceAppTests.TestInfrastructure;
 

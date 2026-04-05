@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace tulo.eInvoice.eInvoiceApp.Views.Sellers;
+namespace tulo.eInvoiceApp.Views.Sellers;
 /// <summary>
 /// Interaction logic for SellerView.xaml
 /// </summary>

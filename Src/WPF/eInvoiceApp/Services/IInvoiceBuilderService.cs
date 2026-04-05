@@ -1,7 +1,7 @@
-﻿using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+﻿using tulo.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Models;
 
-namespace tulo.eInvoice.eInvoiceApp.Services;
+namespace tulo.eInvoiceApp.Services;
 
 /// <summary>
 /// Provides functionality to assemble a complete <see cref="Invoice"/> model

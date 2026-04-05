@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace tulo.eInvoice.eInvoiceApp.Views.Common;
+namespace tulo.eInvoiceApp.Views.Common;
 /// <summary>
 /// Interaction logic for InsertPublicKeyView.xaml
 /// </summary>

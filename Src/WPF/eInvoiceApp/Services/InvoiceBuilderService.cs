@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using tulo.CommonMVVM.Collector;
-using tulo.eInvoice.eInvoiceApp.Options;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.Options;
+using tulo.eInvoiceApp.Stores.Invoices;
+using tulo.eInvoiceApp.ViewModels.Invoices;
 using tulo.eInvoiceXmlGeneratorCii.Models;
 
-namespace tulo.eInvoice.eInvoiceApp.Services;
+namespace tulo.eInvoiceApp.Services;
 
 public sealed class InvoiceBuilderService(ICollectorCollection collectorCollection) : IInvoiceBuilderService
 {

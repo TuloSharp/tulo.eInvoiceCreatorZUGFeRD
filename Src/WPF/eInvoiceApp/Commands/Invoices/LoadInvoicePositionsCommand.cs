@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
-using tulo.eInvoice.eInvoiceApp.Services;
-using tulo.eInvoice.eInvoiceApp.Stores.Invoices;
-using tulo.eInvoice.eInvoiceApp.ViewModels.Invoices;
+using tulo.eInvoiceApp.Services;
+using tulo.eInvoiceApp.Stores.Invoices;
+using tulo.eInvoiceApp.ViewModels.Invoices;
 
-namespace tulo.eInvoice.eInvoiceApp.Commands.Invoices;
+namespace tulo.eInvoiceApp.Commands.Invoices;
 
 public class LoadInvoicePositionsCommand(InvoiceViewModel invoiceViewModel, ICollectorCollection collectorCollection) : AsyncBaseCommand
 {

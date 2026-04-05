@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace tulo.eInvoice.eInvoiceApp.Views.Common
+namespace tulo.eInvoiceApp.Views.Common
 {
     /// <summary>
     /// Interaction logic for SpinnerMessageControl.xaml

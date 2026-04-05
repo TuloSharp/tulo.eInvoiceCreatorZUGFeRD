@@ -9,10 +9,10 @@
         xmlns:custombehaviors="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
         xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:navigator="clr-namespace:tulo.eInvoice.eInvoiceApp.Controls"
+        xmlns:navigator="clr-namespace:tulo.eInvoiceApp.Controls"
         xmlns:livelogscontrol="clr-namespace:tulo.ResourcesWpfLib.Controls.LiveLogs;assembly=tulo.ResourcesWpfLib"
         xmlns:fontsizepicker="clr-namespace:tulo.FontSizePicker;assembly=tulo.FontSizePicker"
-        xmlns:views="clr-namespace:tulo.eInvoice.eInvoiceApp.Views.Invoices"
+        xmlns:views="clr-namespace:tulo.eInvoiceApp.Views.Invoices"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -29,7 +29,7 @@
         Title="eInvoice Viewer"
         Icon="Assets/TuloTeam.ico"
         SnapsToDevicePixels="True"
-        MinWidth="740"
+        MinWidth="650"
         MinHeight="1000">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="1"

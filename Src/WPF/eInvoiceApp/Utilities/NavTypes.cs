@@ -1,4 +1,4 @@
-﻿namespace tulo.eInvoice.eInvoiceApp.Utilities
+﻿namespace tulo.eInvoiceApp.Utilities
 {
     public enum NavTypes
     {

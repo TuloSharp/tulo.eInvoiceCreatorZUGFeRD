@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace tulo.eInvoice.eInvoiceApp.Views.Sellers.Controls;
+namespace tulo.eInvoiceApp.Views.Sellers.Controls;
 /// <summary>
 /// Interaction logic for SellerPartyControl.xaml
 /// </summary>

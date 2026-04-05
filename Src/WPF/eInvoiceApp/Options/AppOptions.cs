@@ -1,4 +1,4 @@
-﻿namespace tulo.eInvoice.eInvoiceApp.Options;
+﻿namespace tulo.eInvoiceApp.Options;
 public class AppOptions : IAppOptions
 {
     public LocalizationOptions Localization { get; set; } = new();
