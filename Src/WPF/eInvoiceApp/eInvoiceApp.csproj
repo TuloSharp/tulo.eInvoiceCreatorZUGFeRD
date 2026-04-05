@@ -16,9 +16,9 @@
 		<Authors>Tulo Team</Authors>
 		<Company>Tulo Team</Company>
 		<Description>
-			This App is for private use within our organisation only.
-			Generate an framework project
-		</Description>
+      WPF desktop application for creating, previewing, archiving, and digitally signing
+      fully compliant electronic invoices in ZUGFeRD 2.4 EXTENDED / Factur-X 1.0
+    </Description>
 		<RepositoryType>GitHub</RepositoryType>
 		<RepositoryUrl></RepositoryUrl>
 		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
