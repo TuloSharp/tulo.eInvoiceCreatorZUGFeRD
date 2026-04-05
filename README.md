@@ -1,6 +1,6 @@
-# tulo.eInvoiceCreator.ZUGFeRD
+# tulo.eInvoiceCreatorZUGFeRD
 
-> A professional WPF desktop application for creating, previewing, archiving, and digitally signing
+> An open-source, professional WPF desktop application for creating, previewing, archiving, and digitally signing
 > fully compliant electronic invoices in **ZUGFeRD 2.4 EXTENDED / Factur-X 1.0** format — built on **.NET 8**,
 > designed for real business use, and ready to run without an installer.
 
@@ -21,7 +21,7 @@
 
 ## What this application does
 
-`tulo.eInvoiceCreator.ZUGFeRD` is a full invoice creation tool that goes far beyond simple XML viewing.
+`tulo.eInvoiceCreatorZUGFeRD` is a full invoice creation tool that goes far beyond simple XML viewing.
 
 It allows users to fill in all relevant invoice data — seller, buyer, positions, payment terms,
 discounts — and generates a complete **ZUGFeRD 2.4 EXTENDED / Factur-X 1.0** compliant document
@@ -432,14 +432,6 @@ publishes as:  single-file, win-x64, .NET 8
 release name:  {project_name} {tag}
 ZIP name:      {zip_prefix}-{tag}-win-x64.zip
 ```
-
----
-
-## Open Source
-
-This project is open source and can be used, modified, and improved by the community.
-
-👉 https://github.com/TuloSharp/tulo.eInvoiceApp.git
 
 ---
 
