@@ -4,8 +4,18 @@
 > fully compliant electronic invoices in **ZUGFeRD 2.4 EXTENDED / Factur-X 1.0** format — built on **.NET 8**,
 > designed for real business use, and ready to run without an installer.
 
-![Image 1](./ReadMeImages/UiImage01.png)
-![Image 2](./ReadMeImages/UiImage02.png)
+![Image 1](./ReadMeAsserts/UiImage01.png)  
+
+<img src="./ReadMeAsserts/UiImage02.png" width="300"/> 
+
+[📄 Example plain Pdf invoice — 6063636771001.pdf](./ReadMeAsserts/6063636771001.pdf)
+
+[📄 Example Xml invoice — 6063636771001.xml](./ReadMeAsserts/6063636771001.pdf)
+
+[📄 Example Pdf/A3 invoice — 6063636771001_PdfA3.pdf](./ReadMeAsserts/6063636771001.pdf)
+
+[📄 Example signed Pdf/A3 invoice — 6063636771001_SignedPdfA3.pdf](./ReadMeAsserts/6063636771001.pdf)
+
 
 ---
 
@@ -20,6 +30,10 @@ package: CII XML, PDF, PDF/A, PDF/A-3 with embedded XML, and an optionally digit
 The application is focused on the **ZUGFeRD 2.4 EXTENDED** profile.
 Other profiles are not actively tested and are not the intended target of this project.
 
+The user remains in full control of their data at all times.
+Seller information, buyer data, and all invoice content are managed locally —
+nothing is sent to any external service.
+
 ---
 
 ## Important disclaimer
@@ -30,6 +44,38 @@ in any productive, legal, or compliance-related context.
 You can find it in:
 
 **View → About**
+
+---
+
+## Requirements
+
+| Requirement | Detail |
+|---|---|
+| OS | Windows x64 |
+| Runtime | .NET 8 (must be installed separately) |
+| .NET Download | https://dotnet.microsoft.com/en-us/download/dotnet/8.0 |
+
+---
+
+## Getting started
+
+1. Go to the [Releases](../../releases) page
+2. Download the latest `.zip` file
+3. Create a folder structure as described in the [Configuration — end users](#configuration--end-users) section
+4. Extract the ZIP into the `tulo.eInvoiceApp/` folder
+5. Edit your `appsettings.json` in the `tulo.eInvoiceApp-appsettings/` folder with your seller data and preferences
+6. Run `tulo.eInvoiceApp.exe`
+
+No installer required.
+
+---
+
+## Validation
+
+After generating an invoice, validation using official tools is strongly recommended:
+
+- **[Kosit Validator](https://github.com/itplr-kosit/validator)**
+- ⭐ **[Online ZUGFeRD Validator](https://www.portinvoice.com/en/)**
 
 ---
 
@@ -46,44 +92,6 @@ You can find it in:
 > **Note:** Other ZUGFeRD profiles (MINIMUM, BASIC WL, BASIC, EN16931) are not actively
 > tested. They may work but are not guaranteed. The focus of this application is
 > **ZUGFeRD 2.4 EXTENDED**.
-
----
-
-## Core pipeline
-
-Every invoice runs through the following steps automatically:
-
-```
-Invoice Data (UI / ViewModel)
-        │
-        ▼
-  1. Build Invoice Model              (IInvoiceBuilderService)
-        │
-        ▼
-  2. Map to CII structure             (ICiiMapper)
-        │
-        ▼
-  3. Export CII to XML                (IXmlCiiExporter)
-        │
-        ▼
-  4. Generate PDF stream              (IPdfGeneratorFromInvoice)
-        │
-        ▼
-  5. Write PDF + XML to disk
-        │
-        ▼
-  6. Convert PDF → PDF/A              (IToPdfAConverterService)
-        │
-        ▼
-  7. Upgrade PDF/A → PDF/A-3          (IToPdfA3UpgradeService)
-     + embed CII XML as attachment
-        │
-        ▼
-  8. Sign PDF/A-3 (optional)          (tulo.SigningPdfA3.exe via CLI)
-        │
-        ▼
-  9. Open final file in default viewer (if configured)
-```
 
 ---
 
@@ -152,12 +160,8 @@ Each position includes:
 ### Seller data — configured via appsettings
 
 Seller information is not entered manually in the UI.
-It is pre-configured in `appsettings.json` and applied automatically to every invoice:
-
-- Seller name, address, VAT ID, Fiscal ID, Leitweg-ID
-- IBAN, BIC, account name for bank transfer
-- Contact person name, phone, email
-- Invoice notes (e.g. bank details text, general conditions)
+It is pre-configured in `appsettings.json` and applied automatically to every invoice.
+See the [Seller configuration](#seller-configuration) section for details.
 
 ---
 
@@ -203,30 +207,6 @@ after creation (signed PDF is preferred over unsigned).
 
 ---
 
-## Digital signing — optional
-
-PDF/A-3 signing is handled by the companion CLI tool `tulo.SigningPdfA3.exe`.
-
-Signing is **skipped silently and without error** if any of the following is absent:
-- The signing executable path (`SignedExepath`)
-- The certificate file (`SignaturePath`)
-- The certificate password (`PublicKey`)
-
-Configure in `appsettings.json`:
-
-```json
-"Signature": {
-  "SignedExepath": "C:\\Tools\\tulo.SigningPdfA3.exe",
-  "SignaturePath": "C:\\Certificates\\your-certificate.pfx",
-  "PublicKey": "your-certificate-password",
-  "Reason": "Invoice approval",
-  "Location": "Germany",
-  "ContactInfo": "contact@example.com"
-}
-```
-
----
-
 ## Seller configuration
 
 Seller data is defined once in `appsettings.json` and reused for all invoices:
@@ -261,21 +241,73 @@ Seller data is defined once in `appsettings.json` and reused for all invoices:
 
 ---
 
-## Machine-specific configuration
+## Digital signing — optional
 
-The application supports **machine-specific appsettings overrides** without modifying the base file.
+PDF/A-3 signing is handled by the companion CLI tool `tulo.SigningPdfA3.exe`.
+
+Signing is **skipped silently and without error** if any of the following is absent:
+- The signing executable path (`SignedExepath`)
+- The certificate file (`SignaturePath`)
+- The certificate password (`PublicKey`)
+
+Configure in `appsettings.json`:
+
+```json
+"Signature": {
+  "SignedExepath": "C:\\Tools\\tulo.SigningPdfA3.exe",
+  "SignaturePath": "C:\\Certificates\\your-certificate.pfx",
+  "PublicKey": "your-certificate-password",
+  "Reason": "Invoice approval",
+  "Location": "Germany",
+  "ContactInfo": "contact@example.com"
+}
+```
+
+---
+
+## Configuration — end users
+
+When a new release is downloaded, the `appsettings.json` shipped inside the ZIP
+would normally be overwritten. To prevent this, the application supports an
+**external settings folder** that lives next to the application folder
+and is never touched by updates.
+
+Recommended folder structure:
+
+```
+Root/
+├── tulo.eInvoiceApp/                     ← extract the ZIP here
+│   └── tulo.eInvoiceApp.exe
+│
+└── tulo.eInvoiceApp-appsettings/         ← your custom settings live here
+    └── appsettings.json                  ← never overwritten by updates
+```
+
+The application automatically detects and loads the `appsettings.json`
+from the `tulo.eInvoiceApp-appsettings` folder if it exists.
+
+This means you can update the application by simply replacing the contents
+of `tulo.eInvoiceApp/` without losing your seller data, output paths,
+certificate configuration, or any other customization.
+
+---
+
+## Configuration — developers
+
+For development, each developer can maintain their own local settings
+without modifying the shared base `appsettings.json`.
 
 The following files are loaded automatically if they exist:
 
 | File | Purpose |
 |---|---|
-| `appsettings.json` | Base configuration (required) |
-| `appsettings.{machinename}.json` | Machine-specific overrides (optional, hot-reload) |
-| `{AppDataFolder}/appsettings.json` | External app data folder override (optional, hot-reload) |
-| `AdditionalParameters_{machinename}.json` | Additional machine-specific parameters |
+| `appsettings.json` | Base configuration — committed to source control |
+| `appsettings.{machinename}.json` | Per-developer overrides — not committed (add to `.gitignore`) |
+| `AdditionalParameters_{machinename}.json` | Additional per-machine parameters — not committed |
+| `tulo.eInvoiceApp-appsettings/appsettings.json` | External folder override — hot-reload enabled |
 
-This allows different machines (e.g. dev, staging, production) to use different
-certificate paths, output folders, or seller data — without touching the base config.
+This allows every developer to use different output paths, certificates,
+or seller data locally without affecting other team members or the shared configuration.
 
 ---
 
@@ -317,6 +349,42 @@ Supported VAT rates are configurable in `appsettings.json`:
 
 ---
 
+## Core pipeline
+
+Every invoice runs through the following steps automatically:
+
+**Step 1 — Build invoice model**
+The invoice data entered in the UI is assembled into a structured internal model.
+
+**Step 2 — Map to CII**
+The invoice model is mapped to the Cross Industry Invoice (CII) structure.
+
+**Step 3 — Export CII to XML**
+The CII structure is serialized into a ZUGFeRD 2.4 EXTENDED compliant XML document.
+
+**Step 4 — Generate PDF stream**
+A fully formatted PDF is rendered from the invoice data.
+
+**Step 5 — Write source files to disk**
+The raw PDF and the CII XML are written to the configured archive output directory.
+
+**Step 6 — Convert PDF → PDF/A**
+The PDF is converted to PDF/A (archival format).
+
+**Step 7 — Upgrade PDF/A → PDF/A-3 + embed XML**
+The PDF/A is upgraded to PDF/A-3 and the CII XML is embedded as an attachment,
+producing a fully compliant ZUGFeRD / Factur-X document.
+
+**Step 8 — Sign PDF/A-3 (optional)**
+If signing is configured, the PDF/A-3 is digitally signed via the companion CLI tool
+`tulo.SigningPdfA3.exe`. If signing is not configured, this step is silently skipped.
+
+**Step 9 — Open with default viewer (optional)**
+If enabled in the configuration, the final file is opened automatically.
+The signed PDF is preferred over the unsigned version if both exist.
+
+---
+
 ## Logging
 
 The application uses **Serilog** for structured, enriched logging across the entire pipeline.
@@ -330,37 +398,6 @@ Two log files are written to the system temp directory:
 
 Every log entry includes timestamp, username, thread ID, process ID, log level,
 and source context — making it easy to trace issues across pipeline steps.
-
----
-
-## Validation
-
-After generating an invoice, validation using official tools is strongly recommended:
-
-- **[Kosit Validator](https://github.com/itplr-kosit/validator)**
-- ⭐ **[Online ZUGFeRD Validator](https://www.portinvoice.com/en/)**
-
----
-
-## Requirements
-
-| Requirement | Detail |
-|---|---|
-| OS | Windows x64 |
-| Runtime | .NET 8 (must be installed separately) |
-| .NET Download | https://dotnet.microsoft.com/en-us/download/dotnet/8.0 |
-
----
-
-## Getting started
-
-1. Go to the [Releases](../../releases) page
-2. Download the latest `.zip` file
-3. Extract the ZIP to any folder
-4. Edit `appsettings.json` with your seller data, paths, and preferences
-5. Run `tulo.eInvoiceApp.exe`
-
-No installer required.
 
 ---
 

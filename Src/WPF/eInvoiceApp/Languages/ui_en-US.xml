@@ -149,7 +149,7 @@
   <!--#endregion -->
 
   <!--#region Main Window Labels & Contents -->
-  <entry key="MainWindowTitle">Create ZUGFeRD Invoice</entry>
+  <entry key="MainWindowTitle">Create ZUGFeRD Extended Invoice</entry>
   <entry key="DonateText">Like the app? Please donate.</entry>
   <entry key="ToolTipDonateText">You can find the donation link in the About view.</entry>
   <!--#endregion -->

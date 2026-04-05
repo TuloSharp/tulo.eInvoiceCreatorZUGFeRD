@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rsm:CrossIndustryInvoice xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100" xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100">
+  <rsm:ExchangedDocumentContext>
+    <ram:GuidelineSpecifiedDocumentContextParameter>
+      <ram:ID>urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</ram:ID>
+    </ram:GuidelineSpecifiedDocumentContextParameter>
+  </rsm:ExchangedDocumentContext>
+  <rsm:ExchangedDocument>
+    <ram:ID>6063636771001</ram:ID>
+    <ram:Name>RECHNUNG</ram:Name>
+    <ram:TypeCode>380</ram:TypeCode>
+    <ram:IssueDateTime>
+      <udt:DateTimeString format="102">00010101</udt:DateTimeString>
+    </ram:IssueDateTime>
+    <ram:IncludedNote>
+      <ram:Content>Bank: LBBW Stuttgart BLZ: 999 888 77 Kto.Nr.: 1234567, IBAN: DE33 9998 8877 0001 2345 67 BIC: SOLADEST600</ram:Content>
+      <ram:SubjectCode>REG</ram:SubjectCode>
+    </ram:IncludedNote>
+    <ram:IncludedNote>
+      <ram:Content>Wenn nicht anders angegeben entspricht das Leistungsdatum dem Rechnungsdatum.</ram:Content>
+      <ram:SubjectCode>AAI</ram:SubjectCode>
+    </ram:IncludedNote>
+  </rsm:ExchangedDocument>
+  <rsm:SupplyChainTradeTransaction>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>1</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedTradeProduct>
+        <ram:GlobalID schemeID="0160">7711231873598</ram:GlobalID>
+        <ram:SellerAssignedID>0595810 25</ram:SellerAssignedID>
+        <ram:Name>GWDSTG-DIN976-A-4.8-(A2K)-M10X1000</ram:Name>
+        <ram:Description>GWDSTG-DIN976-A-4.8-(A2K)-M10X1000</ram:Description>
+      </ram:SpecifiedTradeProduct>
+      <ram:SpecifiedLineTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssuerAssignedID>Abholung 1</ram:IssuerAssignedID>
+          <ram:FormattedIssueDateTime>
+            <qdt:DateTimeString format="102">20260827</qdt:DateTimeString>
+          </ram:FormattedIssueDateTime>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount>2.06</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="H87">1</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount>2.06</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="H87">1</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedLineTradeAgreement>
+      <ram:SpecifiedLineTradeDelivery>
+        <ram:BilledQuantity unitCode="H87">25</ram:BilledQuantity>
+        <ram:ShipToTradeParty>
+          <ram:ID>9900880077</ram:ID>
+          <ram:Name>Musterkunde GmbH &amp; Co Name 2 Musterkunde</ram:Name>
+          <ram:SpecifiedLegalOrganization>
+            <ram:ID schemeID="0002">77777/01234</ram:ID>
+          </ram:SpecifiedLegalOrganization>
+          <ram:DefinedTradeContact>
+            <ram:PersonName>Herr Test Monteur</ram:PersonName>
+            <ram:TelephoneUniversalCommunication>
+              <ram:CompleteNumber>02173 9364</ram:CompleteNumber>
+            </ram:TelephoneUniversalCommunication>
+            <ram:EmailURIUniversalCommunication>
+              <ram:URIID>mike.maier@lieferant.com</ram:URIID>
+            </ram:EmailURIUniversalCommunication>
+          </ram:DefinedTradeContact>
+          <ram:PostalTradeAddress>
+            <ram:PostcodeCode>40789</ram:PostcodeCode>
+            <ram:LineOne>Musterstrasse 44</ram:LineOne>
+            <ram:CityName>Musterstadt</ram:CityName>
+            <ram:CountryID>DE</ram:CountryID>
+          </ram:PostalTradeAddress>
+          <ram:URIUniversalCommunication>
+            <ram:URIID schemeID="0204">04011000-1234512345-35</ram:URIID>
+          </ram:URIUniversalCommunication>
+          <ram:SpecifiedTaxRegistration>
+            <ram:ID schemeID="VA">DE2012129398</ram:ID>
+          </ram:SpecifiedTaxRegistration>
+        </ram:ShipToTradeParty>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssuerAssignedID>8408230045</ram:IssuerAssignedID>
+          <ram:LineID>000010</ram:LineID>
+          <ram:FormattedIssueDateTime>
+            <qdt:DateTimeString format="102">20260827</qdt:DateTimeString>
+          </ram:FormattedIssueDateTime>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedLineTradeDelivery>
+      <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementLineMonetarySummation>
+          <ram:LineTotalAmount>51.50</ram:LineTotalAmount>
+          <ram:TotalAllowanceChargeAmount>0</ram:TotalAllowanceChargeAmount>
+        </ram:SpecifiedTradeSettlementLineMonetarySummation>
+        <ram:AdditionalReferencedDocument>
+          <ram:IssuerAssignedID>2156307416</ram:IssuerAssignedID>
+          <ram:TypeCode>130</ram:TypeCode>
+          <ram:ReferenceTypeCode>VN</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+      </ram:SpecifiedLineTradeSettlement>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>2</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedTradeProduct>
+        <ram:GlobalID schemeID="0160">7748539263943</ram:GlobalID>
+        <ram:SellerAssignedID>05899800555 150</ram:SellerAssignedID>
+        <ram:Name>MUELLSACK-EXTRASTARK-BLAU-700X1100X0,07</ram:Name>
+        <ram:Description>MUELLSACK-EXTRASTARK-BLAU-700X1100X0,07</ram:Description>
+      </ram:SpecifiedTradeProduct>
+      <ram:SpecifiedLineTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssuerAssignedID>Abholung 1</ram:IssuerAssignedID>
+          <ram:FormattedIssueDateTime>
+            <qdt:DateTimeString format="102">20260827</qdt:DateTimeString>
+          </ram:FormattedIssueDateTime>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount>49.29</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="H87">1</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount>49.29</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="H87">1</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedLineTradeAgreement>
+      <ram:SpecifiedLineTradeDelivery>
+        <ram:BilledQuantity unitCode="H87">150</ram:BilledQuantity>
+        <ram:ShipToTradeParty>
+          <ram:ID>9900880077</ram:ID>
+          <ram:Name>Musterkunde GmbH &amp; Co Name 2 Musterkunde</ram:Name>
+          <ram:SpecifiedLegalOrganization>
+            <ram:ID schemeID="0002">77777/01234</ram:ID>
+          </ram:SpecifiedLegalOrganization>
+          <ram:DefinedTradeContact>
+            <ram:PersonName>Herr Test Monteur</ram:PersonName>
+            <ram:TelephoneUniversalCommunication>
+              <ram:CompleteNumber>02173 9364</ram:CompleteNumber>
+            </ram:TelephoneUniversalCommunication>
+            <ram:EmailURIUniversalCommunication>
+              <ram:URIID>mike.maier@lieferant.com</ram:URIID>
+            </ram:EmailURIUniversalCommunication>
+          </ram:DefinedTradeContact>
+          <ram:PostalTradeAddress>
+            <ram:PostcodeCode>40789</ram:PostcodeCode>
+            <ram:LineOne>Musterstrasse 44</ram:LineOne>
+            <ram:CityName>Musterstadt</ram:CityName>
+            <ram:CountryID>DE</ram:CountryID>
+          </ram:PostalTradeAddress>
+          <ram:URIUniversalCommunication>
+            <ram:URIID schemeID="0204">04011000-1234512345-35</ram:URIID>
+          </ram:URIUniversalCommunication>
+          <ram:SpecifiedTaxRegistration>
+            <ram:ID schemeID="VA">DE2012129398</ram:ID>
+          </ram:SpecifiedTaxRegistration>
+        </ram:ShipToTradeParty>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssuerAssignedID>8408230045</ram:IssuerAssignedID>
+          <ram:LineID>000020</ram:LineID>
+          <ram:FormattedIssueDateTime>
+            <qdt:DateTimeString format="102">20260827</qdt:DateTimeString>
+          </ram:FormattedIssueDateTime>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedLineTradeDelivery>
+      <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementLineMonetarySummation>
+          <ram:LineTotalAmount>7393.50</ram:LineTotalAmount>
+          <ram:TotalAllowanceChargeAmount>0</ram:TotalAllowanceChargeAmount>
+        </ram:SpecifiedTradeSettlementLineMonetarySummation>
+        <ram:AdditionalReferencedDocument>
+          <ram:IssuerAssignedID>2156307416</ram:IssuerAssignedID>
+          <ram:TypeCode>130</ram:TypeCode>
+          <ram:ReferenceTypeCode>VN</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+      </ram:SpecifiedLineTradeSettlement>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>3</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedTradeProduct>
+        <ram:GlobalID schemeID="0160">7738898142591</ram:GlobalID>
+        <ram:SellerAssignedID>05234830152 200</ram:SellerAssignedID>
+        <ram:Name>SHR-AW30-(A2K)-7,5X152</ram:Name>
+        <ram:Description>SHR-AW30-(A2K)-7,5X152</ram:Description>
+      </ram:SpecifiedTradeProduct>
+      <ram:SpecifiedLineTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:IssuerAssignedID>Abholung 2</ram:IssuerAssignedID>
+          <ram:FormattedIssueDateTime>
+            <qdt:DateTimeString format="102">20260827</qdt:DateTimeString>
+          </ram:FormattedIssueDateTime>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount>32.76</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="H87">1</ram:BasisQuantity>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount>32.76</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="H87">1</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedLineTradeAgreement>
+      <ram:SpecifiedLineTradeDelivery>
+        <ram:BilledQuantity unitCode="H87">400</ram:BilledQuantity>
+        <ram:ShipToTradeParty>
+          <ram:ID>9900880077</ram:ID>
+          <ram:Name>Musterkunde GmbH &amp; Co Name 2 Musterkunde</ram:Name>
+          <ram:SpecifiedLegalOrganization>
+            <ram:ID schemeID="0002">77777/01234</ram:ID>
+          </ram:SpecifiedLegalOrganization>
+          <ram:DefinedTradeContact>
+            <ram:PersonName>Herr Test Monteur</ram:PersonName>
+            <ram:TelephoneUniversalCommunication>
+              <ram:CompleteNumber>02173 9364</ram:CompleteNumber>
+            </ram:TelephoneUniversalCommunication>
+            <ram:EmailURIUniversalCommunication>
+              <ram:URIID>mike.maier@lieferant.com</ram:URIID>
+            </ram:EmailURIUniversalCommunication>
+          </ram:DefinedTradeContact>
+          <ram:PostalTradeAddress>
+            <ram:PostcodeCode>40789</ram:PostcodeCode>
+            <ram:LineOne>Musterstrasse 44</ram:LineOne>
+            <ram:CityName>Musterstadt</ram:CityName>
+            <ram:CountryID>DE</ram:CountryID>
+          </ram:PostalTradeAddress>
+          <ram:URIUniversalCommunication>
+            <ram:URIID schemeID="0204">04011000-1234512345-35</ram:URIID>
+          </ram:URIUniversalCommunication>
+          <ram:SpecifiedTaxRegistration>
+            <ram:ID schemeID="VA">DE2012129398</ram:ID>
+          </ram:SpecifiedTaxRegistration>
+        </ram:ShipToTradeParty>
+        <ram:DeliveryNoteReferencedDocument>
+          <ram:IssuerAssignedID>8408230046</ram:IssuerAssignedID>
+          <ram:LineID>000010</ram:LineID>
+          <ram:FormattedIssueDateTime>
+            <qdt:DateTimeString format="102">20260827</qdt:DateTimeString>
+          </ram:FormattedIssueDateTime>
+        </ram:DeliveryNoteReferencedDocument>
+      </ram:SpecifiedLineTradeDelivery>
+      <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeSettlementLineMonetarySummation>
+          <ram:LineTotalAmount>13104.00</ram:LineTotalAmount>
+          <ram:TotalAllowanceChargeAmount>0</ram:TotalAllowanceChargeAmount>
+        </ram:SpecifiedTradeSettlementLineMonetarySummation>
+        <ram:AdditionalReferencedDocument>
+          <ram:IssuerAssignedID>2156307417</ram:IssuerAssignedID>
+          <ram:TypeCode>130</ram:TypeCode>
+          <ram:ReferenceTypeCode>VN</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+      </ram:SpecifiedLineTradeSettlement>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:ApplicableHeaderTradeAgreement>
+      <ram:SellerTradeParty>
+        <ram:ID>10737</ram:ID>
+        <ram:Name>Lieferant GmbH &amp; Co. KG</ram:Name>
+        <ram:SpecifiedLegalOrganization>
+          <ram:ID>88888/00072</ram:ID>
+        </ram:SpecifiedLegalOrganization>
+        <ram:DefinedTradeContact>
+          <ram:PersonName>Tim Fuchs Test</ram:PersonName>
+          <ram:TelephoneUniversalCommunication>
+            <ram:CompleteNumber>0170 12345678</ram:CompleteNumber>
+          </ram:TelephoneUniversalCommunication>
+          <ram:EmailURIUniversalCommunication>
+            <ram:URIID>tim.fuchs.test@lieferant.com</ram:URIID>
+          </ram:EmailURIUniversalCommunication>
+        </ram:DefinedTradeContact>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>98765</ram:PostcodeCode>
+          <ram:LineOne>TestStraße 12-17</ram:LineOne>
+          <ram:CityName>Weitstadt</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+        <ram:URIUniversalCommunication>
+          <ram:URIID schemeID="EM">info@lieferant.com</ram:URIID>
+        </ram:URIUniversalCommunication>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">DE946280061</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:SellerTradeParty>
+      <ram:BuyerTradeParty>
+        <ram:ID>9900880077</ram:ID>
+        <ram:Name>Musterkunde GmbH &amp; Co Name 2 Musterkunde</ram:Name>
+        <ram:SpecifiedLegalOrganization>
+          <ram:ID schemeID="0002">77777/01234</ram:ID>
+        </ram:SpecifiedLegalOrganization>
+        <ram:DefinedTradeContact>
+          <ram:PersonName>Herr Test Monteur</ram:PersonName>
+          <ram:TelephoneUniversalCommunication>
+            <ram:CompleteNumber>02173 9364</ram:CompleteNumber>
+          </ram:TelephoneUniversalCommunication>
+          <ram:EmailURIUniversalCommunication>
+            <ram:URIID>mike.maier@lieferant.com</ram:URIID>
+          </ram:EmailURIUniversalCommunication>
+        </ram:DefinedTradeContact>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>40789</ram:PostcodeCode>
+          <ram:LineOne>Musterstrasse 44</ram:LineOne>
+          <ram:CityName>Musterstadt</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+        <ram:URIUniversalCommunication>
+          <ram:URIID schemeID="0204">04011000-1234512345-35</ram:URIID>
+        </ram:URIUniversalCommunication>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">DE2012129398</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:BuyerTradeParty>
+    </ram:ApplicableHeaderTradeAgreement>
+    <ram:ApplicableHeaderTradeDelivery>
+      <ram:ShipToTradeParty>
+        <ram:ID>9900880077</ram:ID>
+        <ram:Name>Musterkunde GmbH &amp; Co Name 2 Musterkunde</ram:Name>
+        <ram:SpecifiedLegalOrganization>
+          <ram:ID schemeID="0002">77777/01234</ram:ID>
+        </ram:SpecifiedLegalOrganization>
+        <ram:DefinedTradeContact>
+          <ram:PersonName>Herr Test Monteur</ram:PersonName>
+          <ram:TelephoneUniversalCommunication>
+            <ram:CompleteNumber>02173 9364</ram:CompleteNumber>
+          </ram:TelephoneUniversalCommunication>
+          <ram:EmailURIUniversalCommunication>
+            <ram:URIID>mike.maier@lieferant.com</ram:URIID>
+          </ram:EmailURIUniversalCommunication>
+        </ram:DefinedTradeContact>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>40789</ram:PostcodeCode>
+          <ram:LineOne>Musterstrasse 44</ram:LineOne>
+          <ram:CityName>Musterstadt</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+        <ram:URIUniversalCommunication>
+          <ram:URIID schemeID="0204">04011000-1234512345-35</ram:URIID>
+        </ram:URIUniversalCommunication>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">DE2012129398</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:ShipToTradeParty>
+      <ram:ShipFromTradeParty>
+        <ram:ID>10737</ram:ID>
+        <ram:Name>Lieferant GmbH &amp; Co. KG</ram:Name>
+        <ram:SpecifiedLegalOrganization>
+          <ram:ID>88888/00072</ram:ID>
+        </ram:SpecifiedLegalOrganization>
+        <ram:DefinedTradeContact>
+          <ram:PersonName>Tim Fuchs Test</ram:PersonName>
+          <ram:TelephoneUniversalCommunication>
+            <ram:CompleteNumber>0170 12345678</ram:CompleteNumber>
+          </ram:TelephoneUniversalCommunication>
+          <ram:EmailURIUniversalCommunication>
+            <ram:URIID>tim.fuchs.test@lieferant.com</ram:URIID>
+          </ram:EmailURIUniversalCommunication>
+        </ram:DefinedTradeContact>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>98765</ram:PostcodeCode>
+          <ram:LineOne>TestStraße 12-17</ram:LineOne>
+          <ram:CityName>Weitstadt</ram:CityName>
+          <ram:CountryID>DE</ram:CountryID>
+        </ram:PostalTradeAddress>
+        <ram:URIUniversalCommunication>
+          <ram:URIID schemeID="EM">info@lieferant.com</ram:URIID>
+        </ram:URIUniversalCommunication>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">DE946280061</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:ShipFromTradeParty>
+      <ram:ActualDeliverySupplyChainEvent>
+        <ram:OccurrenceDateTime>
+          <udt:DateTimeString format="102">00010101</udt:DateTimeString>
+        </ram:OccurrenceDateTime>
+      </ram:ActualDeliverySupplyChainEvent>
+    </ram:ApplicableHeaderTradeDelivery>
+    <ram:ApplicableHeaderTradeSettlement>
+      <ram:PaymentReference>Kundennummer:. 9900880077 Rechnungsnummer:. 6063636771001</ram:PaymentReference>
+      <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+      <ram:SpecifiedTradeSettlementPaymentMeans>
+        <ram:TypeCode>58</ram:TypeCode>
+        <ram:PayeePartyCreditorFinancialAccount>
+          <ram:IBANID>DE89370400440532013000</ram:IBANID>
+          <ram:AccountName>Lieferant GmbH &amp; Co. KG</ram:AccountName>
+        </ram:PayeePartyCreditorFinancialAccount>
+        <ram:PayeeSpecifiedCreditorFinancialInstitution>
+          <ram:BICID>SOLADEST600</ram:BICID>
+        </ram:PayeeSpecifiedCreditorFinancialInstitution>
+      </ram:SpecifiedTradeSettlementPaymentMeans>
+      <ram:ApplicableTradeTax>
+        <ram:CalculatedAmount>3904.31</ram:CalculatedAmount>
+        <ram:TypeCode>VAT</ram:TypeCode>
+        <ram:BasisAmount>20549.00</ram:BasisAmount>
+        <ram:CategoryCode>S</ram:CategoryCode>
+        <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+      </ram:ApplicableTradeTax>
+      <ram:SpecifiedTradePaymentTerms>
+        <ram:DueDateDateTime>
+          <udt:DateTimeString format="102">20260916</udt:DateTimeString>
+        </ram:DueDateDateTime>
+      </ram:SpecifiedTradePaymentTerms>
+      <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+        <ram:LineTotalAmount>20549.00</ram:LineTotalAmount>
+        <ram:ChargeTotalAmount>0</ram:ChargeTotalAmount>
+        <ram:AllowanceTotalAmount>0</ram:AllowanceTotalAmount>
+        <ram:TaxBasisTotalAmount>20549.00</ram:TaxBasisTotalAmount>
+        <ram:TaxTotalAmount currencyID="EUR">3904.31</ram:TaxTotalAmount>
+        <ram:GrandTotalAmount>24453.31</ram:GrandTotalAmount>
+        <ram:TotalPrepaidAmount>0</ram:TotalPrepaidAmount>
+        <ram:DuePayableAmount>24453.31</ram:DuePayableAmount>
+      </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+    </ram:ApplicableHeaderTradeSettlement>
+  </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>
