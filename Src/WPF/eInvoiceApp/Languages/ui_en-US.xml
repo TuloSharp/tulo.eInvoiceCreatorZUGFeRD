@@ -207,6 +207,8 @@
   <entry key="ToolTipInvoicePositionRefDocRefType">Reference type (ram:AdditionalReferencedDocument/ram:ReferenceTypeCode)</entry>
 
   <entry key="ToolTipAdditionalInfosExpander">Reference documents for this invoice position (order, delivery note, additional references).</entry>
+
+  <entry key="ToolTipDiscountInfosExpander">Discount details (reason, net discount, net total after discount)..</entry>
   <!--#endregion -->
 
   <!--#region Invoice Position Details - Placeholders -->

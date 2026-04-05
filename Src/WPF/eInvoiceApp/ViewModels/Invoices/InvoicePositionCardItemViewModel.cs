@@ -2,6 +2,7 @@
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.Commands;
 using tulo.CommonMVVM.ViewModels;
+using tulo.CoreLib.Translators;
 using tulo.eInvoiceApp.DTOs;
 using tulo.eInvoiceApp.Services;
 
@@ -12,6 +13,7 @@ public class InvoicePositionCardItemViewModel : BaseViewModel
     #region Services / Stores filled via CollectorCollection
     private readonly IInvoicePositionLookupService _lookup;
     private readonly ICollectorCollection _collectorCollection;
+    private readonly ITranslatorUiProvider _translatorUiProvider;
     #endregion
 
     public InvoicePositionDetailsDTO InvoicePositionDetails { get; private set; }
@@ -87,8 +89,9 @@ public class InvoicePositionCardItemViewModel : BaseViewModel
     public InvoicePositionCardItemViewModel(InvoicePositionDetailsDTO invoicePositionDetails, ICollectorCollection collectorCollection)
     {
         #region Get Services / Stores from CollectorCollection
-        _lookup = collectorCollection.GetService<IInvoicePositionLookupService>();
         _collectorCollection = collectorCollection;
+        _lookup = collectorCollection.GetService<IInvoicePositionLookupService>();
+        _translatorUiProvider = collectorCollection.GetService<ITranslatorUiProvider>();
         #endregion
 
         InvoicePositionDetails = invoicePositionDetails;
@@ -99,7 +102,7 @@ public class InvoicePositionCardItemViewModel : BaseViewModel
         OpenAddSubInvociePostionViewCommand = new OpenModalStackCommand(collectorCollection, () => new AddInvoicePositionViewModel(collectorCollection), typeof(AddInvoicePositionViewModel));
         #endregion
 
-        ToolTipDiscountInfosExpander = "Discount details (reason, net discount, net total after discount).";
+        ToolTipDiscountInfosExpander = _translatorUiProvider.Translate("ToolTipDiscountInfosExpander");
     }
 
     // Updates the card with fresh DTO data and notifies all bindings at once

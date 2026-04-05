@@ -1,36 +1,326 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
   <!--#region unit code -->
-<entry key="UnitPiece">Stk</entry>
-<entry key="UnitHour">Std</entry>
-<entry key="UnitKilogram">kg</entry>
-<entry key="UnitLitre">Liter</entry>
-<entry key="UnitMetre">m</entry>
-<entry key="UnitLinearMetre">lfm</entry>
-<entry key="UnitSquareMetre">m²</entry>
-<entry key="UnitCubicMetre">m³</entry>
-<entry key="UnitDay">Tag</entry>
-<entry key="UnitMinute">Minute</entry>
-<entry key="UnitSecond">Sekunde</entry>
-<entry key="UnitHectare">Hektar</entry>
-<entry key="UnitKilometre">km</entry>
-<entry key="UnitFlatRate">pschl</entry>
-<entry key="UnitCount">Anz</entry>
-<entry key="UnitPair">Anz. P</entry>
-<entry key="UnitSet">Set</entry>
-<entry key="UnitTonne">Tonne</entry>
-<entry key="UnitWeek">Woche</entry>
-<entry key="UnitPercent">%</entry>
+  <entry key="UnitPiece">Stk</entry>
+  <entry key="UnitHour">Std</entry>
+  <entry key="UnitKilogram">kg</entry>
+  <entry key="UnitLitre">Liter</entry>
+  <entry key="UnitMetre">m</entry>
+  <entry key="UnitLinearMetre">lm</entry>
+  <entry key="UnitSquareMetre">m²</entry>
+  <entry key="UnitCubicMetre">m³</entry>
+  <entry key="UnitDay">Tag</entry>
+  <entry key="UnitMinute">Minute</entry>
+  <entry key="UnitSecond">Sekunde</entry>
+  <entry key="UnitHectare">Hektar</entry>
+  <entry key="UnitKilometre">km</entry>
+  <entry key="UnitFlatRate">Pauschale</entry>
+  <entry key="UnitCount">Menge</entry>
+  <entry key="UnitPair">Paar</entry>
+  <entry key="UnitSet">Set</entry>
+  <entry key="UnitTonne">Tonne</entry>
+  <entry key="UnitWeek">Woche</entry>
+  <entry key="UnitPercent">%</entry>
   <!--#endregion -->
 
-  <!-- Payment means typecode -->
+  <!--#region Invocie Tooltips -->
+  <entry key="ToolTipCompanyBuyerParty">Käufer Firma / rechtlicher Name.</entry>
+  <entry key="ToolTipFiscalIdBuyerParty">Steuernummer des Käufers (häufig schemeID=FC).</entry>
+  <entry key="ToolTipVatIdBuyerParty">Umsatzsteuer-ID des Käufers (häufig schemeID=VA).</entry>
+  <entry key="ToolTipErpCustomerNumberBuyerParty">Interne Kundennummer (ERP-Referenz).</entry>
+  <entry key="ToolTipLeitwegIdBuyerParty">Leitweg-ID (erforderlich für deutsche XRechnung im öffentlichen Bereich).</entry>
+  <entry key="ToolTipPersonBuyerParty">Vollständiger Name der Kontaktperson.</entry>
+  <entry key="ToolTipStreetBuyerParty">Straßenname (ohne Hausnummer, wenn getrennt).</entry>
+  <entry key="ToolTipHouseNumberBuyerParty">Hausnummer (wenn getrennt).</entry>
+  <entry key="ToolTipPostalCodeBuyerParty">Postleitzahl.</entry>
+  <entry key="ToolTipCityBuyerParty">Stadt.</entry>
+  <entry key="ToolTipCountryCodeBuyerParty">Ländercode (z. B. DE).</entry>
+  <entry key="ToolTipPhoneBuyerParty">Telefonnummer der Kontaktperson.</entry>
+  <entry key="ToolTipEmailAddressBuyerParty">E-Mail-Adresse der Kontaktperson.</entry>
 
-    <!--#endregion -->
+  <entry key="ToolTipPaymentDueDateText">Zahlungsfälligkeitsdatum (Texteingabe).</entry>
+  <entry key="ToolTipPaymentReference">Zahlungsreferenz / Verwendungszweck.</entry>
+  <entry key="ToolTipPaymentTerms">Zahlungsbedingungen / Konditionen.</entry>
 
+  <entry key="ToolTipInvoiceNumber">Eindeutige Rechnungsnummer des Dokuments.</entry>
+  <entry key="ToolTipCurrency">Währung als ISO-4217-Code (z. B. EUR, USD, CHF).</entry>
+  <entry key="ToolTipDocumentName">Dokumentanzeigename (z. B. RECHNUNG).</entry>
+  <entry key="ToolTipDocumentTypeCode">Dokumenttypcode gemäß UNTDID 1001 (z. B. 380 = Rechnung, 381 = Gutschrift).</entry>
 
-  <!--Umsatzsteuerkategorie-->
+  <entry key="ToolTipCreatePreviewElectronicInvoice">Vorschau der elektronischen Rechnung erstellen.</entry>
+  <entry key="ToolTipClearAllInvoiceView">Alle Daten aus der Rechnungsansicht löschen.</entry>
+  <entry key="ToolTipCreateElectronicInvoice">Elektronische PdfA3-Rechnung erstellen und exportieren.</entry>
+  <entry key="ToolTipSaveCustomerData">Kundendaten können in einer JSON-Datei gespeichert werden.</entry>
+  <entry key="ToolTipLoadCustomerData">Kundendaten können aus einer JSON-Datei geladen werden.</entry>
+  <!--#endregion -->
 
+  <!--#region Invoice Placeholders -->
+  <entry key="PlaceholderCompanyBuyerParty">Firmenname</entry>
+  <entry key="PlaceholderFiscalIdBuyerParty">Steuernummer (schemeID=FC)</entry>
+  <entry key="PlaceholderVatIdBuyerParty">USt-IdNr. (schemeID=VA)</entry>
+  <entry key="PlaceholderErpCustomerNumberBuyerParty">ERP-Kundennr.</entry>
+  <entry key="PlaceholderLeitwegIdBuyerParty">Leitweg-ID</entry>
+  <entry key="PlaceholderPersonBuyerParty">Vollständiger Name</entry>
+  <entry key="PlaceholderStreetBuyerParty">Straße</entry>
+  <entry key="PlaceholderHouseNumberBuyerParty">Nr.</entry>
+  <entry key="PlaceholderPostalCodeBuyerParty">PLZ</entry>
+  <entry key="PlaceholderCityBuyerParty">Stadt</entry>
+  <entry key="PlaceholderCountryCodeBuyerParty">Land</entry>
+  <entry key="PlaceholderPhoneBuyerParty">Telefon</entry>
+  <entry key="PlaceholderEmailAddressBuyerParty">E-Mail-Adresse</entry>
 
- 
+  <entry key="PlaceholderPaymentReference">Zahlungsreferenz</entry>
+  <entry key="PlaceholderPaymentTerms">Zahlungsbedingungen</entry>
+
+  <entry key="PlaceholderInvoiceNumber">Rechnungsnr.</entry>
+  <entry key="PlaceholderDocumentName">Dokumentname</entry>
+  <entry key="PlaceholderCurrency">EUR</entry>
+  <entry key="PlaceholderDocumentTypeCode">380</entry>
+  <!--#endregion -->
+
+  <!--#region Invocie Labels & Contents -->
+  <entry key="LabelPaymentDueDate">Fälligkeitsdatum</entry>
+  <entry key="LabelPaymentMeansCode">Zahlungsart</entry>
+
+  <entry key="LabelCurrency">Währung</entry>
+  <entry key="LabelDocumentTypeCode">Dokumenttyp</entry>
+
+  <entry key="LabelContentInvoiceView">Rechnungsansicht</entry>
+  <entry key="LabelContentPreview">Vorschau</entry>
+  <entry key="ContentSlideText">Erstellen</entry>
+  <entry key="ContentSlideConfirmedText">Erstellt</entry>
+  <entry key="LabelContenBuyerInformation">Käuferinformationen</entry>
+  <entry key="LabelContentHeader">Kopfdaten</entry>
+  <entry key="LabelContentPaymentInformation">Zahlungsinformationen</entry>
+  <entry key="LabelContentPositionsList">Positionsliste</entry>
+  <!--#endregion -->
+
+  <!--#region Seller ToolTips -->
+  <entry key="ToolTipCompanySellerParty">Verkäufer Firma / rechtlicher Name.</entry>
+  <entry key="ToolTipFiscalIdSellerParty">Steuernummer des Verkäufers (häufig schemeID=FC).</entry>
+  <entry key="ToolTipVatIdSellerParty">Umsatzsteuer-ID des Verkäufers (häufig schemeID=VA).</entry>
+  <entry key="ToolTipErpCustomerNumberSellerParty">ERP-Kundennummer des Verkäufers (falls zutreffend).</entry>
+  <entry key="ToolTipLeitwegIdSellerParty">Leitweg-ID (falls erforderlich).</entry>
+
+  <entry key="ToolTipPersonSellerParty">Vollständiger Name der Kontaktperson.</entry>
+  <entry key="ToolTipAddressSellerParty">Vollständige Adresse (Straße, Hausnummer, PLZ, Stadt, Land).</entry>
+  <entry key="ToolTipPhoneSellerParty">Telefonnummer der Kontaktperson.</entry>
+  <entry key="ToolTipEmailAddressSellerParty">E-Mail-Adresse der Kontaktperson.</entry>
+
+  <entry key="ToolTipBankNameSellerParty">Bankname (falls vorhanden).</entry>
+  <entry key="ToolTipIbanSellerParty">IBAN des Verkäufers für Zahlungen.</entry>
+  <entry key="ToolTipBicSellerParty">BIC / SWIFT des Verkäufers.</entry>
+  <entry key="ToolTipAccountHolderSellerParty">Name des Kontoinhabers.</entry>
+
+  <entry key="ToolTipSubjectCodeInvoiceNote">Hinweis-Betreffcode (z. B. REG/AAI/PTM)</entry>
+  <entry key="ToolTipContentInvoiceNote">Hinweistext / Beschreibung</entry>
+  <!--#endregion -->
+
+  <!--#region Seller Placeholders -->
+  <entry key="PlaceholderCompanySellerParty">Firmenname</entry>
+  <entry key="PlaceholderVatIdSellerParty">USt-IdNr. (schemeID=VA)</entry>
+  <entry key="PlaceholderFiscalIdSellerParty">Steuernummer (schemeID=FC)</entry>
+  <entry key="PlaceholderErpCustomerNumberSellerParty">ERP-Kundennummer</entry>
+  <entry key="PlaceholderLeitwegIdSellerParty">Leitweg-ID</entry>
+
+  <entry key="PlaceholderPersonSellerParty">Vollständiger Name</entry>
+  <entry key="PlaceholderAddressSellerParty">Vollständige Adresse (Straße, Hausnummer, PLZ, Stadt, Land)</entry>
+  <entry key="PlaceholderPhoneSellerParty">Telefon</entry>
+  <entry key="PlaceholderEmailAddressSellerParty">E-Mail-Adresse</entry>
+
+  <entry key="PlaceholderBankNameSellerParty">Bankname</entry>
+  <entry key="PlaceholderIbanSellerParty">IBAN</entry>
+  <entry key="PlaceholderBicSellerParty">BIC</entry>
+  <entry key="PlaceholderAccountHolderSellerParty">Kontoinhaber</entry>
+
+  <entry key="PlaceholderContentInvoiceNote">Geben Sie hier Ihren Rechnungshinweis ein...</entry>
+  <!--#endregion -->
+
+  <!--#region Seller Contents -->
+  <entry key="ContentSellerInformation">Verkäuferinformationen</entry>
+  <entry key="ContenBankAccountDetails">Bankverbindung</entry>
+  <entry key="ContentInvoiceNotes">Rechnungshinweise</entry>
+  <!--#endregion -->
+
+  <!--#region Main Window ToolTips -->
+  <entry key="ToolTipInvoiceViewIcon">Neue Rechnung erstellen.</entry>
+  <entry key="ToolTipBuyerViewIcon">Käuferinformationen verwalten.</entry>
+  <entry key="ToolTipAboutViewIcon">App-Informationen und Funktionen anzeigen.</entry>
+  <!--#endregion -->
+
+  <!--#region Main Window Labels & Contents -->
+  <entry key="MainWindowTitle">ZUGFeRD Extended Rechnung erstellen</entry>
+  <entry key="DonateText">Gefällt Ihnen die App? Bitte spenden.</entry>
+  <entry key="ToolTipDonateText">Den Spendenlink finden Sie in der Info-Ansicht.</entry>
+  <!--#endregion -->
+
+  <!--#region Invoice Position Details - Labels -->
+  <entry key="LabelSaveRequestMessage">Möchten Sie die Änderungen speichern?</entry>
+  <entry key="LabelInvoicePositionGroupBox">Rechnungsposition</entry>
+  <!--#endregion -->
+
+  <!--#region Invoice Position Details - ToolTips -->
+  <entry key="ToolTipYesButtonSaveRequestMessage">Ja (bestätigen und Änderungen speichern)</entry>
+  <entry key="ToolTipNoButtonSaveRequestMessage">Nein (Änderungen verwerfen und zum Formular zurückkehren)</entry>
+  <entry key="ToolTipReturnButtonSaveRequestMessage">Zurück (ohne Speichern zurückkehren)</entry>
+
+  <entry key="ToolTipVatCategory_S">S - Normalsatz (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+  <entry key="ToolTipVatCategory_Z">Z - Nullsatz (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+  <entry key="ToolTipVatCategory_E">E - Steuerbefreit (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+  <entry key="ToolTipVatCategory_AE">AE - Umkehrung der Steuerschuldnerschaft (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+  <entry key="ToolTipVatCategory_K">K - Innergemeinschaftliche Lieferung (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+  <entry key="ToolTipVatCategory_G">G - Export außerhalb der EU (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+
+  <entry key="ToolTipInvoicePositionNr">Positionsnummer (ram:AssociatedDocumentLineDocument/ram:LineID)</entry>
+
+  <entry key="ToolTipInvoicePositionDescription">Artikelname (ram:SpecifiedTradeProduct/ram:Name)</entry>
+  <entry key="ToolTipInvoicePositionProductDescription">Artikelbeschreibung (ram:SpecifiedTradeProduct/ram:Description)</entry>
+
+  <entry key="ToolTipInvoicePositionItemNr">Artikelnummer / Verkäufer-ID (ram:SpecifiedTradeProduct/ram:SellerAssignedID)</entry>
+  <entry key="ToolTipInvoicePositionEan">GTIN/EAN (ram:SpecifiedTradeProduct/ram:GlobalID)</entry>
+  <entry key="ToolTipInvoicePositionQuantity">Berechnete Menge (ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)</entry>
+  <entry key="ToolTipInvoicePostionUnit">Einheitencode (ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)</entry>
+  <entry key="ToolTipInvoicePositionUnitPrice">Netto-Einzelpreis (exkl. MwSt.) (ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)</entry>
+
+  <entry key="ToolTipInvoicePositionSelectedVat">Steuertyp (ram:ApplicableTradeTax/ram:TypeCode)</entry>
+  <entry key="ToolTipInvoicePositionVatRate">MwSt.-Satz % (ram:ApplicableTradeTax/ram:RateApplicablePercent)</entry>
+  <entry key="ToolTipInvoicePositionSelectedVatCategory">MwSt.-Kategorie (ram:ApplicableTradeTax/ram:CategoryCode)</entry>
+
+  <entry key="ToolTipInvoicePositionDiscountReason">Rabattgrund (ram:SpecifiedTradeAllowanceCharge/ram:Reason)</entry>
+  <entry key="ToolTipInvoicePositionDiscountNetAmount">Rabattbetrag (ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TotalAllowanceChargeAmount)</entry>
+
+  <entry key="ToolTipInvoicePositionNetAmount">Netto-Zeilenbetrag (ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)</entry>
+  <entry key="ToolTipInvoicePositionGrossAmount">Bruttobetrag (nicht explizit; Netto + Steuer)</entry>
+  <entry key="ToolTipInvoicePositionNetAmountAfterDiscount">Netto nach Rabatt (Netto - Nachlass)</entry>
+
+  <entry key="ToolTipCalculateTotalsAtInvoicePositionCommand">Beträge neu berechnen (UI-Aktion)</entry>
+
+  <entry key="ToolTipInvoicePositionOrderDate">Bestelldatum (ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString)</entry>
+  <entry key="ToolTipInvoicePositionOrderId">Bestellreferenz (ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID)</entry>
+
+  <entry key="ToolTipInvoicePositionDeliveryNoteDate">Lieferscheindatum (ram:DeliveryNoteReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString)</entry>
+  <entry key="ToolTipInvoicePositionDeliveryNoteId">Lieferschein-ID (ram:DeliveryNoteReferencedDocument/ram:IssuerAssignedID)</entry>
+  <entry key="ToolTipInvoicePositionDeliveryNoteLineId">Lieferscheinpositions-ID (ram:DeliveryNoteReferencedDocument/ram:LineID)</entry>
+
+  <entry key="ToolTipInvoicePositionRefDocId">Referenzdokument-ID (ram:AdditionalReferencedDocument/ram:IssuerAssignedID)</entry>
+  <entry key="ToolTipInvoicePositionRefDocType">Referenzdokumenttyp (ram:AdditionalReferencedDocument/ram:TypeCode)</entry>
+  <entry key="ToolTipInvoicePositionRefDocRefType">Referenztyp (ram:AdditionalReferencedDocument/ram:ReferenceTypeCode)</entry>
+
+  <entry key="ToolTipAdditionalInfosExpander">Referenzdokumente für diese Rechnungsposition (Bestellung, Lieferschein, zusätzliche Referenzen).</entry>
+  <entry key="ToolTipDiscountInfosExpander">Rabattdetails (Grund, Netto-Rabatt, Nettobetrag nach Rabatt).</entry>
+  <!--#endregion -->
+
+  <!--#region Invoice Position Details - Placeholders -->
+  <entry key="PlaceholderInvoicePositionDescription">Beschreibung</entry>
+  <entry key="PlaceholderInvoicePositionProductDescription">Produktbeschreibung</entry>
+
+  <entry key="PlaceholderInvoicePositionItemNr">Artikelnr.</entry>
+  <entry key="PlaceholderInvoicePositionEan">EAN</entry>
+  <entry key="PlaceholderInvoicePositionQuantity">Menge</entry>
+  <entry key="PlaceholderInvoicePostionUnit">Einheit</entry>
+  <entry key="PlaceholderInvoicePositionUnitPrice">E/P [€]</entry>
+  <entry key="PlaceholderInvoicePositionVatRate">%</entry>
+
+  <entry key="PlaceholderInvoicePositionDiscountReason">Rabattgrund</entry>
+  <entry key="PlaceholderInvoicePositionDiscountNetAmount">Rabatt Netto[€]</entry>
+
+  <entry key="PlaceholderInvoicePositionNetAmount">Gesamt Netto[€]</entry>
+  <entry key="PlaceholderInvoicePositionGrossAmount">Gesamt Brutto[€]</entry>
+  <entry key="PlaceholderInvoicePositionNetAmountAfterDiscount">Ges. Netto Rab.[€]</entry>
+
+  <entry key="PlaceholderInvoicePositionOrderId">Bestell-ID</entry>
+  <entry key="PlaceholderInvoicePositionDeliveryNoteId">Lieferschein-ID</entry>
+  <entry key="PlaceholderInvoicePositionDeliveryNoteLineId">Lieferscheinpos.-ID</entry>
+
+  <entry key="PlaceholderInvoicePositionRefDocId">Ref.Dok.-ID</entry>
+  <entry key="PlaceholderInvoicePositionRefDocType">Ref.Dok.-Typ</entry>
+  <entry key="PlaceholderInvoicePositionRefDocRefType">Ref.Dok.-Ref.Typ</entry>
+  <!--#endregion -->
+
+  <!--#region Invoice Position Details - Tags -->
+  <entry key="TagInvoicePositionOrderDate">Bestelldatum</entry>
+  <entry key="TagInvoicePositionDeliveryNoteDate">Lieferdatum</entry>
+  <!--#endregion -->
+
+  <!--#region UI Invoice Position - Labels -->
+  <entry key="LabelCreateInvoicePosition">Rechnungsposition einfügen</entry>
+  <entry key="LabelEditInvoicePosition">Rechnungsposition bearbeiten</entry>
+  <entry key="LabelDeleteInvoicePosition">Rechnungsposition löschen</entry>
+  <!--#endregion -->
+
+  <!--#region UI Invoice Position - ToolTips -->
+  <entry key="ToolTipReturn">Zur vorherigen Ansicht zurück</entry>
+  <entry key="ToolTipSave">Aktion bestätigen</entry>
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - Tags -->
+  <entry key="TagDiscountBasisDate">Basisdatum</entry>
+  <entry key="TagPaymentDueDateRangeText">Zahlbar bis</entry>
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - Labels -->
+  <entry key="LabelContentPaymentTerms">Zahlungsbedingungen</entry>
+  <entry key="LabelApplyDiscount">Skonto anwenden</entry>
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - ToolTips -->
+  <entry key="ToolTipDiscountPercent">Rabatt in Prozent, z. B. 1,5</entry>
+  <entry key="ToolTipDiscountDays">Skontofrist in Tagen, z. B. 10</entry>
+  <entry key="ToolTipDiscountBasisDate">Basisdatum für die Skontoberechnung</entry>
+  <entry key="ToolTipDiscountPreviewText">Vorschautext für die Skontobedingung</entry>
+  <entry key="ToolTipPaymentDueDateRangeText">Zahlungsfälligkeitsdatum ohne Abzug</entry>
+  <entry key="ToolTipNoDiscountPreviewText">Vorschautext für die Fälligkeitsbedingung</entry>
+  <!--#endregion -->
+
+  <!--#region UI Payment Terms - Placeholders -->
+  <entry key="PlaceholderDiscountPercent">... % Skonto</entry>
+  <entry key="PlaceholderDiscountDays">... Tage</entry>
+  <entry key="PlaceholderDiscountPreviewText">Bis dd.MM.yyyy erhalten Sie ... % Skonto</entry>
+  <entry key="PlaceholderNoDiscountPreviewText">Bis dd.MM.yyyy ohne Abzug</entry>
+  <!--#endregion -->
+
+  <!--#region Date contest for validation -->
+  <entry key="ContentDateInvalid">Datum ist ungültig.</entry>
+  <entry key="ContentDateMustBeBetweenTemplate">Datum muss zwischen</entry>
+  <!--#endregion -->
+
+  <!--#region save & Load customer data -->
+  <entry key="TitelSaveCustomerData">Kundendaten speichern</entry>
+  <entry key="FileNameCustomerData">_kundendaten</entry>
+  <entry key="FilterJsonFile">JSON-Datei</entry>
+  <entry key="TitelLoadCustomerData">Kundendaten laden</entry>
+  <!--#endregion -->
+
+  <!--#region DocumentTypeCode -->
+  <entry key="DocumentTypeCode_380">Rechnung</entry>
+  <entry key="DocumentTypeCode_381">Gutschrift</entry>
+  <entry key="DocumentTypeCode_383">Lastschrift</entry>
+
+  <entry key="ToolTipDocumentTypeCode_380">Wählen Sie diese Option für eine normale Rechnung.</entry>
+  <entry key="ToolTipDocumentTypeCode_381">Wählen Sie diese Option für eine Gutschrift.</entry>
+  <entry key="ToolTipDocumentTypeCode_383">Wählen Sie diese Option für eine Lastschrift.</entry>
+  <!--#endregion -->
+
+  <!--#region PaymentMeansCode -->
+  <entry key="PaymentMeansCode_58">Überweisung</entry>
+  <entry key="PaymentMeansCode_59">SEPA-Überweisung</entry>
+  <entry key="PaymentMeansCode_49">SEPA-Lastschrift</entry>
+  <entry key="PaymentMeansCode_10">Barzahlung</entry>
+  <entry key="PaymentMeansCode_48">Kartenzahlung</entry>
+
+  <entry key="ToolTipPaymentMeansCode_58">Zahlung per normaler Banküberweisung.</entry>
+  <entry key="ToolTipPaymentMeansCode_59">Zahlung per SEPA-Überweisung im SEPA-Raum.</entry>
+  <entry key="ToolTipPaymentMeansCode_49">Zahlung per SEPA-Lastschrift vom Kundenkonto.</entry>
+  <entry key="ToolTipPaymentMeansCode_10">Zahlung erfolgt in bar.</entry>
+  <entry key="ToolTipPaymentMeansCode_48">Zahlung per Debit- oder Kreditkarte.</entry>
+  <!--#endregion -->
+
+  <!--#region CreateElectronicInvoiceComponentsCommand -->
+  <entry key="CreateInvoiceCmd_ErrorPipelineFailed">PDF konnte nicht generiert oder gerendert werden: {0}</entry>
+  <entry key="CreateInvoiceCmd_ErrorPdfNull">PDF-Generierung hat kein Ergebnis zurückgegeben.</entry>
+  <entry key="CreateInvoiceCmd_ErrorPdfEmpty">PDF-Stream ist leer.</entry>
+  <entry key="CreateInvoiceCmd_ErrorApplyPdfA">PDF/A-Konvertierung fehlgeschlagen: {0}</entry>
+  <entry key="CreateInvoiceCmd_ErrorFileInUse">Die PDF-Datei ist noch in einer anderen Anwendung geöffnet. Bitte schließen Sie den PDF-Viewer und versuchen Sie es erneut.</entry>
+  <entry key="CreateInvoiceCmd_ErrorUpgradePdfA3">PDF/A-3-Aktualisierung fehlgeschlagen: {0}</entry>
   <!--#endregion -->
 </properties>
