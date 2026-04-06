@@ -8,14 +8,13 @@
 
 <img src="./ReadMeAsserts/UiImage02.png" width="300"/> 
 
-[📄 Example plain Pdf invoice — 6063636771001.pdf](./ReadMeAsserts/6063636771001.pdf)
+[📄 Example Pdf invoice — 6063636771001.pdf](./ReadMeAsserts/6063636771001.pdf)
 
-[📄 Example Xml invoice — 6063636771001.xml](./ReadMeAsserts/6063636771001.pdf)
+[📄 Example Xml invoice — 6063636771001.xml](./ReadMeAsserts/6063636771001.xml)
 
-[📄 Example Pdf/A3 invoice — 6063636771001_PdfA3.pdf](./ReadMeAsserts/6063636771001.pdf)
+[📄 Example Pdf/A3 invoice — 6063636771001_PdfA3.pdf](./ReadMeAsserts/6063636771001_PdfA3.pdf)
 
-[📄 Example signed Pdf/A3 invoice — 6063636771001_SignedPdfA3.pdf](./ReadMeAsserts/6063636771001.pdf)
-
+[📄 Example signed Pdf/A3 invoice — 6063636771001_SignedPdfA3.pdf](./ReadMeAsserts/6063636771001_SignedPdfA3.pdf)
 
 ---
 
