@@ -15,10 +15,6 @@
     <Project Path="Src/tulo.eInvoiceXmlGeneratorPdf/tulo.XMLeInvoiceToPdf.csproj" />
     <Project Path="Src/tulo.UpgradeToPdfA3/tulo.UpgradeToPdfA3.csproj" />
   </Folder>
-  <Folder Name="/Src/Common/">
-    <Project Path="Src/Common/tulo.Corelib/tulo.CoreLib.csproj" />
-    <Project Path="Src/Common/tulo.ResourcesWpfLib/tulo.ResourcesWpfLib.csproj" />
-  </Folder>
   <Folder Name="/Src/WPF/">
     <Project Path="Src/WPF/eInvoiceApp/eInvoiceApp.csproj" />
   </Folder>

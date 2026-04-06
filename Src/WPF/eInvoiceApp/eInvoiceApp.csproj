@@ -20,29 +20,29 @@
       fully compliant electronic invoices in ZUGFeRD 2.4 EXTENDED / Factur-X 1.0
     </Description>
 		<RepositoryType>GitHub</RepositoryType>
-		<RepositoryUrl></RepositoryUrl>
-		<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/TuloSharp/tulo.eInvoiceApp.git</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Copyright>© 2025–2026 Tulo Team</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Markdig.Wpf" />
 		<PackageReference Include="tulo.CommonMVVM.WPF" />
+		<PackageReference Include="tulo.CoreLib" />
 		<PackageReference Include="tulo.DropdownMenuControl" />
 		<PackageReference Include="tulo.FontSizePicker" />
 		<PackageReference Include="tulo.LeaderLabeledTextBlock" />
 		<PackageReference Include="tulo.LoadingSpinnerControl" />
 		<PackageReference Include="tulo.ModalViewControl" />
 		<PackageReference Include="tulo.PlaceholderTextBoxControl" />
+		<PackageReference Include="tulo.ResourcesWpfLib" />
 		<PackageReference Include="tulo.RevealPasswordBox" />
 		<PackageReference Include="tulo.SerilogLib" />
 		<PackageReference Include="tulo.SlideToComfirmControl" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Common\tulo.Corelib\tulo.CoreLib.csproj" />
-		<ProjectReference Include="..\..\Common\tulo.ResourcesWpfLib\tulo.ResourcesWpfLib.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvocieXmlGeneratorCii\tulo.eInvoiceXmlGeneratorCii.csproj" />
 		<ProjectReference Include="..\..\tulo.eInvoiceXmlGeneratorPdf\tulo.XMLeInvoiceToPdf.csproj" />
 		<ProjectReference Include="..\..\tulo.UpgradeToPdfA3\tulo.UpgradeToPdfA3.csproj" />
