@@ -261,6 +261,36 @@ Configure in `appsettings.json`:
   "ContactInfo": "contact@example.com"
 }
 ```
+**Important note about certificates**
+
+This project may contain example / dummy signing configuration (e.g. placeholder paths or a self‑signed test certificate used during development).
+
+   - No production-ready certificate is shipped with this repository.
+   -  Any example certificate or password shown in code or configuration is intended only for local testing,
+    demo, or research purposes.
+   - For real business, legal, or compliance-relevant use you must obtain your own suitable certificate
+    (for example from a trusted certificate authority or according to your local/eIDAS requirements).
+
+You are fully responsible for:
+
+   - Selecting an appropriate certificate type and trust level for your use case
+   - Secure and confidential storage of the .pfx file and its password
+   - Ensuring that private keys and passwords are never:
+       - committed to source control,
+       - distributed together with binaries,
+       - or shared in any insecure way
+
+For production use, always:
+
+   - Replace all dummy/test paths and passwords with your own secure configuration
+    Store secrets via secure mechanisms (e.g. environment variables, secret managers, protected configuration)
+   - Verify that your signing setup complies with all applicable regulations 
+    (tax law, e‑invoicing rules, requirements for advanced/qualified electronic signatures, etc.)
+
+Disclaimer
+
+- The signing configuration, sample settings, and any dummy/test certificates in this project are provided without any warranty and must not be used as-is in production.
+- The authors and contributors assume no liability for any damage, compliance issues, or legal consequences resulting from an incorrect or insecure certificate setup. Each user is responsible for configuring and operating their own secure and compliant signing environment.
 
 ---
 
