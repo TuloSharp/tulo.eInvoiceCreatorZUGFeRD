@@ -1,8 +1,8 @@
-﻿using tulo.eInvoiceApp.DTOs;
-using tulo.eInvoiceApp.Services;
-using tulo.eInvoiceApp.Stores.Invoices;
+﻿using tulo.eInvoiceCreatorZUGFeRD.DTOs;
+using tulo.eInvoiceCreatorZUGFeRD.Services;
+using tulo.eInvoiceCreatorZUGFeRD.Stores.Invoices;
 
-namespace tulo.eInvoiceAppTests.Services;
+namespace tulo.eInvoiceCreatorZUGFeRDTests.Services;
 
 public class InvoicePositionServiceTests
 {

@@ -5,15 +5,15 @@ using Microsoft.Extensions.Options;
 using tulo.CommonMVVM.Collector;
 using tulo.CommonMVVM.GlobalProperties;
 using tulo.CoreLib.Translators;
-using tulo.eInvoiceApp.DTOs;
-using tulo.eInvoiceApp.Options;
-using tulo.eInvoiceApp.Services;
-using tulo.eInvoiceApp.Stores.Invoices;
-using tulo.eInvoiceApp.ViewModels.Invoices;
-using tulo.eInvoiceAppTests.Fakes;
-using tulo.eInvoiceAppTests.TestInfrastructure;
+using tulo.eInvoiceCreatorZUGFeRD.DTOs;
+using tulo.eInvoiceCreatorZUGFeRD.Options;
+using tulo.eInvoiceCreatorZUGFeRD.Services;
+using tulo.eInvoiceCreatorZUGFeRD.Stores.Invoices;
+using tulo.eInvoiceCreatorZUGFeRD.ViewModels.Invoices;
+using tulo.eInvoiceCreatorZUGFeRDTests.Fakes;
+using tulo.eInvoiceCreatorZUGFeRDTests.TestInfrastructure;
 
-namespace tulo.eInvoiceAppTests.Services;
+namespace tulo.eInvoiceCreatorZUGFeRDTests.Services;
 
 public class InvoiceBuilderServiceTests : IDisposable
 {

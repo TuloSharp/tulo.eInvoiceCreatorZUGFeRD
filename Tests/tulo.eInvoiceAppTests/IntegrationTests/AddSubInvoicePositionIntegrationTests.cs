@@ -7,14 +7,14 @@ using tulo.CommonMVVM.Stores;
 using tulo.CoreLib.Interfaces.SnapShots;
 using tulo.CoreLib.Services;
 using tulo.CoreLib.Translators;
-using tulo.eInvoiceApp.DTOs;
-using tulo.eInvoiceApp.Options;
-using tulo.eInvoiceApp.Services;
-using tulo.eInvoiceApp.Stores.Invoices;
-using tulo.eInvoiceApp.ViewModels.Invoices;
-using tulo.eInvoiceAppTests.TestInfrastructure;
+using tulo.eInvoiceCreatorZUGFeRD.DTOs;
+using tulo.eInvoiceCreatorZUGFeRD.Options;
+using tulo.eInvoiceCreatorZUGFeRD.Services;
+using tulo.eInvoiceCreatorZUGFeRD.Stores.Invoices;
+using tulo.eInvoiceCreatorZUGFeRD.ViewModels.Invoices;
+using tulo.eInvoiceCreatorZUGFeRDTests.TestInfrastructure;
 
-namespace tulo.eInvoiceAppTests.IntegrationTests;
+namespace tulo.eInvoiceCreatorZUGFeRDTests.IntegrationTests;
 
 public class AddSubInvoicePositionIntegrationTests : IDisposable
 {

@@ -1,0 +1,418 @@
+﻿<UserControl x:Class="tulo.eInvoiceCreatorZUGFeRD.Views.Invoices.InvoiceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:tulo.eInvoiceCreatorZUGFeRD.Views.Invoices"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
+             xmlns:behaviorsutilities="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+             xmlns:commoncommands="clr-namespace:tulo.ResourcesWpfLib.Commands;assembly=tulo.ResourcesWpfLib"
+             xmlns:commoncontrols="clr-namespace:tulo.ResourcesWpfLib.Controls.Common;assembly=tulo.ResourcesWpfLib"
+             xmlns:invoicecontrols="clr-namespace:tulo.eInvoiceCreatorZUGFeRD.Views.Invoices.Controls"
+             xmlns:slidecontrol="clr-namespace:tulo.SlideToComfirmControl;assembly=tulo.SlideToComfirmControl"
+             xmlns:controls="clr-namespace:tulo.eInvoiceCreatorZUGFeRD.Views.Invoices.Controls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             mc:Ignorable="d"
+             d:DesignHeight="700"
+             d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:BoolToGridLengthConverter x:Key="BoolToGridLengthConverter"
+                                                  TrueLength="*"
+                                                  FalseLength="0" />
+            <converters:CheckDefaultDateConverter x:Key="CheckDefaultDateConverter" />
+            <converters:InactiveSinceToBackgroundColorConverter x:Key="InactiveSinceToBackgroundColorConverter" />
+            <converters:MultiCommandParameterConverter x:Key="MultiCommandParameterConverter" />
+            <system:Boolean x:Key="TrueFlag">True</system:Boolean>
+            <system:Boolean x:Key="FalseFlag">False</system:Boolean>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="PreviewKeyUp">
+            <behaviors:InvokeCommandAction Command="{Binding IsAltShortcutKeyPressedCommand, Mode=OneWay}" PassEventArgsToCommand="True" />
+        </behaviors:EventTrigger>
+        <behaviors:EventTrigger EventName="KeyUp">
+            <behaviors:InvokeCommandAction Command="{Binding IsAltShortcutKeyReleasedCommand, Mode=OneWay}" PassEventArgsToCommand="True" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <Grid x:Name="RootGrid"
+          ToolTipService.ShowOnDisabled="True"
+          FocusManager.FocusedElement="{Binding ElementName=currentListView}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="*" />
+            <!--<ColumnDefinition Width="{Binding IsPreviewEnabled, Converter={StaticResource BoolToGridLengthConverter}}" />-->
+
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <!--  Content="Invoice View"  -->
+                <Label Content="{Binding LabelContentInvoiceView}"
+                       Grid.Row="1"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+
+                <Grid Grid.Row="2"
+                      Background="White"
+                      Height="40"
+                      Margin="10,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="saveButton"
+                            Grid.Column="1"
+                            ToolTip="{Binding ToolTipSaveCustomerData}"
+                            HorizontalAlignment="Center"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding SaveCustomerDataCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource SaveDataIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                        </Grid>
+                    </Button>
+                    <Button Name="loadButton"
+                            Grid.Column="3"
+                            ToolTip="{Binding ToolTipLoadCustomerData}"
+                            HorizontalAlignment="Center"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding LoadCustomerDataCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource LoadCustomerDataIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                        </Grid>
+                    </Button>
+
+                    <Button Name="clearAllButton"
+                            Grid.Column="5"
+                            ToolTip="{Binding ToolTipClearAllInvoiceView}"
+                            HorizontalAlignment="Center"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding ClearAllInvoiceViewCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource ClearAllIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                        </Grid>
+                    </Button>
+
+
+                    <Label Content="{Binding LabelContentPreview}"
+                           Grid.Column="7"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                    <ToggleButton Grid.Column="8"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  ToolTip="{Binding ToolTipCreatePreviewElectronicInvoice}"
+                                  Style="{StaticResource ModernSwitchToggle}"
+                                  Command="{Binding CreateElectronicInvoiceComponentsCommand}">
+                        <ToggleButton.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                                <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </ToggleButton.CommandParameter>
+                    </ToggleButton>
+
+                    <slidecontrol:SlideToConfirm Grid.Column="10"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding ContentSlideText}"
+                                                 ToolTip="{Binding ToolTipCreateElectronicInvoice}"
+                                                 ConfirmedText="{Binding ContentSlideConfirmedText}"
+                                                 ConfirmCommand="{Binding CreateElectronicInvoiceComponentsCommand}"
+                                                 ResetSignal="{Binding ResetSlideButton}"
+                                                 Width="100"
+                                                 Height="34"
+                                                 Margin="0,0,0,0"
+                                                 FillBrush="#3B82F6"
+                                                 TrackBrush="{StaticResource ButtonIconPrimaryColorBrush}"
+                                                 ThumbBrush="#FFFFFF" 
+                                                 ThumbHoverBrush ="{StaticResource ButtonIconPrimaryColorBrush}"
+                                                 TrackHoverBrush ="{StaticResource BackgroundTextBoxDisableBrushColor}"
+                                                 TextBrush="White"
+                                                 TextHoverBrush="{StaticResource ButtonIconPrimaryColorBrush}" >
+                        <slidecontrol:SlideToConfirm.ConfirmCommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiCommandParameterConverter}">
+                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" />
+                                <Binding Source="{StaticResource FalseFlag}" />
+                                <Binding Source="{StaticResource TrueFlag}" />
+                            </MultiBinding>
+                        </slidecontrol:SlideToConfirm.ConfirmCommandParameter>
+                    </slidecontrol:SlideToConfirm>
+
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="18" />
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Row="2" Grid.Column="1">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" HorizontalAlignment="Left">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!--  Content="Buyer Information"  -->
+                        <Label Content="{Binding LabelContenBuyerInformation}"
+                               Grid.Row="0"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0,0" />
+                        <controls:BuyerPartyControl Grid.Row="1" HorizontalAlignment="Left" />
+                    </Grid>
+
+                    <Grid Grid.Column="2" HorizontalAlignment="Left">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+
+                        </Grid.RowDefinitions>
+                        <!--  Content="Header"  -->
+                        <Label Content="{Binding LabelContentHeader}"
+                               Grid.Row="0"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0,0" />
+                        <invoicecontrols:HeaderInvoiceControl Grid.Row="1" HorizontalAlignment="Left" />
+                    </Grid>
+
+                </Grid>
+
+                <Grid Grid.Row="4"
+                      Grid.Column="1"
+                      HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--  Content="Payment Information"  -->
+                    <Label Content="{Binding LabelContentPaymentInformation}"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Margin="0,0" />
+                    <controls:PaymentInfosControl Grid.Row="1" />
+                </Grid>
+
+                <Grid Grid.Row="6"
+                      Grid.Column="1"
+                      HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="4" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding LabelContentPaymentTerms}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="0,0" />
+
+                        <Label Content="{Binding LabelApplyDiscount}"
+                               Grid.Column="2"
+                               HorizontalAlignment="Center" />
+
+                        <!--  Checkbox  -->
+                        <CheckBox Grid.Column="3"
+                                  HorizontalAlignment="Right"
+                                  Height="20"
+                                  Width="20"
+                                  Style="{StaticResource CustomizedCheckBox}"
+                                  IsChecked="{Binding HasDiscount, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+
+                    <invoicecontrols:PaymentTermsControl Grid.Row="1"
+                                                         HorizontalAlignment="Left"
+                                                         Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
+                </Grid>
+
+                <Grid Grid.Row="8" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!--  Content="Positions List"  -->
+                    <Label Content="{Binding LabelContentPositionsList}"
+                           Grid.Row="0"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"
+                           Margin="0,0" />
+                    <invoicecontrols:HeaderInvoicePositionControl Grid.Row="1"
+                                                                  HorizontalAlignment="Stretch"
+                                                                  VerticalAlignment="Stretch" />
+                    <Grid Grid.Row="2"
+                          Grid.Column="1"
+                          Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ListView Grid.Row="0"
+                                  Grid.Column="0"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  Padding="0,0,1,1"
+                                  x:Name="currentListView"
+                                  SelectionMode="Single"
+                                  behaviorsutilities:DynamicUniformGridColumns.MinItemWidth="220"
+                                  behaviorsutilities:DynamicUniformGridColumns.MaxItemHeight="180"
+                                  behaviorsutilities:ListGridViewSortByHeader.AutoSort="True"
+                                  ItemsSource="{Binding InvoicePositionCardListItemCollectionView}"
+                                  SelectedItem="{Binding SelectedInvoicePositionCardListItemViewModel, Mode=TwoWay}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.CanContentScroll="True"
+                                  behaviorsutilities:CustomMouseWheelScrolling.HandleMouseWheel="True">
+
+                            <ListView.Resources>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Height" Value="0" />
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="GridViewColumnHeader" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.Resources>
+
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                                    <Setter Property="Margin" Value="4" />
+                                    <Setter Property="MinWidth" Value="220" />
+                                    <Setter Property="MaxHeight" Value="180" />
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <Border x:Name="Bd"
+                                                        Background="{TemplateBinding Background}"
+                                                        SnapsToDevicePixels="True"
+                                                        BorderThickness="0">
+                                                    <ContentPresenter />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter TargetName="Bd" Property="BorderBrush" Value="#FF007ACC" />
+                                                        <Setter TargetName="Bd" Property="BorderThickness" Value="2" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
+                </Grid>
+
+                <!--<commoncontrols:SpinnerMessageControl Grid.Row="5"
+                                                  Grid.Column="1"
+                                                  Panel.ZIndex="10"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Visibility="{Binding IsLoading, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />-->
+
+                <!--<commoncontrols:StatusMessageControl Grid.Row="7"
+                                                     Grid.Column="1"
+                                                     DataContext="{Binding StatusMessageViewModel}" />-->
+            </Grid>
+        </Grid>
+
+        <invoicecontrols:PreviewInvoiceControl Grid.Column="1" Visibility="{Binding DataContext.IsPreviewEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
+
+        <!--<Label Content="To Test if works"
+               Grid.Column="1"
+               Visibility="{Binding DataContext.IsPreviewEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, TargetNullValue=Collapsed}" />-->
+
+    </Grid>
+</UserControl>

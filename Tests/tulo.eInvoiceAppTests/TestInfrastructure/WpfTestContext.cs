@@ -1,6 +1,6 @@
 ﻿using System.Windows.Threading;
 
-namespace tulo.eInvoiceAppTests.TestInfrastructure;
+namespace tulo.eInvoiceCreatorZUGFeRDTests.TestInfrastructure;
 
 public sealed class WpfTestContext : IDisposable
 {

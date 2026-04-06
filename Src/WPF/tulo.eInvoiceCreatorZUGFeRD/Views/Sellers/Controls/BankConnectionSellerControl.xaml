@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="tulo.eInvoiceCreatorZUGFeRD.Views.Sellers.Controls.BankConnectionSellerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:tulo.eInvoiceCreatorZUGFeRD.Views.Sellers.Controls"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
+             xmlns:placeholder="clr-namespace:tulo.PlaceholderTextBoxControl;assembly=tulo.PlaceholderTextBoxControl"
+             xmlns:utilities="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+             mc:Ignorable="d"
+             d:DesignHeight="180"
+             d:DesignWidth="260">
+    <Border Background="{StaticResource PanelBackgroundBrushColor}"
+            BorderBrush="{StaticResource PanelBorderBrushColor}"
+            BorderThickness="2"
+            CornerRadius="5"
+            Margin="1"
+            Padding="4"
+            SnapsToDevicePixels="True"
+            Width="Auto"
+            MaxHeight="160"
+            HorizontalAlignment="Stretch">
+        <Border.Effect>
+            <DropShadowEffect Color="DarkGray"
+                              BlurRadius="10"
+                              ShadowDepth="2"
+                              Opacity="0.5" />
+        </Border.Effect>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Bank Name  -->
+            <placeholder:PlaceholderTextBox Grid.Row="0"
+                                            Grid.Column="1"
+                                            Text="{Binding BankNameSellerParty}"
+                                            ToolTip="{Binding ToolTipBankNameSellerParty}"
+                                            Placeholder="{Binding PlaceholderBankNameSellerParty}"
+                                            utilities:TextBoxProperties.AllowedCharactersRegex="^[^~]*$"
+                                            BorderThickness="0.5"
+                                            Margin="0,2,0,0"
+                                            Padding="6,2" />
+
+            <!--  Account Holder  -->
+            <placeholder:PlaceholderTextBox Grid.Row="1"
+                                            Grid.Column="1"
+                                            Text="{Binding AccountHolderSellerParty}"
+                                            ToolTip="{Binding ToolTipAccountHolderSellerParty}"
+                                            Placeholder="{Binding PlaceholderAccountHolderSellerParty}"
+                                            utilities:TextBoxProperties.AllowedCharactersRegex="^[^~]*$"
+                                            BorderThickness="0.5"
+                                            Margin="0,2,0,0"
+                                            Padding="6,2" />
+
+            <!--  IBAN  -->
+            <placeholder:PlaceholderTextBox Grid.Row="2"
+                                            Grid.Column="1"
+                                            utilities:IbanMask.IsEnabled="True"
+                                            utilities:IbanMask.Iban="{Binding IbanSellerParty}"
+                                            ToolTip="{Binding ToolTipIbanSellerParty}"
+                                            Placeholder="{Binding PlaceholderIbanSellerParty}"
+                                            utilities:TextBoxProperties.AllowedCharactersRegex="^[A-Z0-9 ]*$"
+                                            BorderThickness="0.5"
+                                            Margin="0,2,0,0"
+                                            Padding="6,2" />
+
+            <!--  BIC  -->
+            <placeholder:PlaceholderTextBox Grid.Row="3"
+                                            Grid.Column="1"
+                                            Text="{Binding BicSellerParty}"
+                                            ToolTip="{Binding ToolTipBicSellerParty}"
+                                            Placeholder="{Binding PlaceholderBicSellerParty}"
+                                            utilities:TextBoxProperties.AllowedCharactersRegex="^[^~]*$"
+                                            BorderThickness="0.5"
+                                            Margin="0,2,0,0"
+                                            Padding="6,2" />
+
+        </Grid>
+
+    </Border>
+</UserControl>

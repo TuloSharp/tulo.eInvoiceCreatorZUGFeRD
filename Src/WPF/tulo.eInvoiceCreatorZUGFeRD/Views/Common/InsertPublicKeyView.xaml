@@ -1,0 +1,367 @@
+﻿<UserControl x:Class="tulo.eInvoiceCreatorZUGFeRD.Views.Common.InsertPublicKeyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:tulo.eInvoiceCreatorZUGFeRD.Views.Common"
+             xmlns:flag="clr-namespace:System;assembly=mscorlib"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:commoncontrols="clr-namespace:tulo.ResourcesWpfLib.Controls.Common;assembly=tulo.ResourcesWpfLib"
+             xmlns:extended="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+             xmlns:converters="clr-namespace:tulo.ResourcesWpfLib.Converters;assembly=tulo.ResourcesWpfLib"
+             xmlns:publickey="clr-namespace:tulo.RevealPasswordBox;assembly=tulo.RevealPasswordBox"
+             xmlns:utilities="clr-namespace:tulo.ResourcesWpfLib.Utilities;assembly=tulo.ResourcesWpfLib"
+             xmlns:placeholder="clr-namespace:tulo.PlaceholderTextBoxControl;assembly=tulo.PlaceholderTextBoxControl"
+             Focusable="True"
+             FocusManager.IsFocusScope="True"
+             KeyboardNavigation.TabNavigation="Cycle"
+             extended:SetFocusOnModalShow.Enabled="True"
+             Background="{StaticResource PanelBackgroundBrushColor}"
+             BorderBrush="{StaticResource PanelBorderBrushColor}"
+             Style="{StaticResource RoundedUserControlStyle}"
+             ToolTipService.InitialShowDelay="500"
+             BorderThickness="2"
+             mc:Ignorable="d"
+             Width="444"
+             Height="Auto"
+             d:DesignHeight="330"
+             d:DesignWidth="444">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:InputErrorToBorderBrushConverter x:Key="InputErrorToBorderBrushConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:DebuggerConverter x:Key="DebuggerConverter" />
+            <converters:ButtonStateDiagnosticConverter x:Key="ButtonStateDiagnosticConverter" />
+            <flag:Boolean x:Key="TrueFlag">True</flag:Boolean>
+            <flag:Boolean x:Key="FalseFlag">False</flag:Boolean>
+
+            <Style TargetType="{x:Type TextBox}"
+                   BasedOn="{StaticResource {x:Type TextBox}}"
+                   x:Key="ErrorAtBorderBrushTextBox">
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource InputErrorToBorderBrushConverter}">
+                            <Binding Path="Text" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="IsInvalidStateAtInputField" />
+                            <Binding Source="TextBox" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                        <Setter Property="Background" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type placeholder:PlaceholderTextBox}"
+                   BasedOn="{StaticResource {x:Type placeholder:PlaceholderTextBox}}"
+                   x:Key="ErrorAtBorderBrushTextBoxPlaceholder">
+
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource InputErrorToBorderBrushConverter}">
+                            <Binding Path="Text" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="IsInvalidStateAtInputField" />
+                            <Binding Source="TextBox" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                        <Setter Property="Background" Value="{StaticResource BackgroundTextBoxDisableBrushColor}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="PreviewKeyDown">
+            <behaviors:InvokeCommandAction Command="{Binding IsAltShortcutKeyPressedCommand}" PassEventArgsToCommand="True" />
+        </behaviors:EventTrigger>
+        <behaviors:EventTrigger EventName="PreviewKeyUp">
+            <behaviors:InvokeCommandAction Command="{Binding IsAltShortcutKeyReleasedCommand}" PassEventArgsToCommand="True" />
+        </behaviors:EventTrigger>
+        <behaviors:EventTrigger EventName="Deactivated">
+            <behaviors:InvokeCommandAction Command="{Binding IsAltShortcutKeyReleasedCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="Alt"
+                    Key="F4"
+                    Command="{Binding CloseInsertPublicKeyViewCommand}" />
+        <KeyBinding Key="Esc" Command="{Binding CloseInsertPublicKeyViewCommand}" />
+    </UserControl.InputBindings>
+
+    <Grid ToolTipService.ShowOnDisabled="True">
+        <!--  this definition replace the SizeToContent property, because in user control doesn't exist this property  -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="41" />
+                <RowDefinition Height="0" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="6" />
+            </Grid.RowDefinitions>
+
+            <Border CornerRadius="2"
+                    BorderBrush="{StaticResource MainBrushColor}"
+                    BorderThickness="0,2,0,0"
+                    ClipToBounds="True">
+                <Grid Grid.Row="0"
+                      Background="{StaticResource MainBrushColor}"
+                      Focusable="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="2" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Margin="1,0,0,0"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Width="20"
+                           Height="20"
+                           Source="/Assets/TuloTeam.ico" />
+
+                    <TextBlock Grid.Column="1"
+                               MaxWidth="2000"
+                               Padding="4,3,0,0"
+                               Foreground="White"
+                               Text="{Binding LabelInsertPublicKey}" />
+
+                    <Button x:Name="btnClose"
+                            Grid.Column="2"
+                            Focusable="False"
+                            Style="{StaticResource CloseWinButton}"
+                            Width="22"
+                            Height="22"
+                            Cursor="Hand"
+                            Background="{StaticResource MainBrushColor}"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            Command="{Binding CloseInsertPublicKeyViewCommand}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                        <Grid Width="14" Height="14">
+                            <Path Style="{StaticResource WinCloseButtonPathStyle}"
+                                  Data="{StaticResource CloseIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}"
+                                  Stretch="Fill" />
+                        </Grid>
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:KeyTrigger Key="Esc">
+                                <behaviors:InvokeCommandAction Command="{Binding CloseInsertPublicKeyViewCommand}" />
+                            </behaviors:KeyTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    BorderThickness="0,0,0,1"
+                    BorderBrush="{StaticResource GroupBoxBrushColor}">
+                <Grid Background="{StaticResource PanelBrushColor}">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="0" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="3" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="requestedReturnButton"
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            KeyboardNavigation.AcceptsReturn="False"
+                            IsEnabled="{Binding IsSaveRequestMessageVisible, Converter={StaticResource InverseBoolConverter}}"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            ToolTip="{Binding ToolTipReturn}"
+                            Command="{Binding CloseAddInvoicePositionDetailsCommand}">
+                        <Grid>
+                            <Path Style="{StaticResource ContentButtonPathStyle}"
+                                  Data="{StaticResource ArrowBackIconSVG}"
+                                  Fill="{StaticResource ButtonBrushIconColor}" />
+                            <TextBlock Text="R"
+                                       Width="12"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Right"
+                                       Visibility="{Binding IsAltShortcutKeyPressed, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       Background="{StaticResource MainBrushColor}"
+                                       Foreground="{StaticResource ButtonBrushIconColor}" />
+                            <AccessText Text="_Return"
+                                        FontSize="8"
+                                        Foreground="Transparent"
+                                        Background="Transparent" />
+                        </Grid>
+                    </Button>
+
+                    <!--  ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"  -->
+                    <!--  ToolTipService.ShowOnDisabled="True"  -->
+                    <Button Name="saveButton"
+                            Grid.Column="3"
+                            ToolTip="{Binding ToolTipSave}"
+                            KeyboardNavigation.AcceptsReturn="False"
+                            BorderBrush="Transparent"
+                            Foreground="Transparent"
+                            IsEnabled="{Binding IsEnableToSaveData, Converter={StaticResource DebuggerConverter}, ConverterParameter=IsEnableToSaveData}"
+                            Command="{Binding AddInvoicePositionDetailsCommand}">
+
+                        <Grid>
+                            <Viewbox Style="{StaticResource ViewBox4Icon}">
+                                <Path Style="{StaticResource ContentButtonPathStyle}"
+                                      Data="{StaticResource DoneIconSVG}"
+                                      Fill="{StaticResource ButtonBrushIconColor}"
+                                      Width="auto"
+                                      Height="auto" />
+                            </Viewbox>
+                            <TextBlock Text="O"
+                                       Width="12"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Right"
+                                       Background="{StaticResource MainBrushColor}"
+                                       Foreground="{StaticResource ButtonBrushIconColor}"
+                                       Visibility="{Binding IsAltShortcutKeyPressed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <AccessText Text="_Okay"
+                                        FontSize="8"
+                                        Foreground="Transparent"
+                                        Background="Transparent" />
+                        </Grid>
+                    </Button>
+
+                </Grid>
+            </Border>
+
+
+            <Grid Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="14" />
+                    <RowDefinition Height="auto" />
+
+                    <RowDefinition Height="6" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="16" />
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Grid.Row="0"
+                              Margin="10,0,10,0"
+                              Padding="0"
+                              BorderBrush="{StaticResource GroupBoxBrushColor}"
+                              BorderThickness="1">
+                        <GroupBox.Header>
+                            <TextBlock Margin="6,2,6,2"
+                                       FontStyle="Oblique"
+                                       Text="{Binding LabelHeaderGroupBox}" />
+                        </GroupBox.Header>
+
+                        <Grid Margin="0,5,0,5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <placeholder:PlaceholderTextBox Grid.Row="0"
+                                                            Placeholder="{Binding PlaceholderSelectSignature}"
+                                                            ToolTip="{Binding ToolTipSelectSignature}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding SelectSignature, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,0,0,0"
+                                                            Padding="2" />
+
+                            <publickey:RevealPasswordBox Grid.Row="1"
+                                                         x:Name="PasswordBox"
+                                                         Height="24"
+                                                         Width="400"
+                                                         HorizontalAlignment="Left"
+                                                         extended:TextBoxProperties.AllowedCharactersRegex="[^~]"
+                                                         Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <placeholder:PlaceholderTextBox Grid.Row="2"
+                                                            Placeholder="{Binding PlaceholderReasonSigning}"
+                                                            ToolTip="{Binding ToolTipSReasonSigning}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding ReasonSigning, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,0,0,0"
+                                                            Padding="2" />
+
+                            <placeholder:PlaceholderTextBox Grid.Row="3"
+                                                            Placeholder="{Binding PlaceholderLocationSigning}"
+                                                            ToolTip="{Binding ToolTipLocationSigning}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding LocationSigning, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,4,0,0"
+                                                            Padding="2" />
+
+                            <placeholder:PlaceholderTextBox Grid.Row="4"
+                                                            Placeholder="{Binding PlaceholderContactInfoSigning}"
+                                                            ToolTip="{Binding ToolTipContactInfoSigning}"
+                                                            HorizontalContentAlignment="Left"
+                                                            HorizontalAlignment="Left"
+                                                            Style="{StaticResource ErrorAtBorderBrushTextBoxPlaceholder}"
+                                                            Text="{Binding ContactInfoSigning, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="22"
+                                                            Width="400"
+                                                            MaxLength="400"
+                                                            BorderThickness="0.5"
+                                                            Margin="4,4,0,0"
+                                                            Padding="2" />
+                        </Grid>
+                    </GroupBox>
+
+                    <commoncontrols:StatusMessageControl Grid.Row="1"
+                                                         Margin="0,8,0,0"
+                                                         Grid.Column="1"
+                                                         Grid.ColumnSpan="1"
+                                                         DataContext="{Binding StatusMessageViewModel}" />
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

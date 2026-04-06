@@ -62,9 +62,9 @@ You can find it in:
 1. Go to the [Releases](../../releases) page
 2. Download the latest `.zip` file
 3. Create a folder structure as described in the [Configuration — end users](#configuration--end-users) section
-4. Extract the ZIP into the `tulo.eInvoiceApp/` folder
-5. Edit your `appsettings.json` in the `tulo.eInvoiceApp-appsettings/` folder with your seller data and preferences
-6. Run `tulo.eInvoiceApp.exe`
+4. Extract the ZIP into the `tulo.eInvoiceCreatorZUGFeRD/` folder
+5. Edit your `appsettings.json` in the `tulo.eInvoiceCreatorZUGFeRD-appsettings/` folder with your seller data and preferences
+6. Run `tulo.eInvoiceCreatorZUGFeRD.exe`
 
 No installer required.
 
@@ -276,18 +276,18 @@ Recommended folder structure:
 
 ```
 Root/
-├── tulo.eInvoiceApp/                     ← extract the ZIP here
-│   └── tulo.eInvoiceApp.exe
+├── tulo.eInvoiceCreatorZUGFeRD/                     ← extract the ZIP here
+│   └── tulo.eInvoiceCreatorZUGFeRD.exe
 │
-└── tulo.eInvoiceApp-appsettings/         ← your custom settings live here
+└── tulo.eInvoiceCreatorZUGFeRD-appsettings/         ← your custom settings live here
     └── appsettings.json                  ← never overwritten by updates
 ```
 
 The application automatically detects and loads the `appsettings.json`
-from the `tulo.eInvoiceApp-appsettings` folder if it exists.
+from the `tulo.eInvoiceCreatorZUGFeRD-appsettings` folder if it exists.
 
 This means you can update the application by simply replacing the contents
-of `tulo.eInvoiceApp/` without losing your seller data, output paths,
+of `tulo.eInvoiceCreatorZUGFeRD/` without losing your seller data, output paths,
 certificate configuration, or any other customization.
 
 ---
@@ -304,7 +304,7 @@ The following files are loaded automatically if they exist:
 | `appsettings.json` | Base configuration — committed to source control |
 | `appsettings.{machinename}.json` | Per-developer overrides — not committed (add to `.gitignore`) |
 | `AdditionalParameters_{machinename}.json` | Additional per-machine parameters — not committed |
-| `tulo.eInvoiceApp-appsettings/appsettings.json` | External folder override — hot-reload enabled |
+| `tulo.eInvoiceCreatorZUGFeRD-appsettings/appsettings.json` | External folder override — hot-reload enabled |
 
 This allows every developer to use different output paths, certificates,
 or seller data locally without affecting other team members or the shared configuration.
@@ -393,8 +393,8 @@ Two log files are written to the system temp directory:
 
 | File | Content |
 |---|---|
-| `tulo.eInvoiceApp_.log` | Full log — all levels (rolling daily, 7 days) |
-| `tulo.eInvoiceApp_Error_.log` | Error-only log (rolling daily, 7 days) |
+| `tulo.eInvoiceCreatorZUGFeRD_.log` | Full log — all levels (rolling daily, 7 days) |
+| `tulo.eInvoiceCreatorZUGFeRD_Error_.log` | Error-only log (rolling daily, 7 days) |
 
 Every log entry includes timestamp, username, thread ID, process ID, log level,
 and source context — making it easy to trace issues across pipeline steps.
@@ -465,7 +465,7 @@ All credits go to their respective authors and maintainers.
 This tool is a private project. If it helps you, support is appreciated.
 
 - ☕ [PayPal](https://paypal.me/MarceloGuartanAndrad)
-- ⭐ [GitHub](https://github.com/TuloSharp/tulo.eInvoiceApp.git)
+- ⭐ [GitHub](https://github.com/TuloSharp/tulo.eInvoiceCreatorZUGFeRD.git)
 
 ---
 
