@@ -42,7 +42,7 @@ public class InvoiceViewModel : BaseViewModel
 
     public Invoice Invoice { get; private set; } = new Invoice();
 
-    public double? NormalWidthBeforePreview { get; set; } = 740;
+    public double? NormalWidthBeforePreview { get; set; } = 650;
 
     #region InvoicePositions
     private readonly ObservableCollection<InvoicePositionCardItemViewModel> _invoicePositionCardListItemViewModel;
