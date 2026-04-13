@@ -865,6 +865,9 @@ public class InvoiceViewModel : BaseViewModel
     public string ToolTipPaymentDueDateRangeText { get; private set; } = string.Empty;
     public string ToolTipNoDiscountPreviewText { get; private set; } = string.Empty;
 
+    //Search
+    public string ToolTipSearchText { get; private set; } = string.Empty;
+
     private void FillAllInvoiceToolTips()
     {
         // Buyer Party tooltips
@@ -906,6 +909,9 @@ public class InvoiceViewModel : BaseViewModel
         ToolTipDiscountPreviewText = _translatorUiProvider.Translate("ToolTipDiscountPreviewText");
         ToolTipPaymentDueDateRangeText = _translatorUiProvider.Translate("ToolTipPaymentDueDateRangeText");
         ToolTipNoDiscountPreviewText = _translatorUiProvider.Translate("ToolTipNoDiscountPreviewText");
+
+        //search
+        ToolTipSearch = _translatorUiProvider.Translate("ToolTipSearch");
     }
     #endregion
 

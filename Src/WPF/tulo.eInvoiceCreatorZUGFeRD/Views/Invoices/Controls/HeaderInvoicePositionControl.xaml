@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:tulo.eInvoiceCreatorZUGFeRD.Views.Invoices.Controls"
+             xmlns:placeholder="clr-namespace:tulo.PlaceholderTextBoxControl;assembly=tulo.PlaceholderTextBoxControl"
              mc:Ignorable="d"
              d:DesignHeight="44"
              MaxWidth="1000"
@@ -38,19 +39,15 @@
                 <ColumnDefinition Width="4" />
             </Grid.ColumnDefinitions>
 
-            <!--<Button Name="cleanupButton"
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Foreground="Transparent"
-                    ToolTip="Cleanup Invoice"
-                    Command="{Binding CleanUpInvoiceViewCommand}">
-                <Grid>
-                    <Path Style="{StaticResource ContentButtonPathStyle}"
-                          Data="{StaticResource CleanUpIconSVG}"
-                          Fill="{StaticResource ButtonBrushIconColor}" />
-                </Grid>
-            </Button>-->
+            <placeholder:PlaceholderTextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Grid.Column="1"
+                                            ToolTip="{Binding ToolTipSearchText}"
+                                            Placeholder="🔍"
+                                            BorderThickness="0.5"
+                                            Margin="0,2,4,0"
+                                            Width="300"
+                                            Height="24"
+                                            Padding="6,2" />
 
             <Button Name="createButton"
                     Grid.Column="3"

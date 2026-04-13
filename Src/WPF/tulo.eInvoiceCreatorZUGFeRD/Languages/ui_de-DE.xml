@@ -52,6 +52,8 @@
   <entry key="ToolTipCreateElectronicInvoice">Elektronische PdfA3-Rechnung erstellen und exportieren.</entry>
   <entry key="ToolTipSaveCustomerData">Kundendaten können in einer JSON-Datei gespeichert werden.</entry>
   <entry key="ToolTipLoadCustomerData">Kundendaten können aus einer JSON-Datei geladen werden.</entry>
+
+  <entry key="ToolTipSearchText">Eintrag suchen</entry>
   <!--#endregion -->
 
   <!--#region Invoice Placeholders -->

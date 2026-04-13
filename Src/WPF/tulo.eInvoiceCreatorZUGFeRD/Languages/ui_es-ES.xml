@@ -52,6 +52,8 @@
   <entry key="ToolTipCreateElectronicInvoice">Crear y exportar la factura electrónica PdfA3.</entry>
   <entry key="ToolTipSaveCustomerData">Los datos del cliente pueden guardarse en un archivo JSON.</entry>
   <entry key="ToolTipLoadCustomerData">Los datos del cliente pueden cargarse desde un archivo JSON.</entry>
+
+  <entry key="ToolTipSearchText">Buscar el item</entry>
   <!--#endregion -->
 
   <!--#region Invoice Placeholders -->

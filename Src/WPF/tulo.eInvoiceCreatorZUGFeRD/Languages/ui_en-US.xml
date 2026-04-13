@@ -52,6 +52,8 @@
   <entry key="ToolTipCreateElectronicInvoice">Create and export the electronic PdfA3 invoice.</entry>
   <entry key="ToolTipSaveCustomerData">Customer data can saved into json file</entry>
   <entry key="ToolTipLoadCustomerData">Customer data can be loaded from a json file</entry>
+  
+  <entry key="ToolTipSearchText">Search item</entry>
   <!--#endregion -->
 
   <!--#region Invoice Placeholders -->
