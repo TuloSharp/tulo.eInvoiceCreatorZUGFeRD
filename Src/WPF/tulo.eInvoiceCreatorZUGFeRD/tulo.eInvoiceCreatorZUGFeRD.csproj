@@ -24,7 +24,12 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Copyright>© 2025–2026 Tulo Team</Copyright>
+    <ApplicationIcon>Assets\TuloTeam.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="Assets\TuloTeam.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Markdig.Wpf" />
