@@ -126,7 +126,7 @@ public class GenerateXmlCiiIntegrationTests
 
         // XSD-Validierung (Extended)
         CiiSchemaValidator.ValidateCiiZugferd24Extended(xml);
-        // optional use SAXON but ist not free
+       
         //CiiSchematronValidator.ValidateCiiExtendedSchematron(xml);
 
         SaveXmlFile(invoice, xml);

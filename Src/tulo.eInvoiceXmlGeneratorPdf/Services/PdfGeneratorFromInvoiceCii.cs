@@ -92,7 +92,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
                 yPosition += 16;
             }
             else
-                yPosition += 26;
+                yPosition += 8; //for the letterhead
             #endregion
 
             #region Buyer, Seller & Invoice-Info Tables

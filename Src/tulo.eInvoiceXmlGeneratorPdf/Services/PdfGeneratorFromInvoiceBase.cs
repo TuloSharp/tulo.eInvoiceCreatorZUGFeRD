@@ -548,13 +548,9 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
             string normalizedIconKey = NormalizeIconKey(fieldKey);
 
-            bool allowIcon = keepIconsForPhoneEmailOnly &&
-                             (normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) ||
-                              normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase));
+            bool allowIcon = keepIconsForPhoneEmailOnly && (normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) || normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase));
 
-            bool isCompanyName =
-                fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) &&
-                !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
+            bool isCompanyName = fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) && !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
 
             XFont f = isCompanyName ? nameBold : fontBody;
             XBrush b = isCompanyName ? _darkBlueBrushColor : _blackBrushColor;
@@ -563,7 +559,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         }
 
         // Build lines (Buyer)
-        var buyerLines = new List<(string text, XFont font, string iconKey)>();
+        var buyerLines = new List<(string text, XFont font, XBrush brush, string iconKey)>();
         foreach (var (xpathOrValue, fieldKey) in buyerRows)
         {
             var value = ResolveXmlOrValue(xmlDoc, nsmgr, xpathOrValue);
@@ -571,11 +567,15 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
             var normalizedIconKey = NormalizeIconKey(fieldKey);
 
-            var allowIcon = keepIconsForPhoneEmailOnly &&
-                            (normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) ||
-                             normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase));
+            var allowIcon = keepIconsForPhoneEmailOnly && (normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) || normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase));
 
-            buyerLines.Add((value, fontBody, allowIcon ? normalizedIconKey : string.Empty));
+            bool isCompanyName = fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) && !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
+            
+            XFont f = isCompanyName ? nameBold : fontBody;
+            XBrush b = isCompanyName ? _darkBlueBrushColor : _blackBrushColor;
+
+
+            buyerLines.Add((value, f ,b, allowIcon ? normalizedIconKey : string.Empty));
         }
 
         // Heights
@@ -639,9 +639,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         xGraphics.DrawRectangle(_invoiceBoxBrush, boxRect);
 
         double innerY = topY + invoiceBoxPadding;
-        xGraphics.DrawString(invoiceBoxTitle, titleBold, XBrushes.Black,
-            new XRect(invoiceX + invoiceBoxPadding, innerY, invoiceBoxWidth - 2 * invoiceBoxPadding, titleH),
-            XStringFormats.TopLeft);
+        xGraphics.DrawString(invoiceBoxTitle, titleBold, XBrushes.Black, new XRect(invoiceX + invoiceBoxPadding, innerY, invoiceBoxWidth - 2 * invoiceBoxPadding, titleH), XStringFormats.TopLeft);
 
         innerY += titleH + 8;
         xGraphics.DrawLine(linePen, invoiceX, innerY - 4, invoiceX + invoiceBoxWidth, innerY - 4);
@@ -661,13 +659,9 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             string value = node != null ? node.InnerText : ContentNotFound;
             value = ParseDateTimeToRightFormat(xpath, value);
 
-            xGraphics.DrawString($"{label}:", fontBody, XBrushes.Black,
-                new XRect(labelX, innerY, (valueX - labelX) - 8, invoiceRowH),
-                XStringFormats.TopLeft);
+            xGraphics.DrawString($"{label}:", fontBody, XBrushes.Black, new XRect(labelX, innerY, (valueX - labelX) - 8, invoiceRowH),XStringFormats.TopLeft);
 
-            xGraphics.DrawString(value, fontBody, XBrushes.Black,
-                new XRect(valueX, innerY, valueW, invoiceRowH),
-                XStringFormats.TopRight);
+            xGraphics.DrawString(value, fontBody, XBrushes.Black, new XRect(valueX, innerY, valueW, invoiceRowH), XStringFormats.TopRight);
 
             innerY += invoiceRowH;
         }
@@ -678,20 +672,15 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         xGraphics.DrawLine(linePen, leftMargin, sepY, leftMargin + contentWidth, sepY);
 
         // BUYER
-        double buyerY = sepY + sepGapBottom;
-
-        //OverviewBuyer
-        string overviewBuyer = translationProvider.Translate("OverviewBuyer", "OverviewBuyer");
-        xGraphics.DrawString(overviewBuyer, titleBold, _darkBlueBrushColor,
-            new XRect(leftMargin, buyerY, leftBlockWidth, titleH),
-            XStringFormats.TopLeft);
+        double buyerY = sepY + sepGapBottom -20; //to move the block a bit up, so that the gap to the separator line is not that big in case there are only few lines in the buyer block
 
         buyerY += titleH + buyerTitleGap;
+        const double buyerIndent = 30; //for the letterhead  25mm to the left margin
 
         for (int i = 0; i < buyerLines.Count; i++)
         {
-            var (text, f, iconKey) = buyerLines[i];
-            double textX = leftMargin;
+            var (text, f, brush, iconKey) = buyerLines[i];
+            double textX = leftMargin + buyerIndent;
 
             if (!string.IsNullOrEmpty(iconKey))
             {
@@ -702,10 +691,12 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             var lines = WrapForWidth(ref xGraphics, text, f, leftBlockWidth);
             for (int k = 0; k < lines.Length; k++)
             {
-                xGraphics.DrawString(lines[k], f, XBrushes.Black,
-                    new XRect(textX, buyerY, leftBlockWidth - (textX - leftMargin), lineH),
-                    XStringFormats.TopLeft);
+                xGraphics.DrawString(lines[k], f, brush, new XRect(textX, buyerY, leftBlockWidth - (textX - leftMargin), lineH), XStringFormats.TopLeft);
+
                 buyerY += lineH;
+
+                if (f == nameBold && k == lines.Length - 1)
+                    buyerY += 4;
             }
         }
 
@@ -1398,9 +1389,19 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         return result;
     }
 
-    public string ReadLineNotesAsText(XmlDocument xmlDoc, XmlNamespaceManager nsmgr, string notesNodeXpath, string contentRelativeXpath, string? subjectRelativeXpath = null, bool includeSubject = true, string separator = "\n", string[]? subjectFilter = null)
+    public string ReadLineNotesAsText(XmlDocument xmlDoc, XmlNamespaceManager nsmgr, string notesNodeXpath, string contentRelativeXpath, string? subjectRelativeXpath = null, bool includeSubject = true, string separator = "\r\n", string[]? subjectFilter = null)
     {
-        return string.Join(separator, ReadLineNotes(xmlDoc, nsmgr, notesNodeXpath, contentRelativeXpath, subjectRelativeXpath, includeSubject, subjectFilter));
+        var lines = ReadLineNotes(xmlDoc, nsmgr, notesNodeXpath, contentRelativeXpath, subjectRelativeXpath, includeSubject, subjectFilter);
+
+        if (lines == null || lines.Count == 0)
+            return string.Empty;
+
+        var cleanedLines = lines
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x.Trim())
+            .ToList();
+
+        return string.Join(separator, cleanedLines);
     }
 
     public string GetContentXNodesAsText(XmlNamespaceManager nsmgr, string xpath, XmlDocument? xmlDoc, string separator = "  ")

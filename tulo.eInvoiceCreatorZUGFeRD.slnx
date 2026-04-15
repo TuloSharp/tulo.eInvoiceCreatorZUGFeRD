@@ -22,7 +22,7 @@
   <Folder Name="/Tests/">
     <Project Path="Tests/tulo.CreateZugferdPdfA3Tests/tulo.UpgradeToPdfA3Tests.csproj" />
     <Project Path="Tests/tulo.eInvocieXmlGeneratorCiiTests/tulo.eInvocieXmlGeneratorCiiTests.csproj" />
-    <Project Path="Tests/tulo.eInvoiceCreatorZUGFeRDTests/tulo.eInvoiceCreatorZUGFeRDTests.csproj" />
-    <Project Path="Tests/tulo.eInvoiceXmlGeneratorPdfTests/tulo.XMLeInvoiceToPdfTests.csproj" />
+    <Project Path="Tests/tulo.eInvoiceAppTests/tulo.eInvoiceAppTests.csproj" />
+    <Project Path="Tests/tulo.eInvoiceXmlGeneratorPdfTests/tulo.eInvoiceXmlGeneratorPdfTests.csproj" />
   </Folder>
 </Solution>

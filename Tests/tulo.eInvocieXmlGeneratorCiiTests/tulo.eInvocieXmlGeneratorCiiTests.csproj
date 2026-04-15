@@ -19,6 +19,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
 		<PackageReference Include="MSTest" />
+		<!--<PackageReference Include="SaxonCS" />-->
 		<PackageReference Include="System.Text.RegularExpressions" />
 	</ItemGroup>
 
@@ -84,6 +85,9 @@
 		</None>
 		<None Update="Schemas\FACTUR-X_EXTENDED.xslt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Schemas\FACTUR-X_EXTENDED_codedb.xml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Schemas\FACTUR-X_EXTENDED_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

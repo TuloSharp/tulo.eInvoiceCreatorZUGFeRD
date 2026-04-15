@@ -911,7 +911,7 @@ public class InvoiceViewModel : BaseViewModel
         ToolTipNoDiscountPreviewText = _translatorUiProvider.Translate("ToolTipNoDiscountPreviewText");
 
         //search
-        ToolTipSearch = _translatorUiProvider.Translate("ToolTipSearch");
+        ToolTipSearchText = _translatorUiProvider.Translate("ToolTipSearch");
     }
     #endregion
 
