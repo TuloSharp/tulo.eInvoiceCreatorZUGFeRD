@@ -12,7 +12,7 @@ jobs:
   call-release:
     uses: ./.github/workflows/common-release.yml
     with:
-      project_name: eInvoiceApp
+      project_name: eInvoiceCreatorZUGFeRD
       project_path: Src/WPF/tulo.eInvoiceCreatorZUGFeRD/tulo.eInvoiceCreatorZUGFeRD.csproj
       publish_dir: publish/tulo.eInvoiceCreatorZUGFeRD
       zip_prefix: tulo.eInvoiceCreatorZUGFeRD
@@ -21,3 +21,26 @@ jobs:
       dotnet_version: 8.0.x
       config_file: NuGet.config
       prerelease: false
+      release_body: |
+       ## Release Notes
+      
+       ### Requirements
+         - Windows x64
+         - .NET 8 Runtime installed
+
+       ### How to use
+         1. Download the ZIP file
+         2. Extract the ZIP file
+         3. Run tulo.eInvoiceCreatorZUGFeRD.exe
+        
+       ### Notes
+         - Please report issues on GitHub
+         
+       ### v1.0.1
+         - Footer rendering improved
+         - Buyer block alignment adjusted for the letterhead
+         - Multiple footer notes render correctly
+
+       ### v1.0.0
+        - first release for testing
+  

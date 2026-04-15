@@ -70,4 +70,18 @@
 	  <PackageReference Include="QRCoder" />
 	  <PackageReference Include="Svg" />
 	</ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Link>README.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+    <None Include="..\..\ReadMeAsserts\**\*.*">
+      <Link>ReadMeAsserts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
 </Project>

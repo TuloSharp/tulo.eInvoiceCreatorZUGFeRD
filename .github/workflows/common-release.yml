@@ -50,6 +50,7 @@ jobs:
       EXECUTABLE_NAME: ${{ inputs.executable_name }}
       RUNTIME: ${{ inputs.runtime }}
       CONFIG_FILE: ${{ inputs.config_file }}
+      RELEASE_BODY: ${{ inputs.release_body }}
 
     steps:
       - name: Checkout
@@ -172,30 +173,6 @@ jobs:
           Write-Host "EXE found: $exePath"
           Write-Host "::endgroup::"
 
-      - name: Create README.txt
-        shell: pwsh
-        run: |
-          Write-Host "::group::Create README.txt"
-          @"
-          $env:PROJECT_NAME
-
-          Requirements
-          - Windows x64
-          - .NET 8 Runtime installed
-
-          How to start
-          1. Download the ZIP file
-          2. Extract the ZIP file
-          3. Run $env:EXECUTABLE_NAME
-
-          Notes
-          - This is a beta version for testing
-          - Please report issues on GitHub
-          "@ | Out-File -FilePath (Join-Path $env:PUBLISH_DIR "README.txt") -Encoding utf8
-
-          Get-Content (Join-Path $env:PUBLISH_DIR "README.txt")
-          Write-Host "::endgroup::"
-
       - name: Create ZIP
         shell: pwsh
         run: |
@@ -219,21 +196,7 @@ jobs:
           name: ${{ inputs.project_name }} ${{ github.ref_name }}
           prerelease: ${{ inputs.prerelease }}
           files: ${{ env.ZIP_NAME }}
-          body: |
-            Beta release of ${{ inputs.project_name }}
-
-            Requirements
-            - Windows x64
-            - .NET 8 Runtime installed
-
-            How to use
-            1. Download the ZIP file
-            2. Extract the ZIP file
-            3. Run ${{ inputs.executable_name }}
-
-            Notes
-            - This is a beta version for testing
-            - Please report issues on GitHub
+          body: ${{  env.RELEASE_BODY }}
 
       - name: Final summary
         shell: pwsh
