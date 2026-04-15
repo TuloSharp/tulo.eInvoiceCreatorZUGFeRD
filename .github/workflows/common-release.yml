@@ -34,6 +34,10 @@ on:
         required: false
         type: boolean
         default: false
+      release_body:
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: write
