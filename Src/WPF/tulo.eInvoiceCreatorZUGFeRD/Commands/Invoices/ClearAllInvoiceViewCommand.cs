@@ -9,10 +9,8 @@ namespace tulo.eInvoiceCreatorZUGFeRD.Commands.Invoices;
 public class ClearAllInvoiceViewCommand(InvoiceViewModel invoiceViewModel, ICollectorCollection collectorCollection) : AsyncBaseCommand
 {
     #region Services / Stores filled via CollectorCollection
-    private readonly ILogger<ClearAllInvoiceViewCommand> _logger =
-        collectorCollection.GetService<ILoggerFactory>().CreateLogger<ClearAllInvoiceViewCommand>();
-    private readonly IInvoicePositionService _invoicePositionService =
-        collectorCollection.GetService<IInvoicePositionService>();
+    private readonly ILogger<ClearAllInvoiceViewCommand> _logger = collectorCollection.GetService<ILoggerFactory>().CreateLogger<ClearAllInvoiceViewCommand>();
+    private readonly IInvoicePositionService _invoicePositionService = collectorCollection.GetService<IInvoicePositionService>();
     #endregion
 
     protected override async Task ExecuteAsync(object parameter)
@@ -23,10 +21,13 @@ public class ClearAllInvoiceViewCommand(InvoiceViewModel invoiceViewModel, IColl
         {
             // 1. Delete all invoice positions from the store
             //    ToList() first — never modify a collection while iterating it
-            var positionIds = invoiceViewModel.InvoicePositionCardListItemCollectionView.Cast<InvoicePositionCardItemViewModel>().Select(vm => vm.InvoicePositionId).ToList();
+            var posIds2Delete = invoiceViewModel.InvoicePositionCardListItemCollectionView.Cast<InvoicePositionCardItemViewModel>().Select(vm => vm.InvoicePositionId).ToList();
 
-            foreach (var id in positionIds)
-                await _invoicePositionService.DeleteInvoicePositionAsync(id);
+            foreach (var posId in posIds2Delete)
+            {
+                await _invoicePositionService.DeleteInvoicePositionAsync(posId);
+                invoiceViewModel.RemoveInvoicePositionFromUi(posId);
+            }
 
             // 2. Clear invoice header
             invoiceViewModel.InvoiceNumber = string.Empty;

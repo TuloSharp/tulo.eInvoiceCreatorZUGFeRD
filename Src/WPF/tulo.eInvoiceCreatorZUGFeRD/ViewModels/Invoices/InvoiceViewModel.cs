@@ -685,8 +685,8 @@ public class InvoiceViewModel : BaseViewModel
         FillAllInvoiceLabelsAndContents();
 
         //Only for UI Tests
-        SeedTestSellerData();
-        SeedTestInvoicePositions();
+        //SeedTestSellerData();
+        //SeedTestInvoicePositions();
     }
 
     private void OnInvoicePositionCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -769,13 +769,17 @@ public class InvoiceViewModel : BaseViewModel
 
         existingItemViewModel.Update(invoicePositionDetailsDTO);
         InvoicePositionCardListItemCollectionView.Refresh();
-
     }
 
     private void OnInvoicePositionDeleted(Guid id)
     {
+        RemoveInvoicePositionFromUi(id);
+    }
+
+    public void RemoveInvoicePositionFromUi(Guid id)
+    {
         var existingItemViewModel = _invoicePositionCardListItemViewModel
-            .FirstOrDefault(x => x.InvoicePositionId == id);
+           .FirstOrDefault(x => x.InvoicePositionId == id);
 
         if (existingItemViewModel != null)
             _invoicePositionCardListItemViewModel.Remove(existingItemViewModel);
@@ -789,6 +793,7 @@ public class InvoiceViewModel : BaseViewModel
 
         InvoicePositionCardListItemCollectionView.Refresh();
     }
+
 
     public static InvoiceViewModel LoadInvoiceViewModel(ICollectorCollection collectorCollection)
     {
