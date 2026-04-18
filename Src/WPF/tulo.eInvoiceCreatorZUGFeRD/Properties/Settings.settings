@@ -9,7 +9,7 @@
       <Value Profile="(Default)">150</Value>
     </Setting>
     <Setting Name="NormalWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">650</Value>
+      <Value Profile="(Default)">730</Value>
     </Setting>
     <Setting Name="NormalHeight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">900</Value>

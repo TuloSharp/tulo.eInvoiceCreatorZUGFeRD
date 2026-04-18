@@ -126,7 +126,7 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
     private void SaveWindowSize()
     {
         //only for this app 
-        Settings.Default.NormalWidth = 650;
+        Settings.Default.NormalWidth = AppConstants.Ui.WidthBeforePreview;
         //Settings.Default.NormalWidth = _width;
         Settings.Default.NormalHeight = _height;
         Settings.Default.Save();

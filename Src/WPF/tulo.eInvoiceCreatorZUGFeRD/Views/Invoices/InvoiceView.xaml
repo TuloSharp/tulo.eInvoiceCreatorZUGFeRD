@@ -16,7 +16,7 @@
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              mc:Ignorable="d"
              d:DesignHeight="700"
-             d:DesignWidth="600">
+             d:DesignWidth="730">
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -43,7 +43,7 @@
           ToolTipService.ShowOnDisabled="True"
           FocusManager.FocusedElement="{Binding ElementName=currentListView}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="672" />
             <ColumnDefinition Width="*" />
             <!--<ColumnDefinition Width="{Binding IsPreviewEnabled, Converter={StaticResource BoolToGridLengthConverter}}" />-->
 

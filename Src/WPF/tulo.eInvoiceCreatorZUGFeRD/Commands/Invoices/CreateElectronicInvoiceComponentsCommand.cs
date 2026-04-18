@@ -326,7 +326,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
                 if (window is not null)
                 {
-                    const double baseWidth = 650;
+                    const double baseWidth = AppConstants.Ui.WidthBeforePreview;
                     const double extraWidth = 800;
 
                     invoiceViewModel.NormalWidthBeforePreview ??= baseWidth;

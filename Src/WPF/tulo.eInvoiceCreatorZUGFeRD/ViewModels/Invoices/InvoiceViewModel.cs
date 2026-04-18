@@ -42,7 +42,7 @@ public class InvoiceViewModel : BaseViewModel
 
     public Invoice Invoice { get; private set; } = new Invoice();
 
-    public double? NormalWidthBeforePreview { get; set; } = 650;
+    public double? NormalWidthBeforePreview { get; set; } = AppConstants.Ui.WidthBeforePreview;
 
     #region InvoicePositions
     private readonly ObservableCollection<InvoicePositionCardItemViewModel> _invoicePositionCardListItemViewModel;
@@ -685,8 +685,8 @@ public class InvoiceViewModel : BaseViewModel
         FillAllInvoiceLabelsAndContents();
 
         //Only for UI Tests
-        //SeedTestSellerData();
-        //SeedTestInvoicePositions();
+        SeedTestSellerData();
+        SeedTestInvoicePositions();
     }
 
     private void OnInvoicePositionCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

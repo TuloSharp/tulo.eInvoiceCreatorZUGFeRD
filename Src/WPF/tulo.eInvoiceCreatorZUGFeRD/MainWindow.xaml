@@ -29,7 +29,7 @@
         Title="eInvoice Viewer"
         Icon="Assets/TuloTeam.ico"
         SnapsToDevicePixels="True"
-        MinWidth="650"
+        MinWidth="730"
         MinHeight="1000">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="1"

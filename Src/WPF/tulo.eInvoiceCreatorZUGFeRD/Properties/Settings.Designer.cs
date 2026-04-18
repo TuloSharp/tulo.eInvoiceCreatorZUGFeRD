@@ -49,7 +49,7 @@ namespace tulo.eInvoiceCreatorZUGFeRD.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("650")]
+        [global::System.Configuration.DefaultSettingValueAttribute("730")]
         public double NormalWidth {
             get {
                 return ((double)(this["NormalWidth"]));
