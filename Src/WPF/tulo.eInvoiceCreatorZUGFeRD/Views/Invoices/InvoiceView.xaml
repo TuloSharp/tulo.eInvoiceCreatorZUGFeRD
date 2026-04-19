@@ -135,6 +135,7 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
                     <ToggleButton Grid.Column="8"
+                                  IsChecked="{Binding IsPreviewEnabled, Mode=TwoWay}"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center"
                                   ToolTip="{Binding ToolTipCreatePreviewElectronicInvoice}"

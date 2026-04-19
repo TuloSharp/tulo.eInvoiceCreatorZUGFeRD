@@ -58,7 +58,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             SetError(string.Format(_translatorUiProvider.Translate("CreateInvoiceCmd_ErrorPipelineFailed"), ex.Message), encode: true);
         }
     }
-   
+
     #region Pipeline
     private async Task RunPipelineAsync(bool isPreview, bool hasToCreate)
     {
@@ -76,8 +76,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
         if (pdfStream is null)
         {
-            _logger.LogWarning("[Pipeline] PDF generation returned null. Aborting. " + "isPreview={IsPreview}, hasToCreate={HasToCreate}, " + "InvoiceNumber={InvoiceNumber}.",
-                isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
+            _logger.LogWarning("[Pipeline] PDF generation returned null. Aborting. " + "isPreview={IsPreview}, hasToCreate={HasToCreate}, " + "InvoiceNumber={InvoiceNumber}.", isPreview, hasToCreate, invoiceViewModel.InvoiceNumber);
             SetError(_translatorUiProvider.Translate("CreateInvoiceCmd_ErrorPdfNull"));
             return;
         }
@@ -108,26 +107,20 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
             if (!created)
             {
                 _logger.LogWarning("[Pipeline] File creation did not complete successfully. Preview will be skipped.");
-
-                if (!isPreview)
-                    pdfMemoryStream.Dispose();
-
+                pdfMemoryStream.Dispose();
                 return;
             }
 
             _logger.LogInformation("[Pipeline] File creation finished successfully.");
+            pdfMemoryStream.Dispose();
+            _logger.LogInformation("[Pipeline] Non-preview run completed. Returning.");
+            return;
 
-            if (!isPreview)
-            {
-                pdfMemoryStream.Dispose();
-                _logger.LogInformation("[Pipeline] Non-preview run completed. Returning.");
-                return;
-            }
         }
         #endregion
-        
+
         #region Preview rendering
-        if (isPreview)
+        if (isPreview && !hasToCreate)
         {
             _logger.LogInformation("[Pipeline] isPreview=true → applying watermark and rendering.");
             pdfMemoryStream.Position = 0;
@@ -197,6 +190,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
                 invoiceViewModel.StatusMessage = $"ApplyPdfA failed: {pdfAResult.Message}";
                 invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
+                invoiceViewModel.IsPreviewEnabled = false; // Ensure preview is disabled after creation
                 return false;
             }
 
@@ -222,6 +216,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
             SetError(userMessage);
             invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
+            invoiceViewModel.IsPreviewEnabled = false; // Ensure preview is disabled after creation
             return false;
         }
 
@@ -294,6 +289,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
 
         // ── Reset UI slide button ─────────────────────────────────────────────
         invoiceViewModel.ResetSlideButton = !invoiceViewModel.ResetSlideButton;
+        invoiceViewModel.IsPreviewEnabled = false; // Ensure preview is disabled after creation
 
         // ── Open with default viewer ──────────────────────────────────────────
         if (_appOptions!.Value.Archive.CanOpenPdfWithDefaultApp)
@@ -330,8 +326,7 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
                     const double extraWidth = 800;
 
                     invoiceViewModel.NormalWidthBeforePreview ??= baseWidth;
-                    invoiceViewModel.NormalWidthBeforePreview =
-                        Math.Max(baseWidth, window.Width);
+                    invoiceViewModel.NormalWidthBeforePreview = Math.Max(baseWidth, window.Width);
 
                     var target = invoiceViewModel.NormalWidthBeforePreview.Value + extraWidth;
                     window.Width = Math.Min(target, SystemParameters.WorkArea.Width);
