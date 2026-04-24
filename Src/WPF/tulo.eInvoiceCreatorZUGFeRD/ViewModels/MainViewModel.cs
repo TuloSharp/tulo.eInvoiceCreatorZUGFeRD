@@ -56,7 +56,7 @@ public class MainViewModel : BaseViewModel, IResizeWindowViewModel
     }
     #endregion
 
-    #region Size& Pos Window Properties
+    #region Size & Pos Window Properties
 
     private int Counter2AvoidSaveProperties { get; set; }
 

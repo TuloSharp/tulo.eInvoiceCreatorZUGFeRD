@@ -668,14 +668,15 @@ public class InvoiceViewModel : BaseViewModel
         LoadInvoicePositionsCommand = new LoadInvoicePositionsCommand(this, _collectorCollection);
         CreateElectronicInvoiceComponentsCommand = new CreateElectronicInvoiceComponentsCommand(this, _collectorCollection);
 
+        #region Events
         _selectedInvoicePositionStore!.SelectedInvoicePositionChanged += OnSelectedInvoicePositionChanged;
         _invoicePositionCardListItemViewModel.CollectionChanged += OnInvoicePositionCollectionChanged;
 
         _invoicePositionService.InvoicePositionCreated += OnInvoicePositionCreated;
         _invoicePositionService.InvoicePositionUpdated += OnInvoicePositionUpdated;
         _invoicePositionService.InvoicePositionDeleted += OnInvoicePositionDeleted;
-
-        _invoicePositionService.InvoicePositionsLoaded += OnInvoicePositionsLoaded;
+        _invoicePositionService.InvoicePositionsLoaded += OnInvoicePositionsLoaded; 
+        #endregion
 
         LoadDocumentTypeCodesList();
         LoadPaymentMeansCodesList();
@@ -1042,6 +1043,7 @@ public class InvoiceViewModel : BaseViewModel
         //_globalProps4UiControl.IsAltKeyPressedChanged -= OnIsAltKeyIsChanged_IsAltKeyPressedChanged;
 
         _selectedInvoicePositionStore.SelectedInvoicePositionChanged -= OnSelectedInvoicePositionChanged;
+        _invoicePositionCardListItemViewModel.CollectionChanged -= OnInvoicePositionCollectionChanged;
 
         _invoicePositionService.InvoicePositionCreated -= OnInvoicePositionCreated;
         _invoicePositionService.InvoicePositionUpdated -= OnInvoicePositionUpdated;
