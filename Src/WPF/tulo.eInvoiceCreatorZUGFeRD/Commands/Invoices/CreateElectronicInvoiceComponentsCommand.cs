@@ -71,8 +71,9 @@ public class CreateElectronicInvoiceComponentsCommand(InvoiceViewModel invoiceVi
         _logger.LogDebug("[Pipeline] Exporting CII to XML.");
         string xmlInvoiceContent = _xmlCiiExporter.ToXml(cii);
 
+        var companyLogopath = _appOptions?.Value?.CompanyLogo?.LogoPath ?? string.Empty;
         _logger.LogInformation("[Pipeline] Generating PDF stream.");
-        var pdfStream = _pdfGeneratorFromInvoice.GeneratePdfStream(xmlInvoiceFileName: string.Empty, xmlInvoiceContent: xmlInvoiceContent, hasToRenderHeader: false);
+        var pdfStream = _pdfGeneratorFromInvoice.GeneratePdfStream(xmlInvoiceFileName: string.Empty, xmlInvoiceContent: xmlInvoiceContent, false, companyLogopath);
 
         if (pdfStream is null)
         {

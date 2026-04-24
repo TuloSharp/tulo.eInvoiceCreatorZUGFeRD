@@ -36,5 +36,7 @@ public interface IAppOptions
     /// paths, signature algorithms, and signing behavior.
     /// </summary>
     SignatureOptions Signature { get; set; }
+
+    CompanyLogoOptions CompanyLogo { get; set; }
 }
 

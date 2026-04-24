@@ -40,7 +40,7 @@ public interface IPdfGeneratorFromInvoice
     /// <returns>
     /// The full file system path of the generated PDF file.
     /// </returns>
-    string GeneratePdfFile(string pdfPath, string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader);
+    string GeneratePdfFile(string pdfPath, string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader, string companyLogoPath);
 
     /// <summary>
     /// Generates a PDF document from the provided XML invoice data
@@ -66,6 +66,6 @@ public interface IPdfGeneratorFromInvoice
     /// A <see cref="MemoryStream"/> containing the generated PDF data.
     /// The caller is responsible for disposing the stream after use.
     /// </returns>
-    MemoryStream GeneratePdfStream(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader);
+    MemoryStream GeneratePdfStream(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader, string companyLogoPath);
 }
 

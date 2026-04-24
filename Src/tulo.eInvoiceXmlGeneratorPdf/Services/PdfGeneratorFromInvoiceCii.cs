@@ -19,7 +19,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
     }
 
     #region CII Invoice File
-    public string GeneratePdfFile(string pdfPath, string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader)
+    public string GeneratePdfFile(string pdfPath, string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader, string companyLogoPath)
     {
         LoadXmlInvoiceContent(xmlInvoiceContent);
 
@@ -29,7 +29,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
         {
             ApplyDocumentMetadata(pdfDoc);
 
-            CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
+            CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc, companyLogoPath);
             ApplyFooterToAllPages(pdfDoc);
             pdfDoc.Save(pdfPath);
         }
@@ -39,7 +39,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
     #endregion
 
     #region CII Invoice Stream
-    public MemoryStream GeneratePdfStream(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader)
+    public MemoryStream GeneratePdfStream(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader, string companyLogoPath)
     {
         LoadXmlInvoiceContent(xmlInvoiceContent);
 
@@ -50,7 +50,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
         {
             ApplyDocumentMetadata(pdfDoc);
 
-            CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc);
+            CreatePdfContent(xmlInvoiceFileName, xmlInvoiceContent, hasToRenderHeader, pdfDoc, companyLogoPath);
             ApplyFooterToAllPages(pdfDoc);
             pdfDoc.Save(pdfStream, false);
         }
@@ -61,7 +61,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
     #endregion
 
     #region Create PDf Content
-    private void CreatePdfContent(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader, PdfDocument pdfDoc)
+    private void CreatePdfContent(string xmlInvoiceFileName, string xmlInvoiceContent, bool hasToRenderHeader, PdfDocument pdfDoc, string companyLogoPath)
     {
         int yPosition = 20;
 
@@ -155,7 +155,7 @@ public class PdfGeneratorFromInvoiceCii(ITranslatorProvider translationProvider)
                 { "//ram:BuyerTradeParty/ram:ID", "BuyerRefId" }
             };
 
-            CreateBuyerInvocieDataSellerBlock(pdfDoc, ref pfdPage, ref xGraphics, invoiceDoc, nsmgr!, _translationProvider, sellerRows, buyerRows, _translationProvider.Translate(titleInvoiceTypeCode), invoiceFields, ref yPosition, fontTitleInfo, fontBody, iconDictionary, keepIconsForPhoneEmailOnly: true);
+            CreateBuyerInvocieDataSellerBlock(pdfDoc, ref pfdPage, ref xGraphics, invoiceDoc, nsmgr!, _translationProvider, sellerRows, buyerRows, _translationProvider.Translate(titleInvoiceTypeCode), invoiceFields, ref yPosition, fontTitleInfo, fontBody, iconDictionary, true, companyLogoPath);
             yPosition += 8;
             #endregion
 

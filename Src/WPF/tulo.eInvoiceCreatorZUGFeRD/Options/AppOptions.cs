@@ -10,6 +10,8 @@ public class AppOptions : IAppOptions
     public VatsOptions Vats { get; set; } = new();
 
     public SignatureOptions Signature { get; set; } = new();
+
+    public CompanyLogoOptions CompanyLogo { get; set; } = new();
 }
 
 public class InvoiceOptions
@@ -73,4 +75,9 @@ public sealed class SignatureOptions
     public string? Reason { get; set; }
     public string? Location { get; set; }
     public string? ContactInfo { get; set; }
+}
+
+public sealed class CompanyLogoOptions
+{
+    public string? LogoPath { get; set; }
 }

@@ -60,7 +60,7 @@ public class ZugferdPdfA3PdfSharpIntegrationTests
         string outputPdfAPath = Path.Combine(examplesDir, fileName + "_generated_pdfa.pdf");
         string outputPdfA3Path = Path.Combine(examplesDir, fileName + "_generated_pdfa3.pdf");
 
-        string createdPdfPath = _pdfGeneratorFromInvoice.GeneratePdfFile(outputGeneratedPdfPath, fileName + ".xml", xmlContent, hasToRenderHeader: true);
+        string createdPdfPath = _pdfGeneratorFromInvoice.GeneratePdfFile(outputGeneratedPdfPath, fileName + ".xml", xmlContent, true, string.Empty);
 
         Assert.IsFalse(string.IsNullOrWhiteSpace(createdPdfPath), "Generated PDF path is empty.");
         Assert.AreEqual(outputGeneratedPdfPath, createdPdfPath, "Generated PDF path is unexpected.");

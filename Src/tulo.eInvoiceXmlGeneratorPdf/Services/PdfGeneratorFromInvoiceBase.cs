@@ -510,7 +510,7 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
     }
     #endregion
 
-    public void CreateBuyerInvocieDataSellerBlock(PdfDocument pdfDoc, ref PdfPage pdfPage, ref XGraphics xGraphics, XmlDocument? xmlDoc, XmlNamespaceManager nsmgr, ITranslatorProvider translationProvider, List<(string xpathOrValue, string fieldKey)> sellerRows, List<(string xpathOrValue, string fieldKey)> buyerRows, string invoiceBoxTitle, Dictionary<string, string> invoiceFields, ref int yPosition, XFont fontTitleInfo, XFont fontBody, Dictionary<string, string> svgIconNames, bool keepIconsForPhoneEmailOnly = false)
+    public void CreateBuyerInvocieDataSellerBlock(PdfDocument pdfDoc, ref PdfPage pdfPage, ref XGraphics xGraphics, XmlDocument? xmlDoc, XmlNamespaceManager nsmgr, ITranslatorProvider translationProvider, List<(string xpathOrValue, string fieldKey)> sellerRows, List<(string xpathOrValue, string fieldKey)> buyerRows, string invoiceBoxTitle, Dictionary<string, string> invoiceFields, ref int yPosition, XFont fontTitleInfo, XFont fontBody, Dictionary<string, string> svgIconNames, bool keepIconsForPhoneEmailOnly = false, string? logoPath = null)
     {
         const double leftMargin = 40;
         const double rightMargin = 40;
@@ -519,38 +519,71 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
         const double invoiceBoxWidth = 260;
         const double invoiceBoxPadding = 12;
 
+        const double logoMaxWidth = 210;
+        const double logoMaxHeight = 80;
+
+        const double topBlockHeight = 95;
+        const double gapTopToBottom = 10;
+        const double gapBottomToLine = 1;
+
         XPen linePen = new XPen(_grayColor, 0.8);
 
         double pageWidth = pdfPage.Width.Point;
         double contentWidth = pageWidth - leftMargin - rightMargin;
 
         double leftBlockWidth = contentWidth - invoiceBoxWidth - gapToInvoiceBox;
-        if (leftBlockWidth < 180) leftBlockWidth = 180;
+
+        if (leftBlockWidth < 180)
+            leftBlockWidth = 180;
+
+        double rightBlockX = leftMargin + leftBlockWidth + gapToInvoiceBox;
 
         XFont titleBold;
-        try { titleBold = new XFont(fontTitleInfo.FontFamily.Name, fontTitleInfo.Size, XFontStyleEx.Bold); }
-        catch { titleBold = fontTitleInfo; }
+        try
+        {
+            titleBold = new XFont(fontTitleInfo.FontFamily.Name, fontTitleInfo.Size, XFontStyleEx.Bold);
+        }
+        catch
+        {
+            titleBold = fontTitleInfo;
+        }
 
         XFont nameBold;
-        try { nameBold = new XFont(fontBody.FontFamily.Name, fontBody.Size + 4, XFontStyleEx.Bold); }
-        catch { nameBold = new XFont(fontBody.FontFamily.Name, fontBody.Size + 4); }
+        try
+        {
+            nameBold = new XFont(fontBody.FontFamily.Name, fontBody.Size + 4, XFontStyleEx.Bold);
+        }
+        catch
+        {
+            nameBold = new XFont(fontBody.FontFamily.Name, fontBody.Size + 4);
+        }
 
         double lineH = fontBody.GetHeight();
         double titleH = titleBold.GetHeight();
         const int invoiceRowH = 12;
 
-        // Build lines (Seller)
+        // SELLER LINES
         var sellerLines = new List<(string text, XFont font, XBrush brush, string iconKey)>();
+
         foreach (var (xpathOrValue, fieldKey) in sellerRows)
         {
             string value = ResolveXmlOrValue(xmlDoc, nsmgr, xpathOrValue);
-            if (string.IsNullOrWhiteSpace(value) || value == ContentNotFound) continue;
+
+            if (string.IsNullOrWhiteSpace(value) || value == ContentNotFound)
+                continue;
 
             string normalizedIconKey = NormalizeIconKey(fieldKey);
 
-            bool allowIcon = keepIconsForPhoneEmailOnly && (normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) || normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase));
+            bool allowIcon =
+                keepIconsForPhoneEmailOnly &&
+                (
+                    normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) ||
+                    normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase)
+                );
 
-            bool isCompanyName = fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) && !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
+            bool isCompanyName =
+                fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) &&
+                !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
 
             XFont f = isCompanyName ? nameBold : fontBody;
             XBrush b = isCompanyName ? _darkBlueBrushColor : _blackBrushColor;
@@ -558,95 +591,206 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
             sellerLines.Add((value, f, b, allowIcon ? normalizedIconKey : string.Empty));
         }
 
-        // Build lines (Buyer)
+        // BUYER LINES
         var buyerLines = new List<(string text, XFont font, XBrush brush, string iconKey)>();
+
         foreach (var (xpathOrValue, fieldKey) in buyerRows)
         {
-            var value = ResolveXmlOrValue(xmlDoc, nsmgr, xpathOrValue);
-            if (string.IsNullOrWhiteSpace(value) || value == ContentNotFound) continue;
+            string value = ResolveXmlOrValue(xmlDoc, nsmgr, xpathOrValue);
 
-            var normalizedIconKey = NormalizeIconKey(fieldKey);
+            if (string.IsNullOrWhiteSpace(value) || value == ContentNotFound)
+                continue;
 
-            var allowIcon = keepIconsForPhoneEmailOnly && (normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) || normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase));
+            string normalizedIconKey = NormalizeIconKey(fieldKey);
 
-            bool isCompanyName = fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) && !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
-            
+            bool allowIcon =
+                keepIconsForPhoneEmailOnly &&
+                (
+                    normalizedIconKey.Equals("Phone", StringComparison.OrdinalIgnoreCase) ||
+                    normalizedIconKey.Equals("Email", StringComparison.OrdinalIgnoreCase)
+                );
+
+            bool isCompanyName =
+                fieldKey.Contains("Name", StringComparison.OrdinalIgnoreCase) &&
+                !fieldKey.Contains("Contact", StringComparison.OrdinalIgnoreCase);
+
             XFont f = isCompanyName ? nameBold : fontBody;
             XBrush b = isCompanyName ? _darkBlueBrushColor : _blackBrushColor;
 
-
-            buyerLines.Add((value, f ,b, allowIcon ? normalizedIconKey : string.Empty));
+            buyerLines.Add((value, f, b, allowIcon ? normalizedIconKey : string.Empty));
         }
 
-        // Heights
+        // HEIGHTS
         double sellerH = 0;
-        for (int i = 0; i < sellerLines.Count; i++)
+
+        foreach (var l in sellerLines)
         {
-            var l = sellerLines[i];
-            sellerH += WrapForWidth(ref xGraphics, l.text, l.font, leftBlockWidth).Length * lineH;
+            sellerH += WrapForWidth(
+                ref xGraphics,
+                l.text,
+                l.font,
+                invoiceBoxWidth - 2 * invoiceBoxPadding).Length * lineH;
+
+            if (l.font == nameBold)
+                sellerH += 4;
         }
 
-        double invoiceBoxH = (invoiceBoxPadding * 2) + titleH + 8 + (invoiceFields.Count * invoiceRowH);
+        double buyerH = 0;
 
-        double topH = Math.Max(sellerH, invoiceBoxH);
-
-        const double buyerTitleGap = 4;
-        double buyerH = titleH + buyerTitleGap;
-
-        for (int i = 0; i < buyerLines.Count; i++)
+        foreach (var l in buyerLines)
         {
-            var l = buyerLines[i];
-            buyerH += WrapForWidth(ref xGraphics, l.text, l.font, leftBlockWidth).Length * lineH;
+            buyerH += WrapForWidth(
+                ref xGraphics,
+                l.text,
+                l.font,
+                leftBlockWidth).Length * lineH;
+
+            if (l.font == nameBold)
+                buyerH += 4;
         }
 
-        const double sepGapTop = 6;
-        const double sepGapBottom = 8;
+        double invoiceBoxH =
+            invoiceBoxPadding * 2 +
+            titleH +
+            8 +
+            invoiceFields.Count * invoiceRowH;
 
-        double requiredH = topH + sepGapTop + 1 + sepGapBottom + buyerH + 8;
+        double realTopBlockHeight = Math.Max(topBlockHeight, sellerH);
+
+        double bottomBlockHeight = Math.Max(buyerH, invoiceBoxH);
+
+        double requiredH =
+            realTopBlockHeight +
+            gapTopToBottom +
+            bottomBlockHeight +
+            gapBottomToLine +
+            1 +
+            8;
+
         AddNewPageIfNecessary(pdfDoc, ref pdfPage, ref xGraphics, ref yPosition, requiredHeight: (int)Math.Ceiling(requiredH));
 
-        double leftX = leftMargin;
         double topY = yPosition;
-        double invoiceX = leftMargin + leftBlockWidth + gapToInvoiceBox;
-
-        // SELLER
-        double y = topY;
-        for (int i = 0; i < sellerLines.Count; i++)
+        
+        // 1. LOGO LEFT TOP
+        if (!string.IsNullOrWhiteSpace(logoPath) && File.Exists(logoPath))
         {
-            var (text, f, brush, iconKey) = sellerLines[i];
-            double textX = leftX;
+            try
+            {
+                using XImage logo = XImage.FromFile(logoPath);
+
+                double logoW = logo.PixelWidth;
+                double logoH = logo.PixelHeight;
+
+                double scale = Math.Min(
+                    logoMaxWidth / logoW,
+                    logoMaxHeight / logoH);
+
+                double drawW = logoW * scale;
+                double drawH = logoH * scale;
+
+                xGraphics.DrawImage(
+                    logo, leftMargin, topY, drawW, drawH);
+            }
+            catch
+            {
+                // Do not render the logo if the file is unreadable.
+            }
+        }
+
+        // 2. SELLER RIGHT TOP
+        double sellerY = topY + 8;
+
+        foreach (var (text, f, brush, iconKey) in sellerLines)
+        {
+            double textX = rightBlockX + invoiceBoxPadding;
 
             if (!string.IsNullOrEmpty(iconKey))
             {
-                DrawSvgIconIfAvailable(ref xGraphics, svgIconNames, iconKey, (int)textX, (int)y);
+                DrawSvgIconIfAvailable(
+                    ref xGraphics,
+                    svgIconNames,
+                    iconKey,
+                    (int)textX,
+                    (int)sellerY);
+
                 textX += 14;
             }
 
-            var lines = WrapForWidth(ref xGraphics, text, f, leftBlockWidth);
-            for (int k = 0; k < lines.Length; k++)
+            var lines = WrapForWidth(
+                ref xGraphics,
+                text,
+                f,
+                invoiceBoxWidth - 2 * invoiceBoxPadding);
+
+            foreach (string line in lines)
             {
-                xGraphics.DrawString(lines[k], f, brush, new XRect(textX, y, leftBlockWidth - (textX - leftX), lineH), XStringFormats.TopLeft);
+                xGraphics.DrawString(
+                    line,
+                    f,
+                    brush,
+                    new XRect(
+                        textX,
+                        sellerY,
+                        invoiceBoxWidth - 2 * invoiceBoxPadding,
+                        lineH),
+                    XStringFormats.TopLeft);
 
-                y += lineH;
-
-                if (f == nameBold && k == lines.Length - 1)
-                    y += 4;
+                sellerY += lineH;
             }
+
+            if (f == nameBold)
+                sellerY += 4;
         }
 
-        // INVOICE BOX
-        var boxRect = new XRect(invoiceX, topY, invoiceBoxWidth, invoiceBoxH);
+        // 3. BUYER LEFT BELOW LOGO
+        double bottomY = topY + realTopBlockHeight + gapTopToBottom;
+        double buyerY = bottomY;
+
+        const double buyerIndent = 30;
+
+        foreach (var (text, f, brush, iconKey) in buyerLines)
+        {
+            double textX = leftMargin + buyerIndent;
+
+            if (!string.IsNullOrEmpty(iconKey))
+            {
+                DrawSvgIconIfAvailable(ref xGraphics, svgIconNames, iconKey, (int)textX, (int)buyerY);
+
+                textX += 14;
+            }
+
+            var lines = WrapForWidth(ref xGraphics, text, f, leftBlockWidth - buyerIndent);
+
+            foreach (string line in lines)
+            {
+                xGraphics.DrawString(line, f, brush, new XRect(textX, buyerY, leftBlockWidth - buyerIndent, lineH), XStringFormats.TopLeft);
+
+                buyerY += lineH;
+            }
+
+            if (f == nameBold)
+                buyerY += 4;
+        }
+
+        // 4. INVOICE BOX RIGHT BELOW SELLER
+        double invoiceY = bottomY;
+
+        var boxRect = new XRect(rightBlockX, invoiceY, invoiceBoxWidth, invoiceBoxH);
+
         xGraphics.DrawRectangle(_invoiceBoxBrush, boxRect);
 
-        double innerY = topY + invoiceBoxPadding;
-        xGraphics.DrawString(invoiceBoxTitle, titleBold, XBrushes.Black, new XRect(invoiceX + invoiceBoxPadding, innerY, invoiceBoxWidth - 2 * invoiceBoxPadding, titleH), XStringFormats.TopLeft);
+        double innerY = invoiceY + invoiceBoxPadding;
+
+        xGraphics.DrawString(invoiceBoxTitle, titleBold, XBrushes.Black, new XRect(rightBlockX + invoiceBoxPadding, innerY, invoiceBoxWidth - 2 * invoiceBoxPadding, titleH), XStringFormats.TopLeft);
 
         innerY += titleH + 8;
-        xGraphics.DrawLine(linePen, invoiceX, innerY - 4, invoiceX + invoiceBoxWidth, innerY - 4);
 
-        double labelX = invoiceX + invoiceBoxPadding;
+        xGraphics.DrawLine(linePen, rightBlockX, innerY - 4, rightBlockX + invoiceBoxWidth, innerY - 4);
+
+        double labelX = rightBlockX + invoiceBoxPadding;
         const double valueW = 120;
-        double valueX = invoiceX + invoiceBoxWidth - invoiceBoxPadding - valueW;
+
+        double valueX = rightBlockX + invoiceBoxWidth - invoiceBoxPadding - valueW;
 
         foreach (var kvp in invoiceFields)
         {
@@ -657,52 +801,23 @@ public abstract class PdfGeneratorFromInvoiceBase(ITranslatorProvider translatio
 
             XmlNode? node = xmlDoc?.SelectSingleNode(xpath, nsmgr);
             string value = node != null ? node.InnerText : ContentNotFound;
+
             value = ParseDateTimeToRightFormat(xpath, value);
 
-            xGraphics.DrawString($"{label}:", fontBody, XBrushes.Black, new XRect(labelX, innerY, (valueX - labelX) - 8, invoiceRowH),XStringFormats.TopLeft);
+            xGraphics.DrawString($"{label}:", fontBody, XBrushes.Black, new XRect(labelX, innerY, valueX - labelX - 8, invoiceRowH), XStringFormats.TopLeft);
 
             xGraphics.DrawString(value, fontBody, XBrushes.Black, new XRect(valueX, innerY, valueW, invoiceRowH), XStringFormats.TopRight);
 
             innerY += invoiceRowH;
         }
 
-        // Separator line
-        const int adjustUp = 6;
-        double sepY = topY + topH + sepGapTop - adjustUp;
-        xGraphics.DrawLine(linePen, leftMargin, sepY, leftMargin + contentWidth, sepY);
+        // 5. LINE UNDER BUYER / INVOICE BOX
+        double lineY = bottomY + bottomBlockHeight + gapBottomToLine;
 
-        // BUYER
-        double buyerY = sepY + sepGapBottom -20; //to move the block a bit up, so that the gap to the separator line is not that big in case there are only few lines in the buyer block
+        xGraphics.DrawLine(linePen, leftMargin, lineY, leftMargin + contentWidth, lineY);
 
-        buyerY += titleH + buyerTitleGap;
-        const double buyerIndent = 30; //for the letterhead  25mm to the left margin
-
-        for (int i = 0; i < buyerLines.Count; i++)
-        {
-            var (text, f, brush, iconKey) = buyerLines[i];
-            double textX = leftMargin + buyerIndent;
-
-            if (!string.IsNullOrEmpty(iconKey))
-            {
-                DrawSvgIconIfAvailable(ref xGraphics, svgIconNames, iconKey, (int)textX, (int)buyerY);
-                textX += 14;
-            }
-
-            var lines = WrapForWidth(ref xGraphics, text, f, leftBlockWidth);
-            for (int k = 0; k < lines.Length; k++)
-            {
-                xGraphics.DrawString(lines[k], f, brush, new XRect(textX, buyerY, leftBlockWidth - (textX - leftMargin), lineH), XStringFormats.TopLeft);
-
-                buyerY += lineH;
-
-                if (f == nameBold && k == lines.Length - 1)
-                    buyerY += 4;
-            }
-        }
-
-        yPosition = (int)Math.Ceiling(buyerY + 4);
+        yPosition = (int)Math.Ceiling(lineY + 8);
     }
-
     private string[] WrapForWidth(ref XGraphics g, string? text, XFont font, double width)
     {
         return WrapText(ref g, text ?? string.Empty, font, (int)width);
