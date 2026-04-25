@@ -37,6 +37,13 @@ public interface IAppOptions
     /// </summary>
     SignatureOptions Signature { get; set; }
 
+    /// <summary>
+    /// Gets or sets the company logo settings used for rendering the logo
+    /// in generated documents, such as invoices or PDF exports.
+    /// </summary>
+    /// <remarks>
+    /// If a logo path is configured and the file exists, the logo can be rendered
+    /// in the document header. If no logo is configured, no logo is rendered.
+    /// </remarks>
     CompanyLogoOptions CompanyLogo { get; set; }
 }
-
